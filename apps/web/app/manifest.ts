@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "Dub - The Modern Link Attribution Platform",
     start_url: "/",
     display: "standalone",
-    background_color: "#ffffff",
-    theme_color: "#ffffff",
+    background_color: "#e5e5e5",
+    theme_color: "#e1e1e1",
     icons: [
       {
         src: "https://assets.dub.co/favicons/android-chrome-192x192.png",
