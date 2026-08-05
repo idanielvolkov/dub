@@ -15,14 +15,7 @@ export const GET = withWorkspace(
         projectId: workspace.id,
       },
       select: {
-        dubsh: true,
-        chatgpt: true,
-        sptifi: true,
-        gitnew: true,
-        callink: true,
-        amznid: true,
-        ggllink: true,
-        figpage: true,
+        detzfun: true,
       },
     });
 
@@ -63,14 +56,7 @@ export const PATCH = withWorkspace(
         projectId: workspace.id,
       },
       data: {
-        dubsh: defaultDomains.includes("dub.sh"),
-        chatgpt: defaultDomains.includes("chatg.pt"),
-        sptifi: defaultDomains.includes("spti.fi"),
-        gitnew: defaultDomains.includes("git.new"),
-        callink: defaultDomains.includes("cal.link"),
-        amznid: defaultDomains.includes("amzn.id"),
-        ggllink: defaultDomains.includes("ggl.link"),
-        figpage: defaultDomains.includes("fig.page"),
+        detzfun: defaultDomains.includes("detz.fun"),
       },
     });
 
