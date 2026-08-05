@@ -4,6 +4,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Safari 26 derives its browser chrome color from the page background. */
+html,
+body {
+  background-color: #e1e1e1;
+}
+
 /* Hide the react-medium-image-zoom unzoom button */
 [data-rmiz-btn-unzoom] {
   visibility: hidden;
