@@ -6,10 +6,14 @@ import { ReferButton } from "@/ui/layout/sidebar/refer-button";
 import Toolbar from "@/ui/layout/toolbar/toolbar";
 import { UpgradeBanner } from "@/ui/layout/upgrade-banner";
 import { constructMetadata } from "@dub/utils";
+import type { Viewport } from "next";
 import { ReactNode } from "react";
 
 export const dynamic = "force-static";
 export const metadata = constructMetadata();
+export const viewport: Viewport = {
+  themeColor: "#e1e1e1",
+};
 
 export default async function Layout({ children }: { children: ReactNode }) {
   return (
