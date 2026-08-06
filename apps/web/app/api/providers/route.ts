@@ -4,7 +4,9 @@ import { getUrlQuerySchema } from "@/lib/zod/schemas/links";
 import { fetchWithTimeout } from "@dub/utils";
 import { NextRequest, NextResponse } from "next/server";
 
-export const runtime = "edge";
+// The bundled providers route exceeds Vercel Hobby's 1 MB Edge Function limit.
+// Run it as a regular serverless function, which has a larger deployment limit.
+export const runtime = "nodejs";
 
 export async function GET(req: NextRequest) {
   try {
