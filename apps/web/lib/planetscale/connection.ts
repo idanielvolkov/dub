@@ -12,7 +12,7 @@ if (!databaseUrl) {
 const pool = mysql.createPool(databaseUrl);
 
 export const conn = {
-  async execute<T = Record<string, unknown>>(
+  async execute<T = any>(
     query: string,
     params: unknown[] = [],
   ) {
