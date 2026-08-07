@@ -71,7 +71,7 @@ export const SignUpEmail = () => {
       <div className="flex flex-col gap-y-6">
         <label>
           <span className="text-content-emphasis mb-2 block text-sm font-medium leading-none">
-            {subdomain === "partners" ? "Email" : "Work email"}
+            Email
           </span>
           <Input
             type="email"
