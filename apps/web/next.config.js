@@ -28,6 +28,7 @@ module.exports = withPlausibleProxy({
     "prettier",
     "shiki",
     "@dub/email",
+    "@dub/utils",
     "@boxyhq/saml-jackson",
   ],
   outputFileTracingIncludes: {
@@ -38,7 +39,7 @@ module.exports = withPlausibleProxy({
   },
   experimental: {
     // Keep large self-hosted builds within Vercel Hobby's memory limit.
-    cpus: 1,
+    cpus: 2,
     workerThreads: false,
     webpackBuildWorker: true,
     optimizePackageImports: [
@@ -61,6 +62,14 @@ module.exports = withPlausibleProxy({
             /(^@google-cloud\/spanner|^@mongodb-js\/zstd|^aws-crt|^aws4$|^pg-native$|^mongodb-client-encryption$|^@sap\/hana-client$|^@sap\/hana-client\/extension\/Stream$|^snappy$|^react-native-sqlite-storage$|^bson-ext$|^cardinal$|^kerberos$|^hdb-pool$|^sql.js$|^sqlite3$|^better-sqlite3$|^ioredis$|^typeorm-aurora-data-api-driver$|^pg-query-stream$|^oracledb$|^mysql$|^snappy\/package\.json$|^cloudflare:sockets$)/,
         }),
       );
+    } else {
+      // mysql2 is only called by server-side helpers. Some shared schema
+      // barrels make webpack inspect it for the browser bundle as well.
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        net: false,
+        tls: false,
+      };
     }
 
     config.module = {
