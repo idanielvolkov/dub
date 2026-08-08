@@ -6,19 +6,12 @@ import { PlanProps, WorkspaceProps } from "@/lib/types";
 import { ModalContext } from "@/ui/modals/modal-provider";
 import { getUserAvatarUrl } from "@/ui/users/user-avatar";
 import { BlurImage, Popover, useScrollProgress } from "@dub/ui";
-import { Check2, Gear, Plus, UserPlus } from "@dub/ui/icons";
+import { Check2, Gear, Plus } from "@dub/ui/icons";
 import { cn, isLegacyBusinessPlan, pluralize } from "@dub/utils";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
-import {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useParams } from "next/navigation";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 
 export function WorkspaceDropdown() {
   const { workspaces } = useWorkspaces();
@@ -134,32 +127,13 @@ function WorkspaceList({
   setOpenPopover: (open: boolean) => void;
 }) {
   const { setShowAddWorkspaceModal } = useContext(ModalContext);
-  const { link, programId } = useParams() as {
-    link: string | string[];
-    programId?: string;
-  };
-  const pathname = usePathname();
-
   const scrollRef = useRef<HTMLDivElement>(null);
   const { scrollProgress, updateScrollProgress } = useScrollProgress(scrollRef);
 
   const { users } = useWorkspaceUsers();
   const membersCount = users?.filter((user) => !user.isMachine).length ?? 0;
 
-  const href = useCallback(
-    (slug: string) => {
-      if (link) {
-        // if we're on a link page, navigate back to the workspace root
-        return `/${slug}/links`;
-      } else if (selected.slug) {
-        // else, we keep the path but remove all query params
-        return pathname.replace(selected.slug, slug).split("?")[0] || "/";
-      } else {
-        return "/";
-      }
-    },
-    [link, programId, pathname, selected.slug],
-  );
+  const href = (slug: string) => `/${slug}/vpn`;
 
   return (
     <div className="relative w-full">
@@ -199,26 +173,16 @@ function WorkspaceList({
             </div>
           </div>
 
-          {/* Settings and Invite members options */}
+          {/* Account settings */}
           <div className="flex flex-row gap-1">
             <Link
-              href={`/${selected.slug ? selected.slug : "account"}/settings`}
+              href="/account/settings"
               className="flex items-center justify-start gap-x-2 rounded-lg border border-neutral-200 px-2 py-1 text-neutral-700 outline-none transition-all duration-75 hover:bg-neutral-100/50 focus-visible:ring-2 focus-visible:ring-black/50 active:bg-neutral-200/80"
               onClick={() => setOpenPopover(false)}
             >
               <Gear className="size-4 text-neutral-800" />
-              <span className="block truncate text-sm">Settings</span>
+              <span className="block truncate text-sm">Account</span>
             </Link>
-            {selected.slug && (
-              <Link
-                href={`/${selected.slug}/settings/people`}
-                className="flex items-center justify-start gap-x-2 rounded-lg border border-neutral-200 px-2 py-1 text-neutral-700 outline-none transition-all duration-75 hover:bg-neutral-100/50 focus-visible:ring-2 focus-visible:ring-black/50 active:bg-neutral-200/80"
-                onClick={() => setOpenPopover(false)}
-              >
-                <UserPlus className="size-4 text-neutral-800" />
-                <span className="block truncate text-sm">Invite members</span>
-              </Link>
-            )}
           </div>
         </div>
 
