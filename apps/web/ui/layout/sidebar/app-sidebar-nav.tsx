@@ -87,11 +87,20 @@ const NAV_GROUPS: SidebarNavGroups<SidebarNavData> = ({
   defaultProgramId,
   hasProgramAccess,
 }) => {
+  const vpnGroup = {
+    id: "vpn",
+    name: "VPN Business",
+    description:
+      "Manage subscribers, VPN servers, traffic, plans, and service health.",
+    icon: ShieldCheck,
+    href: slug ? `/${slug}/vpn` : "/vpn",
+    active: pathname.startsWith(`/${slug}/vpn`),
+  };
   const programGroup = {
     id: "program",
-    name: "Partner Program",
+    name: "Customer Programs",
     description:
-      "Kickstart viral product-led growth with powerful, branded referral and affiliate programs.",
+      "Grow your VPN business with branded referrals and affiliate programs.",
     learnMoreHref: "https://dub.co/partners",
     icon: ConnectedDots4,
     href: slug ? `/${slug}/program` : "/program",
@@ -104,9 +113,9 @@ const NAV_GROUPS: SidebarNavGroups<SidebarNavData> = ({
   };
   const linksGroup = {
     id: "links",
-    name: "Short Links",
+    name: "Campaign Links",
     description:
-      "Create, organize, and measure the performance of your short links.",
+      "Create, organize, and measure VPN acquisition campaign links.",
     learnMoreHref: "https://dub.co/links",
     icon: Compass,
     href: slug ? `/${slug}/links` : "/links",
@@ -115,15 +124,66 @@ const NAV_GROUPS: SidebarNavGroups<SidebarNavData> = ({
 
   // TEMPORARY: hide the program tab for restricted workspace users
   if (hasProgramAccess === false) {
-    return [linksGroup];
+    return [vpnGroup, linksGroup];
   }
 
   return defaultProgramId
-    ? [programGroup, linksGroup]
-    : [linksGroup, programGroup];
+    ? [vpnGroup, programGroup, linksGroup]
+    : [vpnGroup, linksGroup, programGroup];
 };
 
 const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
+  vpn: ({ slug }) => ({
+    title: "VPN Business",
+    direction: "left",
+    content: [
+      {
+        items: [
+          {
+            name: "Overview",
+            icon: Gauge6,
+            href: `/${slug}/vpn`,
+            exact: true,
+          },
+          {
+            name: "Subscribers",
+            icon: Users,
+            href: `/${slug}/vpn/subscribers`,
+          },
+          {
+            name: "VPN Servers",
+            icon: Globe,
+            href: `/${slug}/vpn/servers`,
+          },
+        ],
+      },
+      {
+        name: "Business",
+        items: [
+          {
+            name: "Plans",
+            icon: Receipt2,
+            href: `/${slug}/vpn/plans`,
+          },
+          {
+            name: "Traffic",
+            icon: LinesYStatic,
+            href: `/${slug}/vpn/traffic`,
+          },
+        ],
+      },
+      {
+        name: "Operations",
+        items: [
+          {
+            name: "System",
+            icon: CubeSettings,
+            href: `/${slug}/vpn/system`,
+          },
+        ],
+      },
+    ],
+  }),
   // partner program
   program: ({
     slug,
@@ -136,7 +196,7 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
     pendingLeadsCount,
     partnerNetworkEnabled,
   }) => ({
-    title: "Partner Program",
+    title: "Customer Programs",
     showNews,
     direction: "left",
     content: [
@@ -301,7 +361,7 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
   }),
   // short links
   links: ({ slug, pathname, queryString, showNews }) => ({
-    title: "Short Links",
+    title: "Campaign Links",
     showNews,
     direction: "left",
     content: [
@@ -536,13 +596,15 @@ export function AppSidebarNav({
       ? "userSettings"
       : pathname.startsWith(`/${slug}/settings`)
         ? "workspaceSettings"
-        : pathname.includes("/program/campaigns/") ||
-            pathname.includes("/program/messages/") ||
-            pathname.endsWith("/program/payouts/success")
-          ? null
-          : pathname.startsWith(`/${slug}/program`)
-            ? "program"
-            : "links";
+        : pathname.startsWith(`/${slug}/vpn`)
+          ? "vpn"
+          : pathname.includes("/program/campaigns/") ||
+              pathname.includes("/program/messages/") ||
+              pathname.endsWith("/program/payouts/success")
+            ? null
+            : pathname.startsWith(`/${slug}/program`)
+              ? "program"
+              : "links";
   }, [slug, pathname]);
 
   const { program } = useProgram({

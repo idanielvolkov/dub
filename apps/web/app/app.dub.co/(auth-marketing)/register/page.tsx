@@ -3,7 +3,7 @@ import { APP_DOMAIN, constructMetadata } from "@dub/utils";
 import RegisterPageClient from "./page-client";
 
 export const metadata = constructMetadata({
-  title: "Create your Dub account",
+  title: "Create your Detz VPN account",
   canonicalUrl: `${APP_DOMAIN}/register`,
 });
 

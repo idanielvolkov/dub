@@ -154,7 +154,7 @@ export function SuccessPageClient({
                     icon: ConnectedDots4,
                     title: "Create a program",
                     description: "Set up your Dub partner program",
-                    href: `/${workspace.slug}/program`,
+                    href: `/${workspace.slug}/vpn`,
                     cta: "Manage",
                     complete: true,
                   },
