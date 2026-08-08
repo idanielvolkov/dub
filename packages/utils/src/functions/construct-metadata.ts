@@ -3,28 +3,10 @@ import { Metadata } from "next";
 export function constructMetadata({
   title,
   fullTitle,
-  description = "Dub is the modern link attribution platform for short links, conversion tracking, and affiliate programs.",
-  image = "https://assets.dub.co/thumbnail.jpg",
+  description = "Detz VPN is a secure VPN service with simple subscription and server management.",
+  image = null,
   video,
-  icons = [
-    {
-      rel: "apple-touch-icon",
-      sizes: "32x32",
-      url: "https://assets.dub.co/favicons/apple-touch-icon.png",
-    },
-    {
-      rel: "icon",
-      type: "image/png",
-      sizes: "32x32",
-      url: "https://assets.dub.co/favicons/favicon-32x32.png",
-    },
-    {
-      rel: "icon",
-      type: "image/png",
-      sizes: "16x16",
-      url: "https://assets.dub.co/favicons/favicon-16x16.png",
-    },
-  ],
+  icons,
   url,
   canonicalUrl,
   noIndex = false,
@@ -44,7 +26,7 @@ export function constructMetadata({
   return {
     title:
       fullTitle ||
-      (title ? `${title} | Dub` : "Dub - The Modern Link Attribution Platform"),
+      (title ? `${title} | Detz VPN` : "Detz VPN - Secure VPN Management"),
     description,
     openGraph: {
       title,
@@ -67,10 +49,9 @@ export function constructMetadata({
       ...(video && {
         player: video,
       }),
-      creator: "@dubdotco",
     },
     icons,
-    metadataBase: new URL("https://dub.co"),
+    metadataBase: new URL("https://detz.fun"),
     ...((url || canonicalUrl) && {
       alternates: {
         canonical: url || canonicalUrl,
