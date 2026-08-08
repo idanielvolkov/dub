@@ -29,9 +29,9 @@ export const AuthLayout = ({
       <div className="flex grow basis-0 flex-col justify-end">
         {showTerms && (
           <p className="px-20 py-8 text-center text-xs font-medium text-neutral-500 md:px-0">
-            By continuing, you agree to Dub&rsquo;s{" "}
+            By continuing, you agree to Detz VPN&rsquo;s{" "}
             <a
-              href={`https://dub.co/legal/${showTerms === "app" ? "terms" : "partners"}`}
+              href="https://detz.fun/legal/terms"
               target="_blank"
               className="font-semibold text-neutral-600 hover:text-neutral-800"
             >
@@ -39,7 +39,7 @@ export const AuthLayout = ({
             </a>{" "}
             and{" "}
             <a
-              href="https://dub.co/legal/privacy"
+              href="https://detz.fun/legal/privacy"
               target="_blank"
               className="font-semibold text-neutral-600 hover:text-neutral-800"
             >

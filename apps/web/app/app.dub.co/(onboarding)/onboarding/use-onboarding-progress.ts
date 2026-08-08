@@ -65,7 +65,7 @@ export function useOnboardingProgress() {
         onboardingStep: "completed",
       });
 
-      router.push(slug ? (hasProgram ? `/${slug}/program` : `/${slug}`) : "/");
+      router.push(slug ? `/${slug}/vpn` : "/");
     },
     [executeAsync, router, slug],
   );

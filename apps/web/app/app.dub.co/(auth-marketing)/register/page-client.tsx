@@ -1,6 +1,5 @@
 "use client";
 
-import { AuthAlternativeBanner } from "@/ui/auth/auth-alternative-banner";
 import {
   RegisterProvider,
   useRegisterContext,
@@ -23,7 +22,7 @@ function SignUp() {
     <>
       <div className="w-full max-w-sm">
         <h3 className="text-center text-xl font-semibold">
-          Create your Dub account
+          Create your Detz VPN account
         </h3>
         <div className="mt-8">
           <SignUpForm />
@@ -37,14 +36,6 @@ function SignUp() {
             Log in
           </Link>
         </p>
-
-        <div className="mt-12 w-full">
-          <AuthAlternativeBanner
-            text="Looking for your Dub partner account?"
-            cta="Sign up at partners.dub.co"
-            href="https://partners.dub.co/register"
-          />
-        </div>
       </div>
     </>
   );

@@ -5,8 +5,6 @@ import { waitUntil } from "@vercel/functions";
 import { randomBytes } from "crypto";
 import { hashToken } from ".";
 import { DubApiError } from "../api/errors";
-import { isEmailDomainBlocked } from "../email/is-email-domain-blocked";
-import { isGenericEmail } from "../email/is-generic-email";
 import { redis } from "../upstash";
 import { assertRateLimit } from "../upstash/assert-rate-limit";
 import { RATELIMIT_POLICIES } from "../upstash/ratelimit-policies";
@@ -77,16 +75,6 @@ export const requestEmailChange = async ({
     policy: RATELIMIT_POLICIES.emailChangeRequestTarget,
     identifier: newEmail.toLowerCase(),
   });
-
-  const isGenericEmailWithPlus = email.includes("+") && isGenericEmail(email);
-  const emailDomainBlocked = await isEmailDomainBlocked(newEmail);
-  if (isGenericEmailWithPlus || emailDomainBlocked) {
-    throw new DubApiError({
-      code: "bad_request",
-      message:
-        "Invalid email address – please use your work email instead. If you think this is a mistake, please contact us at dub.co/support",
-    });
-  }
 
   // Remove existing verification tokens
   await prisma.verificationToken.deleteMany({

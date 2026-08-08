@@ -129,7 +129,7 @@ export const EmailSignIn = ({ next }: { next?: string }) => {
         {authMethod === "email" && (
           <label>
             <span className="text-content-emphasis mb-2 block text-sm font-medium leading-none">
-              {subdomain === "partners" ? "Email" : "Work email"}
+              Email
             </span>
             <input
               id="email"
