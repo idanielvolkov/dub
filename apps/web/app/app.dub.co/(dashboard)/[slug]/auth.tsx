@@ -3,11 +3,12 @@
 import { ErrorCodes } from "@/lib/api/error-codes";
 import useWorkspace from "@/lib/swr/use-workspace";
 import LayoutLoader from "@/ui/layout/layout-loader";
-import { notFound, redirect, useParams } from "next/navigation";
+import { notFound, redirect, useParams, usePathname } from "next/navigation";
 import { ReactNode } from "react";
 
 export default function WorkspaceAuth({ children }: { children: ReactNode }) {
   const { slug } = useParams();
+  const pathname = usePathname();
   const { loading, error } = useWorkspace();
 
   if (loading) {
@@ -24,6 +25,10 @@ export default function WorkspaceAuth({ children }: { children: ReactNode }) {
     ) {
       redirect(`/${slug}/invite`);
     }
+  }
+
+  if (!pathname.startsWith(`/${slug}/vpn`)) {
+    redirect(`/${slug}/vpn`);
   }
 
   return children;
