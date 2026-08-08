@@ -1,24 +1,22 @@
 "use server";
 
 import { createRemnawaveUser } from "@/lib/remnawave/client";
+import { getVpnPlan } from "@/lib/remnawave/plans";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
-export async function createSubscriber(formData: FormData) {
+export async function provisionPlan(formData: FormData) {
+  const slug = String(formData.get("slug") || "");
+  const plan = getVpnPlan(String(formData.get("planId") || ""));
   const username = String(formData.get("username") || "")
     .trim()
     .toLowerCase()
     .replace(/[^a-z0-9_-]/g, "-")
     .slice(0, 36);
-  const durationDays = Math.max(
-    1,
-    Math.min(3650, Number(formData.get("durationDays")) || 30),
-  );
-  const slug = String(formData.get("slug") || "");
 
-  if (username.length < 3) {
-    throw new Error("Subscriber name must contain at least 3 characters");
+  if (!plan || username.length < 3) {
+    throw new Error("Choose a plan and enter at least 3 characters");
   }
 
   const session = await getSession();
@@ -33,9 +31,12 @@ export async function createSubscriber(formData: FormData) {
   await createRemnawaveUser({
     username,
     expireAt: new Date(
-      Date.now() + durationDays * 24 * 60 * 60 * 1000,
+      Date.now() + plan.durationDays * 24 * 60 * 60 * 1000,
     ).toISOString(),
+    trafficLimitBytes: plan.trafficGb * 1024 ** 3,
+    trafficLimitStrategy: plan.reset,
+    hwidDeviceLimit: plan.devices,
   });
 
-  revalidatePath(`/${slug}/vpn/subscribers`);
+  redirect(`/${slug}/vpn/subscribers`);
 }

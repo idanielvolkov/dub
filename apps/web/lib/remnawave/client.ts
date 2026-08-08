@@ -9,6 +9,17 @@ export type RemnawaveHealth = {
   status: string;
   database?: string;
   error?: string;
+  metrics?: RemnawaveRuntimeMetric[];
+};
+
+export type RemnawaveRuntimeMetric = {
+  instanceType: string;
+  rss: number;
+  heapUsed: number;
+  heapTotal: number;
+  eventLoopDelayMs: number;
+  activeHandles: number;
+  uptime: number;
 };
 
 type RemnawaveEnvelope<T> = { response: T };
@@ -19,7 +30,9 @@ export type RemnawaveUser = {
   status: string;
   expireAt: string;
   trafficLimitBytes: number;
-  usedTrafficBytes: number;
+  usedTrafficBytes: number | null;
+  trafficLimitStrategy: string;
+  hwidDeviceLimit: number | null;
   subscriptionUrl: string;
   onlineAt: string | null;
 };
@@ -59,6 +72,9 @@ async function remnawaveFetch<T>(path: string): Promise<T> {
 export async function createRemnawaveUser(input: {
   username: string;
   expireAt: string;
+  trafficLimitBytes?: number;
+  trafficLimitStrategy?: "NO_RESET" | "DAY" | "WEEK" | "MONTH";
+  hwidDeviceLimit?: number;
 }) {
   if (!process.env.REMNAWAVE_API_TOKEN) {
     throw new Error("REMNAWAVE_API_TOKEN is not configured");
@@ -127,6 +143,7 @@ export async function getRemnawaveHealth(): Promise<RemnawaveHealth> {
     }
 
     const data = (await response.json()) as {
+      response?: { runtimeMetrics?: RemnawaveRuntimeMetric[] };
       status?: string;
       database?: { status?: string } | string;
     };
@@ -138,6 +155,7 @@ export async function getRemnawaveHealth(): Promise<RemnawaveHealth> {
         typeof data.database === "string"
           ? data.database
           : data.database?.status,
+      metrics: data.response?.runtimeMetrics || [],
     };
   } catch (error) {
     return {
