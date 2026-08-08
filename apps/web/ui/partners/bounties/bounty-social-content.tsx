@@ -8,7 +8,6 @@ import { useClaimBountyForm } from "@/ui/partners/bounties/use-claim-bounty-form
 import { useSocialContent } from "@/ui/partners/bounties/use-social-content";
 import { Button, CircleCheck, LoadingSpinner } from "@dub/ui";
 import { cn, formatDate } from "@dub/utils";
-import { useReferralsEmbedData } from "app/(ee)/app.dub.co/embed/referrals/page-client";
 import { AlertTriangle } from "lucide-react";
 import { useEffect, useId, useState } from "react";
 import { evaluateSocialContentRequirements } from "./evaluate-social-content-requirements";
@@ -186,38 +185,9 @@ export function SocialContentUrlField({
 }
 
 export function SocialAccountNotVerifiedWarning({
-  bounty,
+  bounty: _bounty,
 }: {
   bounty: PartnerBountyProps;
 }) {
-  const bountyInfo = resolveBountyDetails(bounty);
-
-  const { program, partner } = useReferralsEmbedData();
-
-  if (!bountyInfo?.socialPlatform) {
-    return null;
-  }
-
-  return (
-    <div className="bg-bg-attention flex flex-col items-center justify-between gap-2 rounded-lg p-2 text-center sm:flex-row">
-      <div className="text-content-attention px-2 text-sm font-medium">
-        {`A verified ${bountyInfo.socialPlatform.label} account must be connected to your Dub partner profile to claim this bounty.`}
-
-        <a
-          href="https://dub.co/help/article/partner-profile#website-and-socials"
-          target="_blank"
-          className="ml-1 underline underline-offset-2"
-        >
-          Learn more
-        </a>
-      </div>
-
-      <a
-        href={`https://partners.dub.co/${program.slug}/register?email=${partner.email}`}
-        target="_blank"
-      >
-        <Button text="Update profile" className="h-7 w-full px-3 sm:w-fit" />
-      </a>
-    </div>
-  );
+  return null;
 }
