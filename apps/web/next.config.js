@@ -39,7 +39,7 @@ module.exports = withPlausibleProxy({
   },
   experimental: {
     // Keep large self-hosted builds within Vercel Hobby's memory limit.
-    cpus: 2,
+    cpus: 1,
     workerThreads: false,
     webpackBuildWorker: true,
     optimizePackageImports: [
