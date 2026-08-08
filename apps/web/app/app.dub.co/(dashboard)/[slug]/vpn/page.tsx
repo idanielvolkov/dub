@@ -24,7 +24,17 @@ export default async function VpnOverviewPage() {
       value: `${nodes.filter((node) => node.isConnected).length}/${nodes.length || 4}`,
       hint: "VPN locations",
     },
-    { label: "Traffic today", value: "—", hint: "Incoming telemetry" },
+    {
+      label: "Traffic used",
+      value: `${(
+        users.users.reduce(
+          (sum, user) => sum + (user.usedTrafficBytes || 0),
+          0,
+        ) /
+        1024 ** 3
+      ).toFixed(1)} GB`,
+      hint: "Subscriber telemetry",
+    },
     {
       label: "Remnawave",
       value: health.connected ? "Online" : "Connecting",
