@@ -1,8 +1,15 @@
 "use server";
 
-import { createRemnawaveUser } from "@/lib/remnawave/client";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import {
+  createRemnawaveUser,
+  deleteRemnawaveUser,
+  resetRemnawaveUserTraffic,
+  revokeRemnawaveUserSubscription,
+  setRemnawaveUserEnabled,
+  updateRemnawaveUser,
+} from "@/lib/remnawave/client";
 import { revalidatePath } from "next/cache";
 
 export async function createSubscriber(formData: FormData) {
@@ -38,4 +45,77 @@ export async function createSubscriber(formData: FormData) {
   });
 
   revalidatePath(`/${slug}/vpn/subscribers`);
+}
+
+async function authorize(slug: string) {
+  const session = await getSession();
+  const workspace = session?.user.id
+    ? await prisma.project.findFirst({
+        where: { slug, users: { some: { userId: session.user.id } } },
+        select: { id: true },
+      })
+    : null;
+  if (!workspace) throw new Error("Unauthorized workspace access");
+}
+
+const text = (data: FormData, key: string) =>
+  String(data.get(key) || "").trim();
+
+export async function saveSubscriber(formData: FormData) {
+  const slug = text(formData, "slug");
+  await authorize(slug);
+  const trafficGb = Math.max(0, Number(formData.get("trafficGb")) || 0);
+  const deviceLimit = Math.max(0, Number(formData.get("deviceLimit")) || 0);
+  await updateRemnawaveUser({
+    uuid: text(formData, "uuid"),
+    expireAt: new Date(
+      `${text(formData, "expireAt")}T23:59:59.000Z`,
+    ).toISOString(),
+    trafficLimitBytes: Math.round(trafficGb * 1024 ** 3),
+    trafficLimitStrategy: text(formData, "trafficLimitStrategy") as
+      | "NO_RESET"
+      | "DAY"
+      | "WEEK"
+      | "MONTH",
+    hwidDeviceLimit: deviceLimit || null,
+    email: text(formData, "email") || null,
+    description: text(formData, "description") || null,
+  });
+  revalidatePath(`/${slug}/vpn/subscribers`);
+  revalidatePath(`/${slug}/operations/users`);
+}
+
+export async function changeSubscriberState(formData: FormData) {
+  const slug = text(formData, "slug");
+  await authorize(slug);
+  await setRemnawaveUserEnabled(
+    text(formData, "uuid"),
+    text(formData, "enabled") === "true",
+  );
+  revalidatePath(`/${slug}/vpn/subscribers`);
+  revalidatePath(`/${slug}/operations/users`);
+}
+
+export async function resetSubscriberTraffic(formData: FormData) {
+  const slug = text(formData, "slug");
+  await authorize(slug);
+  await resetRemnawaveUserTraffic(text(formData, "uuid"));
+  revalidatePath(`/${slug}/vpn/subscribers`);
+  revalidatePath(`/${slug}/operations/users`);
+}
+
+export async function revokeSubscriber(formData: FormData) {
+  const slug = text(formData, "slug");
+  await authorize(slug);
+  await revokeRemnawaveUserSubscription(text(formData, "uuid"));
+  revalidatePath(`/${slug}/vpn/subscribers`);
+  revalidatePath(`/${slug}/operations/users`);
+}
+
+export async function removeSubscriber(formData: FormData) {
+  const slug = text(formData, "slug");
+  await authorize(slug);
+  await deleteRemnawaveUser(text(formData, "uuid"));
+  revalidatePath(`/${slug}/vpn/subscribers`);
+  revalidatePath(`/${slug}/operations/users`);
 }
