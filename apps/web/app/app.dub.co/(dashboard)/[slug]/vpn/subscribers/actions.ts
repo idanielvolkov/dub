@@ -25,6 +25,28 @@ export async function createSubscriber(formData: FormData) {
     Math.min(3650, Number(formData.get("durationDays")) || 30),
   );
   const slug = String(formData.get("slug") || "");
+  const email = String(formData.get("email") || "")
+    .trim()
+    .slice(0, 128);
+  const description = String(formData.get("description") || "")
+    .trim()
+    .slice(0, 500);
+  const trafficGb = Math.min(
+    1_000_000,
+    Math.max(0, Number(formData.get("trafficGb")) || 0),
+  );
+  const deviceLimit = Math.min(
+    999,
+    Math.max(0, Math.round(Number(formData.get("deviceLimit")) || 0)),
+  );
+  const requestedStrategy = String(
+    formData.get("trafficLimitStrategy") || "NO_RESET",
+  );
+  const trafficLimitStrategy = ["NO_RESET", "DAY", "WEEK", "MONTH"].includes(
+    requestedStrategy,
+  )
+    ? (requestedStrategy as "NO_RESET" | "DAY" | "WEEK" | "MONTH")
+    : "NO_RESET";
 
   if (username.length < 3) {
     throw new Error("Subscriber name must contain at least 3 characters");
@@ -44,6 +66,11 @@ export async function createSubscriber(formData: FormData) {
     expireAt: new Date(
       Date.now() + durationDays * 24 * 60 * 60 * 1000,
     ).toISOString(),
+    email: email || undefined,
+    description: description || undefined,
+    trafficLimitBytes: Math.round(trafficGb * 1024 ** 3),
+    trafficLimitStrategy,
+    hwidDeviceLimit: deviceLimit || undefined,
   });
 
   revalidatePath(`/${slug}/vpn/subscribers`);
