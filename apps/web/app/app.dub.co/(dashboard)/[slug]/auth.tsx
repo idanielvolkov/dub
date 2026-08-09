@@ -27,7 +27,12 @@ export default function WorkspaceAuth({ children }: { children: ReactNode }) {
     }
   }
 
-  if (!pathname.startsWith(`/${slug}/vpn`)) {
+  const productPaths = ["vpn", "operations", "growth"];
+  const isProductPath = productPaths.some((product) =>
+    pathname.startsWith(`/${slug}/${product}`),
+  );
+
+  if (!isProductPath) {
     redirect(`/${slug}/vpn`);
   }
 

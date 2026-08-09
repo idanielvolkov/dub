@@ -50,6 +50,48 @@ export type RemnawaveNode = {
   countryCode: string;
 };
 
+export type RemnawaveHost = {
+  uuid: string;
+  remark: string;
+  address: string;
+  port: number | null;
+  isDisabled: boolean;
+  isHidden: boolean;
+  securityLayer: string | null;
+  nodes: { uuid: string; name: string }[];
+};
+
+export type RemnawaveConfigProfile = {
+  uuid: string;
+  name: string;
+  inbounds: unknown[];
+  nodes: unknown[];
+  updatedAt: string;
+};
+
+export type RemnawaveSquad = {
+  uuid: string;
+  name: string;
+  info: string | null;
+  inbounds: unknown[];
+  updatedAt: string;
+};
+
+export type RemnawaveSubscriptionTemplate = {
+  uuid: string;
+  name: string;
+  templateType: string;
+  viewPosition: number;
+};
+
+export type RemnawaveSubscriptionSettings = {
+  uuid: string;
+  randomizeHosts: boolean;
+  isShowCustomRemarks: boolean;
+  serveJsonAtBaseSubscription: boolean;
+  updatedAt: string;
+};
+
 async function remnawaveFetch<T>(path: string): Promise<T> {
   if (!process.env.REMNAWAVE_API_TOKEN) {
     throw new Error("REMNAWAVE_API_TOKEN is not configured");
@@ -121,6 +163,57 @@ export async function getRemnawaveNodes() {
     return await remnawaveFetch<RemnawaveNode[]>("/api/nodes");
   } catch {
     return [];
+  }
+}
+
+export async function getRemnawaveHosts() {
+  try {
+    return await remnawaveFetch<RemnawaveHost[]>("/api/hosts");
+  } catch {
+    return [];
+  }
+}
+
+export async function getRemnawaveConfigProfiles() {
+  try {
+    return await remnawaveFetch<{
+      total: number;
+      configProfiles: RemnawaveConfigProfile[];
+    }>("/api/config-profiles");
+  } catch {
+    return { total: 0, configProfiles: [] };
+  }
+}
+
+export async function getRemnawaveSquads() {
+  try {
+    return await remnawaveFetch<{
+      total: number;
+      internalSquads: RemnawaveSquad[];
+    }>("/api/internal-squads");
+  } catch {
+    return { total: 0, internalSquads: [] };
+  }
+}
+
+export async function getRemnawaveSubscriptionTemplates() {
+  try {
+    return await remnawaveFetch<{
+      total: number;
+      templates: RemnawaveSubscriptionTemplate[];
+    }>("/api/subscription-templates");
+  } catch {
+    return { total: 0, templates: [] };
+  }
+}
+
+export async function getRemnawaveSubscriptionSettings() {
+  try {
+    return await remnawaveFetch<RemnawaveSubscriptionSettings>(
+      "/api/subscription-settings",
+    );
+  } catch {
+    return null;
   }
 }
 
