@@ -3,13 +3,11 @@
 import { cn } from "@dub/utils";
 import * as Popover from "@radix-ui/react-popover";
 import { BoxSelect, Home, LayoutGrid, Type } from "lucide-react";
-import { useParams } from "next/navigation";
-import { MouseEvent, useCallback, useContext, useState } from "react";
+import { MouseEvent, useCallback, useState } from "react";
 import { toast } from "sonner";
 import { Button, ButtonProps } from "./button";
 import { useCopyToClipboard } from "./hooks";
 import { Logo } from "./logo";
-import { NavContext } from "./nav";
 import { Wordmark } from "./wordmark";
 
 const logoSvg = `<svg width="65" height="64" viewBox="0 0 65 64" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -21,7 +19,7 @@ const wordmarkSvg = `<svg width="46" height="24" viewBox="0 0 46 24" fill="none"
 </svg>`;
 
 /**
- * The Dub logo with a custom context menu for copying/navigation,
+ * The Detz logo with a custom context menu for copying/navigation,
  * for use in the top site nav
  */
 export function NavWordmark({
@@ -33,10 +31,6 @@ export function NavWordmark({
   isInApp?: boolean;
   className?: string;
 }) {
-  const { domain = "detz.fun" } = useParams() as { domain: string };
-
-  const { theme } = useContext(NavContext);
-
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   const handleContextMenu = useCallback((e: MouseEvent<HTMLDivElement>) => {
@@ -73,11 +67,7 @@ export function NavWordmark({
         <Popover.Content
           sideOffset={14}
           align="start"
-          className={cn(
-            "z-50 -mt-1.5",
-            !isInApp && "-translate-x-8",
-            theme === "dark" && "dark",
-          )}
+          className={cn("z-50 -mt-1.5", !isInApp && "-translate-x-8")}
           onClick={(e) => {
             e.stopPropagation();
             setIsPopoverOpen(false);
@@ -102,16 +92,11 @@ export function NavWordmark({
               onClick={() => window.open("https://detz.fun", "_blank")}
               icon={<BoxSelect strokeWidth={2} className="h-4 w-4" />}
             />
-            {isInApp || domain != "detz.fun" ? (
+            {isInApp ? (
               <ContextMenuButton
                 text="Home Page"
                 variant="outline"
-                onClick={() =>
-                  window.open(
-                    "https://detz.fun",
-                    "_blank",
-                  )
-                }
+                onClick={() => window.open("https://detz.fun", "_blank")}
                 icon={<Home strokeWidth={2} className="h-4 w-4" />}
               />
             ) : (
