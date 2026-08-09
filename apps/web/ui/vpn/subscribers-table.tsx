@@ -6,6 +6,8 @@ import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import {
   Button,
+  CopyButton,
+  CopyText,
   EmptyState,
   Input,
   Label,
@@ -15,11 +17,13 @@ import {
   ModalHeader,
   StatusBadge,
   Table,
+  useCopyToClipboard,
   useTable,
 } from "@dub/ui";
-import { ShieldUser } from "@dub/ui/icons";
+import { Copy, Link4, Pen2, ShieldUser } from "@dub/ui/icons";
 import { ColumnDef } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
+import { toast } from "sonner";
 import {
   changeSubscriberState,
   createSubscriber,
@@ -47,6 +51,7 @@ export function SubscribersTable({
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showBulkModal, setShowBulkModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState<RemnawaveUser | null>(null);
+  const [, copyToClipboard] = useCopyToClipboard();
   const columns = useMemo<ColumnDef<RemnawaveUser>[]>(
     () => [
       {
@@ -105,19 +110,33 @@ export function SubscribersTable({
             actions={[
               {
                 label: "Edit subscriber",
+                icon: Pen2,
                 onClick: () => setSelectedUser(row.original),
               },
               {
-                label: "Open subscription link",
+                label: "Copy subscription link",
+                icon: Copy,
                 onClick: () =>
-                  window.open(row.original.subscriptionUrl, "_blank"),
+                  toast.promise(copyToClipboard(row.original.subscriptionUrl), {
+                    success: "Subscription link copied",
+                  }),
+              },
+              {
+                label: "Open subscription link",
+                icon: Link4,
+                onClick: () =>
+                  window.open(
+                    row.original.subscriptionUrl,
+                    "_blank",
+                    "noopener,noreferrer",
+                  ),
               },
             ]}
           />
         ),
       },
     ],
-    [],
+    [copyToClipboard],
   );
   const table = useTable({ data: users, columns });
 
@@ -290,6 +309,38 @@ export function SubscribersTable({
               </p>
             </ModalHeader>
             <ModalBody className="bg-bg-muted">
+              <div className="border-border-subtle mb-4 flex items-center gap-3 rounded-xl border bg-white p-3">
+                <div className="min-w-0 flex-1">
+                  <p className="text-content-subtle text-xs">
+                    Subscription link
+                  </p>
+                  <CopyText
+                    value={selectedUser.subscriptionUrl}
+                    successMessage="Subscription link copied"
+                    className="text-content-emphasis mt-1 block max-w-full truncate font-mono text-xs"
+                  >
+                    {selectedUser.subscriptionUrl}
+                  </CopyText>
+                </div>
+                <CopyButton
+                  value={selectedUser.subscriptionUrl}
+                  successMessage="Subscription link copied"
+                  className="shrink-0"
+                />
+                <Button
+                  className="w-fit shrink-0"
+                  variant="secondary"
+                  icon={<Link4 className="size-4" />}
+                  text="Open"
+                  onClick={() =>
+                    window.open(
+                      selectedUser.subscriptionUrl,
+                      "_blank",
+                      "noopener,noreferrer",
+                    )
+                  }
+                />
+              </div>
               <form
                 action={saveSubscriber}
                 className="grid gap-4 sm:grid-cols-2"
