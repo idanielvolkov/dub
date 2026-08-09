@@ -1,5 +1,4 @@
 import { getSession } from "@/lib/auth/utils";
-import { DubCard, DubCardList } from "@/ui/vpn/server-card-list";
 import { prisma } from "@/lib/prisma";
 import { vpnPlansFromStore } from "@/lib/remnawave/plans";
 import { PageContent } from "@/ui/layout/page-content";
@@ -9,7 +8,7 @@ import {
   PlanCardActions,
   RestorePlanButton,
 } from "@/ui/vpn/plan-actions";
-import { Badge, EmptyState } from "@dub/ui";
+import { Badge, CardList, CardListCard, EmptyState } from "@dub/ui";
 import { Cards } from "@dub/ui/icons";
 
 export default async function PlansPage({
@@ -45,8 +44,8 @@ export default async function PlansPage({
       <PageWidthWrapper className="space-y-6 pb-10">
         <div className="grid items-stretch gap-4 lg:grid-cols-3">
           {activePlans.map((plan) => (
-            <DubCardList key={plan.id} className="h-full">
-              <DubCard
+            <CardList key={plan.id} className="h-full">
+              <CardListCard
                 hoverStateEnabled={false}
                 outerClassName={
                   plan.featured ? "h-full border-neutral-900" : "h-full"
@@ -97,8 +96,8 @@ export default async function PlansPage({
                     <PlanCardActions slug={slug} plan={plan} />
                   </div>
                 )}
-              </DubCard>
-            </DubCardList>
+              </CardListCard>
+            </CardList>
           ))}
         </div>
 
@@ -117,14 +116,14 @@ export default async function PlansPage({
         )}
 
         {isOwner && archivedPlans.length > 0 && (
-          <DubCardList>
-            <DubCard innerClassName="p-5" hoverStateEnabled={false}>
+          <CardList>
+            <CardListCard innerClassName="p-5" hoverStateEnabled={false}>
               <h2 className="text-content-emphasis font-semibold">
                 Archived plans
               </h2>
-              <DubCardList variant="compact" className="mt-4">
+              <CardList variant="compact" className="mt-4">
                 {archivedPlans.map((plan) => (
-                  <DubCard key={plan.id} hoverStateEnabled={false}>
+                  <CardListCard key={plan.id} hoverStateEnabled={false}>
                     <div className="flex items-center justify-between">
                       <div>
                         <p className="text-content-emphasis text-sm font-medium">
@@ -136,11 +135,11 @@ export default async function PlansPage({
                       </div>
                       <RestorePlanButton slug={slug} planId={plan.id} />
                     </div>
-                  </DubCard>
+                  </CardListCard>
                 ))}
-              </DubCardList>
-            </DubCard>
-          </DubCardList>
+              </CardList>
+            </CardListCard>
+          </CardList>
         )}
 
         <p className="text-content-subtle text-xs">

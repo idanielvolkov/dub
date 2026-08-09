@@ -1,8 +1,7 @@
 import { getRemnawaveNodes } from "@/lib/remnawave/client";
-import { DubCard, DubCardList } from "@/ui/vpn/server-card-list";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import { EmptyState, StatusBadge } from "@dub/ui";
+import { CardList, CardListCard, EmptyState, StatusBadge } from "@dub/ui";
 import { Nodes4 } from "@dub/ui/icons";
 
 export default async function ServersPage() {
@@ -16,8 +15,8 @@ export default async function ServersPage() {
       <PageWidthWrapper className="pb-10">
         <div className="grid gap-4 md:grid-cols-2">
           {nodes.map((node) => (
-            <DubCardList key={node.uuid}>
-              <DubCard innerClassName="p-0" hoverStateEnabled={false}>
+            <CardList key={node.uuid}>
+              <CardListCard innerClassName="p-0" hoverStateEnabled={false}>
                 <div className="p-5">
                   <div className="flex items-start justify-between gap-4">
                     <div>
@@ -49,8 +48,8 @@ export default async function ServersPage() {
                     </p>
                   </div>
                 </div>
-              </DubCard>
-            </DubCardList>
+              </CardListCard>
+            </CardList>
           ))}
         </div>
         {!nodes.length && (

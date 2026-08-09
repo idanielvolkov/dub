@@ -5,8 +5,7 @@ import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { UserAvatar } from "@/ui/users/user-avatar";
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
-import { DubCard, DubCardList } from "@/ui/vpn/server-card-list";
-import { Badge, Input } from "@dub/ui";
+import { Badge, CardList, CardListCard, Input } from "@dub/ui";
 import {
   changeGrowthMemberRole,
   inviteGrowthMember,
@@ -60,8 +59,8 @@ export default async function GrowthTeamPage({
                 Members can edit Growth; viewers have read-only access
               </p>
             </div>
-            <DubCardList>
-              <DubCard innerClassName="p-0" hoverStateEnabled={false}>
+            <CardList>
+              <CardListCard innerClassName="p-0" hoverStateEnabled={false}>
                 <form
                   action={inviteGrowthMember}
                   className="grid gap-3 p-5 sm:grid-cols-[1fr_160px_auto]"
@@ -85,8 +84,8 @@ export default async function GrowthTeamPage({
                   />
                   <OperationSubmit>Send invite</OperationSubmit>
                 </form>
-              </DubCard>
-            </DubCardList>
+              </CardListCard>
+            </CardList>
           </section>
         )}
         <section>
@@ -99,9 +98,9 @@ export default async function GrowthTeamPage({
               pending
             </p>
           </div>
-          <DubCardList variant="compact">
+          <CardList variant="compact">
             {workspace.users.map((member) => (
-              <DubCard
+              <CardListCard
                 key={member.userId}
                 innerClassName="flex flex-wrap items-center gap-3 px-5 py-4"
                 hoverStateEnabled={false}
@@ -160,10 +159,10 @@ export default async function GrowthTeamPage({
                     </form>
                   </>
                 )}
-              </DubCard>
+              </CardListCard>
             ))}
             {workspace.invites.map((invite) => (
-              <DubCard
+              <CardListCard
                 key={invite.email}
                 innerClassName="flex flex-wrap items-center gap-3 bg-neutral-50 px-5 py-4"
                 hoverStateEnabled={false}
@@ -188,9 +187,9 @@ export default async function GrowthTeamPage({
                     </OperationSubmit>
                   </form>
                 )}
-              </DubCard>
+              </CardListCard>
             ))}
-          </DubCardList>
+          </CardList>
         </section>
       </PageWidthWrapper>
     </PageContent>

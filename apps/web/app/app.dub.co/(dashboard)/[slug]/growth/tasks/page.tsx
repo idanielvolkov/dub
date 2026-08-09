@@ -1,5 +1,4 @@
 import { getGrowthTasks } from "@/lib/growth/tasks";
-import { DubCard, DubCardList } from "@/ui/vpn/server-card-list";
 import {
   CreateGrowthTaskButton,
   GrowthTaskActions,
@@ -7,7 +6,7 @@ import {
 } from "@/ui/growth/growth-task-actions";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import { Badge, EmptyState } from "@dub/ui";
+import { Badge, CardList, CardListCard, EmptyState } from "@dub/ui";
 import { SquareCheck } from "@dub/ui/icons";
 
 export default async function GrowthTasksPage({
@@ -41,9 +40,9 @@ export default async function GrowthTasksPage({
                     {columnTasks.length} tasks
                   </p>
                 </div>
-                <DubCardList variant="compact">
+                <CardList variant="compact">
                   {columnTasks.map((task) => (
-                    <DubCard
+                    <CardListCard
                       key={task.id}
                       innerClassName="space-y-3 p-4"
                       hoverStateEnabled={false}
@@ -70,9 +69,9 @@ export default async function GrowthTasksPage({
                           : ""}
                       </p>
                       <GrowthTaskActions slug={slug} task={task} />
-                    </DubCard>
+                    </CardListCard>
                   ))}
-                </DubCardList>
+                </CardList>
                 {!columnTasks.length && (
                   <div className="py-8">
                     <EmptyState icon={SquareCheck} title="No tasks" />

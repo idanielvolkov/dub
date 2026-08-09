@@ -8,10 +8,16 @@ import {
   removeExternalSquad,
   renameExternalSquad,
 } from "../../app/app.dub.co/(dashboard)/[slug]/operations/actions";
-import { Button, Input, Label, Modal } from "@dub/ui";
+import {
+  Button,
+  CardList,
+  CardListCard,
+  Input,
+  Label,
+  Modal,
+} from "@dub/ui";
 import { useState } from "react";
 import { OperationSubmit } from "./operation-submit";
-import { DubCard, DubCardList } from "./server-card-list";
 
 export function ExternalSquadsManagement({
   slug,
@@ -40,9 +46,9 @@ export function ExternalSquadsManagement({
         />
       </div>
 
-      <DubCardList variant="compact">
+      <CardList variant="compact">
         {squads.map((squad) => (
-          <DubCard
+          <CardListCard
             key={squad.uuid}
             innerClassName="space-y-4 p-5"
             hoverStateEnabled={false}
@@ -99,9 +105,9 @@ export function ExternalSquadsManagement({
                 </OperationSubmit>
               </form>
             </div>
-          </DubCard>
+          </CardListCard>
         ))}
-      </DubCardList>
+      </CardList>
 
       <Modal showModal={showCreate} setShowModal={setShowCreate}>
         <div className="border-border-subtle border-b px-6 py-4">

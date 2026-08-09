@@ -6,8 +6,7 @@ import {
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
-import { DubCard, DubCardList } from "@/ui/vpn/server-card-list";
-import { Badge, EmptyState } from "@dub/ui";
+import { Badge, CardList, CardListCard, EmptyState } from "@dub/ui";
 import { Discount } from "@dub/ui/icons";
 import { deletePromotion, updatePromotion } from "./actions";
 
@@ -34,9 +33,9 @@ export default async function PromotionsPage({
               {promotions.length} saved offers
             </p>
           </div>
-          <DubCardList variant="compact">
+          <CardList variant="compact">
             {promotions.map((promotion) => (
-              <DubCard
+              <CardListCard
                 key={promotion.id}
                 innerClassName="space-y-4 p-5"
                 hoverStateEnabled={false}
@@ -76,9 +75,9 @@ export default async function PromotionsPage({
                     Delete
                   </OperationSubmit>
                 </form>
-              </DubCard>
+              </CardListCard>
             ))}
-          </DubCardList>
+          </CardList>
           {!promotions.length && (
             <div className="py-12">
               <EmptyState

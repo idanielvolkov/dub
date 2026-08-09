@@ -6,10 +6,9 @@ import {
 } from "@/lib/remnawave/client";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import { DubCard, DubCardList } from "@/ui/vpn/server-card-list";
 import { VpnStats } from "@/ui/vpn/vpn-ui";
 import { ExternalSquadsManagement } from "@/ui/vpn/external-squads-management";
-import { Badge, EmptyState } from "@dub/ui";
+import { Badge, CardList, CardListCard, EmptyState } from "@dub/ui";
 import { ChartActivity2 } from "@dub/ui/icons";
 
 export default async function OperationsInsightsPage({
@@ -73,9 +72,9 @@ export default async function OperationsInsightsPage({
               Devices reported by compatible VPN applications
             </p>
           </div>
-          <DubCardList variant="compact">
+          <CardList variant="compact">
             {(devices?.byPlatform ?? []).map((platform) => (
-              <DubCard key={platform.platform} hoverStateEnabled={false}>
+              <CardListCard key={platform.platform} hoverStateEnabled={false}>
                 <div className="flex items-center justify-between gap-4">
                   <div>
                     <p className="text-content-emphasis text-sm font-medium">
@@ -90,9 +89,9 @@ export default async function OperationsInsightsPage({
                   </div>
                   <Badge variant="gray">{platform.count} devices</Badge>
                 </div>
-              </DubCard>
+              </CardListCard>
             ))}
-          </DubCardList>
+          </CardList>
           {!devices?.byPlatform.length && (
             <EmptyState
               icon={ChartActivity2}
@@ -118,9 +117,9 @@ export default async function OperationsInsightsPage({
               Providers, attached nodes and recorded costs
             </p>
           </div>
-          <DubCardList variant="compact">
+          <CardList variant="compact">
             {infra.providers.map((provider) => (
-              <DubCard key={provider.uuid} hoverStateEnabled={false}>
+              <CardListCard key={provider.uuid} hoverStateEnabled={false}>
                 <div className="flex items-center justify-between gap-4">
                   <div>
                     <p className="text-content-emphasis text-sm font-medium">
@@ -134,9 +133,9 @@ export default async function OperationsInsightsPage({
                     ${provider.billingHistory.totalAmount.toLocaleString("en-US")}
                   </Badge>
                 </div>
-              </DubCard>
+              </CardListCard>
             ))}
-          </DubCardList>
+          </CardList>
         </section>
       </PageWidthWrapper>
     </PageContent>

@@ -10,9 +10,8 @@ import {
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { ButtonLink } from "@/ui/placeholders/button-link";
-import { DubCard, DubCardList } from "@/ui/vpn/server-card-list";
 import { VpnStats } from "@/ui/vpn/vpn-ui";
-import { StatusBadge } from "@dub/ui";
+import { CardList, CardListCard, StatusBadge } from "@dub/ui";
 import { ArrowUpRight2, ChevronRight } from "@dub/ui/icons";
 import Link from "next/link";
 
@@ -103,9 +102,9 @@ export default async function OperationsPage({
               Every section reads directly from your Remnawave installation
             </p>
           </div>
-          <DubCardList variant="compact">
+          <CardList variant="compact">
             {resources.map(([name, count, href]) => (
-              <DubCard key={name}>
+              <CardListCard key={name}>
                 <Link
                   href={href}
                   className="group flex min-h-9 items-center justify-between text-sm"
@@ -118,9 +117,9 @@ export default async function OperationsPage({
                     <ChevronRight className="size-3.5 transition-transform duration-150 group-hover:translate-x-0.5" />
                   </span>
                 </Link>
-              </DubCard>
+              </CardListCard>
             ))}
-          </DubCardList>
+          </CardList>
         </section>
       </PageWidthWrapper>
     </PageContent>
