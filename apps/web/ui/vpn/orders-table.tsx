@@ -2,6 +2,7 @@
 
 import { VpnPlan } from "@/lib/remnawave/plans";
 import { VpnOrder } from "@/lib/vpn/orders";
+import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import {
   Button,
@@ -20,9 +21,6 @@ import {
   fulfillVpnOrder,
   updateVpnOrder,
 } from "../../app/app.dub.co/(dashboard)/[slug]/vpn/orders/actions";
-
-const selectClass =
-  "h-10 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-900 outline-none focus:border-neutral-500 focus:ring-neutral-500";
 
 export function OrdersTable({
   slug,
@@ -111,16 +109,17 @@ export function OrdersTable({
                 <input type="hidden" name="slug" value={slug} />
                 <input type="hidden" name="id" value={row.original.id} />
                 <input type="hidden" name="note" value={row.original.note} />
-                <select
-                  className="border-border-subtle bg-bg-default h-9 min-w-28 rounded-lg border px-2 text-xs"
+                <FormCombobox
                   name="paymentStatus"
                   defaultValue={row.original.paymentStatus}
-                >
-                  <option value="pending">Pending</option>
-                  <option value="paid">Paid</option>
-                  <option value="refunded">Refunded</option>
-                  <option value="canceled">Canceled</option>
-                </select>
+                  className="h-9 min-w-32 text-xs"
+                  options={[
+                    { value: "pending", label: "Pending" },
+                    { value: "paid", label: "Paid" },
+                    { value: "refunded", label: "Refunded" },
+                    { value: "canceled", label: "Canceled" },
+                  ]}
+                />
                 <OperationSubmit>Save</OperationSubmit>
               </form>
             )}
@@ -205,13 +204,14 @@ export function OrdersTable({
           </label>
           <label className="text-content-default grid gap-1.5 text-sm font-medium">
             Plan
-            <select className={selectClass} name="planId" required>
-              {plans.map((plan) => (
-                <option key={plan.id} value={plan.id}>
-                  {plan.name} · ${plan.price}
-                </option>
-              ))}
-            </select>
+            <FormCombobox
+              name="planId"
+              options={plans.map((plan) => ({
+                value: plan.id,
+                label: `${plan.name} · $${plan.price}`,
+              }))}
+              placeholder="Select a plan"
+            />
           </label>
           <label className="text-content-default grid gap-1.5 text-sm font-medium">
             Note

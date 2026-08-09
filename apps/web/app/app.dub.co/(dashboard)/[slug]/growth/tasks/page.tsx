@@ -1,6 +1,7 @@
 import { getGrowthTasks, GrowthTask } from "@/lib/growth/tasks";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
+import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import { VpnPanel, VpnPanelHeader } from "@/ui/vpn/vpn-ui";
 import { Badge } from "@dub/ui";
@@ -53,29 +54,25 @@ function TaskFields({ task }: { task?: GrowthTask }) {
       </label>
       <label className="grid gap-1 text-xs text-neutral-500">
         Status
-        <select
-          className={inputClass}
+        <FormCombobox
           name="status"
           defaultValue={task?.status || "backlog"}
-        >
-          {columns.map((column) => (
-            <option key={column.value} value={column.value}>
-              {column.label}
-            </option>
-          ))}
-        </select>
+          className="h-9"
+          options={columns}
+        />
       </label>
       <label className="grid gap-1 text-xs text-neutral-500">
         Priority
-        <select
-          className={inputClass}
+        <FormCombobox
           name="priority"
           defaultValue={task?.priority || "medium"}
-        >
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-        </select>
+          className="h-9"
+          options={[
+            { value: "low", label: "Low" },
+            { value: "medium", label: "Medium" },
+            { value: "high", label: "High" },
+          ]}
+        />
       </label>
       <label className="grid gap-1 text-xs text-neutral-500 md:col-span-2">
         Description

@@ -1,6 +1,7 @@
 import { getGrowthLeads } from "@/lib/growth/leads";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
+import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import { VpnMetricCard, VpnPanel, VpnPanelHeader } from "@/ui/vpn/vpn-ui";
 import { Badge } from "@dub/ui";
@@ -95,13 +96,18 @@ export default async function LeadsPage({
             </label>
             <label className="grid gap-1 text-xs text-neutral-500">
               Stage
-              <select className={inputClass} name="status" defaultValue="new">
-                <option value="new">New</option>
-                <option value="contacted">Contacted</option>
-                <option value="qualified">Qualified</option>
-                <option value="won">Won</option>
-                <option value="lost">Lost</option>
-              </select>
+              <FormCombobox
+                name="status"
+                defaultValue="new"
+                className="h-9"
+                options={[
+                  { value: "new", label: "New" },
+                  { value: "contacted", label: "Contacted" },
+                  { value: "qualified", label: "Qualified" },
+                  { value: "won", label: "Won" },
+                  { value: "lost", label: "Lost" },
+                ]}
+              />
             </label>
             <label className="grid gap-1 text-xs text-neutral-500 md:col-span-2 lg:col-span-3">
               Note
@@ -152,17 +158,18 @@ export default async function LeadsPage({
                   <input type="hidden" name="id" value={lead.id} />
                   <label className="grid gap-1 text-xs text-neutral-500">
                     Stage
-                    <select
-                      className={inputClass}
+                    <FormCombobox
                       name="status"
                       defaultValue={lead.meta.status}
-                    >
-                      <option value="new">New</option>
-                      <option value="contacted">Contacted</option>
-                      <option value="qualified">Qualified</option>
-                      <option value="won">Won</option>
-                      <option value="lost">Lost</option>
-                    </select>
+                      className="h-9"
+                      options={[
+                        { value: "new", label: "New" },
+                        { value: "contacted", label: "Contacted" },
+                        { value: "qualified", label: "Qualified" },
+                        { value: "won", label: "Won" },
+                        { value: "lost", label: "Lost" },
+                      ]}
+                    />
                   </label>
                   <label className="grid gap-1 text-xs text-neutral-500">
                     Owner
