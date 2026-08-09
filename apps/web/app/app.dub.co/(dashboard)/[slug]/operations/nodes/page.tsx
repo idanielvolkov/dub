@@ -1,3 +1,5 @@
+import { canAccessPlatformArea } from "@/lib/platform-access";
+import { requirePlatformAccess } from "@/lib/platform-access-server";
 import { getRemnawaveNodesState } from "@/lib/remnawave/client";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
@@ -13,6 +15,13 @@ export default async function NodesPage({
     params,
     getRemnawaveNodesState(),
   ]);
+  const membership = await requirePlatformAccess(slug, "remnawave");
+  const canManage = canAccessPlatformArea({
+    role: membership.role,
+    workspacePreferences: membership.workspacePreferences,
+    area: "remnawave",
+    minimum: "manage",
+  });
   return (
     <PageContent
       title="Nodes"
@@ -22,7 +31,11 @@ export default async function NodesPage({
         {nodesState.error ? (
           <RemnawaveUnavailable detail={nodesState.error} />
         ) : (
-          <NodesTable slug={slug} nodes={nodesState.data} />
+          <NodesTable
+            slug={slug}
+            nodes={nodesState.data}
+            canManage={canManage}
+          />
         )}
       </PageWidthWrapper>
     </PageContent>

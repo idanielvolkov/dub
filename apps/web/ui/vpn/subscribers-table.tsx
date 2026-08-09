@@ -44,9 +44,11 @@ function formatBytes(bytes: number | null) {
 export function SubscribersTable({
   slug,
   users,
+  canManage,
 }: {
   slug: string;
   users: RemnawaveUser[];
+  canManage: boolean;
 }) {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showBulkModal, setShowBulkModal] = useState(false);
@@ -109,7 +111,7 @@ export function SubscribersTable({
           <TableRowMenu
             actions={[
               {
-                label: "Edit user",
+                label: canManage ? "Edit user" : "View user",
                 icon: Pen2,
                 onClick: () => setSelectedUser(row.original),
               },
@@ -136,7 +138,7 @@ export function SubscribersTable({
         ),
       },
     ],
-    [copyToClipboard],
+    [canManage, copyToClipboard],
   );
   const table = useTable({ data: users, columns });
 
@@ -151,17 +153,21 @@ export function SubscribersTable({
         </div>
         <div className="flex items-center gap-2">
           <StatusBadge variant="success">Live data</StatusBadge>
-          <Button
-            className="w-fit"
-            variant="secondary"
-            text="Bulk actions"
-            onClick={() => setShowBulkModal(true)}
-          />
-          <Button
-            className="w-fit"
-            text="Add user"
-            onClick={() => setShowCreateModal(true)}
-          />
+          {canManage && (
+            <>
+              <Button
+                className="w-fit"
+                variant="secondary"
+                text="Bulk actions"
+                onClick={() => setShowBulkModal(true)}
+              />
+              <Button
+                className="w-fit"
+                text="Add user"
+                onClick={() => setShowCreateModal(true)}
+              />
+            </>
+          )}
         </div>
       </div>
       <Table
@@ -400,8 +406,8 @@ export function SubscribersTable({
                 />
               </div>
               <form
-                action={saveSubscriber}
-                className="grid gap-4 sm:grid-cols-2"
+                action={canManage ? saveSubscriber : undefined}
+                className={`grid gap-4 sm:grid-cols-2 ${canManage ? "" : "pointer-events-none"}`}
               >
                 <input type="hidden" name="slug" value={slug} />
                 <input type="hidden" name="uuid" value={selectedUser.uuid} />
@@ -468,53 +474,57 @@ export function SubscribersTable({
                     defaultValue={selectedUser.description || ""}
                   />
                 </div>
-                <div className="flex justify-end sm:col-span-2">
-                  <OperationSubmit>Save changes</OperationSubmit>
-                </div>
+                {canManage && (
+                  <div className="flex justify-end sm:col-span-2">
+                    <OperationSubmit>Save changes</OperationSubmit>
+                  </div>
+                )}
               </form>
             </ModalBody>
-            <ModalFooter className="flex-wrap justify-start">
-              <form action={changeSubscriberState}>
-                <input type="hidden" name="slug" value={slug} />
-                <input type="hidden" name="uuid" value={selectedUser.uuid} />
-                <input
-                  type="hidden"
-                  name="enabled"
-                  value={String(selectedUser.status !== "ACTIVE")}
-                />
-                <OperationSubmit>
-                  {selectedUser.status === "ACTIVE" ? "Disable" : "Enable"}
-                </OperationSubmit>
-              </form>
-              <form action={resetSubscriberTraffic}>
-                <input type="hidden" name="slug" value={slug} />
-                <input type="hidden" name="uuid" value={selectedUser.uuid} />
-                <OperationSubmit
-                  confirmMessage={`Reset traffic for ${selectedUser.username}?`}
-                >
-                  Reset traffic
-                </OperationSubmit>
-              </form>
-              <form action={revokeSubscriber}>
-                <input type="hidden" name="slug" value={slug} />
-                <input type="hidden" name="uuid" value={selectedUser.uuid} />
-                <OperationSubmit
-                  confirmMessage={`Generate a new access link for ${selectedUser.username}?`}
-                >
-                  Revoke link
-                </OperationSubmit>
-              </form>
-              <form action={removeSubscriber} className="ml-auto">
-                <input type="hidden" name="slug" value={slug} />
-                <input type="hidden" name="uuid" value={selectedUser.uuid} />
-                <OperationSubmit
-                  destructive
-                  confirmMessage={`Delete ${selectedUser.username}? VPN access will stop immediately.`}
-                >
-                  Delete
-                </OperationSubmit>
-              </form>
-            </ModalFooter>
+            {canManage && (
+              <ModalFooter className="flex-wrap justify-start">
+                <form action={changeSubscriberState}>
+                  <input type="hidden" name="slug" value={slug} />
+                  <input type="hidden" name="uuid" value={selectedUser.uuid} />
+                  <input
+                    type="hidden"
+                    name="enabled"
+                    value={String(selectedUser.status !== "ACTIVE")}
+                  />
+                  <OperationSubmit>
+                    {selectedUser.status === "ACTIVE" ? "Disable" : "Enable"}
+                  </OperationSubmit>
+                </form>
+                <form action={resetSubscriberTraffic}>
+                  <input type="hidden" name="slug" value={slug} />
+                  <input type="hidden" name="uuid" value={selectedUser.uuid} />
+                  <OperationSubmit
+                    confirmMessage={`Reset traffic for ${selectedUser.username}?`}
+                  >
+                    Reset traffic
+                  </OperationSubmit>
+                </form>
+                <form action={revokeSubscriber}>
+                  <input type="hidden" name="slug" value={slug} />
+                  <input type="hidden" name="uuid" value={selectedUser.uuid} />
+                  <OperationSubmit
+                    confirmMessage={`Generate a new access link for ${selectedUser.username}?`}
+                  >
+                    Revoke link
+                  </OperationSubmit>
+                </form>
+                <form action={removeSubscriber} className="ml-auto">
+                  <input type="hidden" name="slug" value={slug} />
+                  <input type="hidden" name="uuid" value={selectedUser.uuid} />
+                  <OperationSubmit
+                    destructive
+                    confirmMessage={`Delete ${selectedUser.username}? VPN access will stop immediately.`}
+                  >
+                    Delete
+                  </OperationSubmit>
+                </form>
+              </ModalFooter>
+            )}
           </>
         )}
       </Modal>

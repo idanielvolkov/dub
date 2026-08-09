@@ -22,9 +22,9 @@ import { useMemo, useState } from "react";
 import {
   changeNodeState,
   removeNode,
+  resetNodeTraffic,
   restartAllNodes,
   restartNode,
-  resetNodeTraffic,
   saveNode,
 } from "../../app/app.dub.co/(dashboard)/[slug]/operations/actions";
 
@@ -37,9 +37,11 @@ function formatBytes(bytes: number) {
 export function NodesTable({
   slug,
   nodes,
+  canManage,
 }: {
   slug: string;
   nodes: RemnawaveNode[];
+  canManage: boolean;
 }) {
   const [selectedNode, setSelectedNode] = useState<RemnawaveNode | null>(null);
   const columns = useMemo<ColumnDef<RemnawaveNode>[]>(
@@ -114,7 +116,7 @@ export function NodesTable({
           <TableRowMenu
             actions={[
               {
-                label: "Manage node",
+                label: canManage ? "Manage node" : "View node",
                 onClick: () => setSelectedNode(row.original),
               },
             ]}
@@ -122,7 +124,7 @@ export function NodesTable({
         ),
       },
     ],
-    [],
+    [canManage],
   );
   const table = useTable({ data: nodes, columns });
 
@@ -139,12 +141,14 @@ export function NodesTable({
         </div>
         <div className="flex items-center gap-2">
           <StatusBadge variant="success">Live data</StatusBadge>
-          <form action={restartAllNodes}>
-            <input type="hidden" name="slug" value={slug} />
-            <OperationSubmit confirmMessage="Restart every connected Remnawave node? Active VPN sessions may reconnect briefly.">
-              Restart all
-            </OperationSubmit>
-          </form>
+          {canManage && (
+            <form action={restartAllNodes}>
+              <input type="hidden" name="slug" value={slug} />
+              <OperationSubmit confirmMessage="Restart every connected Remnawave node? Active VPN sessions may reconnect briefly.">
+                Restart all
+              </OperationSubmit>
+            </form>
+          )}
         </div>
       </div>
       <Table
@@ -184,8 +188,8 @@ export function NodesTable({
             </ModalHeader>
             <ModalBody className="bg-bg-muted">
               <form
-                action={saveNode}
-                className="grid gap-4 sm:grid-cols-2"
+                action={canManage ? saveNode : undefined}
+                className={`grid gap-4 sm:grid-cols-2 ${canManage ? "" : "pointer-events-none"}`}
               >
                 <input type="hidden" name="slug" value={slug} />
                 <input type="hidden" name="uuid" value={selectedNode.uuid} />
@@ -266,9 +270,11 @@ export function NodesTable({
                     maxLength={2}
                   />
                 </div>
-                <div className="flex justify-end sm:col-span-2">
-                  <OperationSubmit>Save changes</OperationSubmit>
-                </div>
+                {canManage && (
+                  <div className="flex justify-end sm:col-span-2">
+                    <OperationSubmit>Save changes</OperationSubmit>
+                  </div>
+                )}
               </form>
               <dl className="border-border-subtle mt-5 grid gap-3 border-t pt-5 text-sm sm:grid-cols-3">
                 <div>
@@ -291,48 +297,50 @@ export function NodesTable({
                 </div>
               </dl>
             </ModalBody>
-            <ModalFooter className="justify-start">
-              <form action={changeNodeState}>
-                <input type="hidden" name="slug" value={slug} />
-                <input type="hidden" name="uuid" value={selectedNode.uuid} />
-                <input
-                  type="hidden"
-                  name="enabled"
-                  value={String(selectedNode.isDisabled)}
-                />
-                <OperationSubmit>
-                  {selectedNode.isDisabled ? "Enable node" : "Disable node"}
-                </OperationSubmit>
-              </form>
-              <form action={restartNode}>
-                <input type="hidden" name="slug" value={slug} />
-                <input type="hidden" name="uuid" value={selectedNode.uuid} />
-                <OperationSubmit
-                  confirmMessage={`Restart ${selectedNode.name}?`}
-                >
-                  Restart node
-                </OperationSubmit>
-              </form>
-              <form action={resetNodeTraffic}>
-                <input type="hidden" name="slug" value={slug} />
-                <input type="hidden" name="uuid" value={selectedNode.uuid} />
-                <OperationSubmit
-                  confirmMessage={`Reset traffic for ${selectedNode.name}?`}
-                >
-                  Reset traffic
-                </OperationSubmit>
-              </form>
-              <form action={removeNode} className="ml-auto">
-                <input type="hidden" name="slug" value={slug} />
-                <input type="hidden" name="uuid" value={selectedNode.uuid} />
-                <OperationSubmit
-                  destructive
-                  confirmMessage={`Delete ${selectedNode.name}? The node must be detached from active configuration first.`}
-                >
-                  Delete node
-                </OperationSubmit>
-              </form>
-            </ModalFooter>
+            {canManage && (
+              <ModalFooter className="justify-start">
+                <form action={changeNodeState}>
+                  <input type="hidden" name="slug" value={slug} />
+                  <input type="hidden" name="uuid" value={selectedNode.uuid} />
+                  <input
+                    type="hidden"
+                    name="enabled"
+                    value={String(selectedNode.isDisabled)}
+                  />
+                  <OperationSubmit>
+                    {selectedNode.isDisabled ? "Enable node" : "Disable node"}
+                  </OperationSubmit>
+                </form>
+                <form action={restartNode}>
+                  <input type="hidden" name="slug" value={slug} />
+                  <input type="hidden" name="uuid" value={selectedNode.uuid} />
+                  <OperationSubmit
+                    confirmMessage={`Restart ${selectedNode.name}?`}
+                  >
+                    Restart node
+                  </OperationSubmit>
+                </form>
+                <form action={resetNodeTraffic}>
+                  <input type="hidden" name="slug" value={slug} />
+                  <input type="hidden" name="uuid" value={selectedNode.uuid} />
+                  <OperationSubmit
+                    confirmMessage={`Reset traffic for ${selectedNode.name}?`}
+                  >
+                    Reset traffic
+                  </OperationSubmit>
+                </form>
+                <form action={removeNode} className="ml-auto">
+                  <input type="hidden" name="slug" value={slug} />
+                  <input type="hidden" name="uuid" value={selectedNode.uuid} />
+                  <OperationSubmit
+                    destructive
+                    confirmMessage={`Delete ${selectedNode.name}? The node must be detached from active configuration first.`}
+                  >
+                    Delete node
+                  </OperationSubmit>
+                </form>
+              </ModalFooter>
+            )}
           </>
         )}
       </Modal>
