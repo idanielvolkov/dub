@@ -25,10 +25,8 @@ import {
   ShieldUser,
   Sliders,
   SquareCheck,
-  UserFocus,
   Users,
   UsersSettings,
-  WindowSettings,
 } from "@dub/ui/icons";
 import { useParams, usePathname } from "next/navigation";
 import { ReactNode } from "react";
@@ -136,11 +134,6 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
             exact: true,
           },
           {
-            name: "Users",
-            icon: iconOr(UserFocus, Users),
-            href: `/${slug}/operations/users`,
-          },
-          {
             name: "Nodes",
             icon: iconOr(Nodes4, Globe),
             href: `/${slug}/operations/nodes`,
@@ -164,11 +157,6 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
             name: "Subscriptions",
             icon: iconOr(QRCode, Receipt2),
             href: `/${slug}/operations/subscriptions`,
-          },
-          {
-            name: "System",
-            icon: iconOr(WindowSettings, CubeSettings),
-            href: `/${slug}/operations/system`,
           },
           {
             name: "Insights & billing",

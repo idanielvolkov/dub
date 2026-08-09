@@ -11,6 +11,7 @@ import {
   deleteRemnawaveHwidDevice,
   deleteRemnawaveSquad,
   removeAllUsersFromRemnawaveExternalSquad,
+  restartAllRemnawaveNodes,
   restartRemnawaveNode,
   setRemnawaveNodeEnabled,
   updateRemnawaveConfigProfile,
@@ -65,6 +66,14 @@ export async function restartNode(formData: FormData) {
   await authorize(slug);
   await restartRemnawaveNode(text(formData, "uuid"));
   revalidatePath(`/${slug}/operations/nodes`);
+}
+
+export async function restartAllNodes(formData: FormData) {
+  const slug = text(formData, "slug");
+  await authorize(slug);
+  await restartAllRemnawaveNodes();
+  revalidatePath(`/${slug}/operations/nodes`);
+  revalidatePath(`/${slug}/operations`);
 }
 
 export async function saveHost(formData: FormData) {

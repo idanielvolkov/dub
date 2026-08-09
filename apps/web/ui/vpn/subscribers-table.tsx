@@ -23,7 +23,9 @@ import { useMemo, useState } from "react";
 import {
   changeSubscriberState,
   createSubscriber,
+  extendAllSubscribers,
   removeSubscriber,
+  resetAllSubscriberTraffic,
   resetSubscriberTraffic,
   revokeSubscriber,
   saveSubscriber,
@@ -43,6 +45,7 @@ export function SubscribersTable({
   users: RemnawaveUser[];
 }) {
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showBulkModal, setShowBulkModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState<RemnawaveUser | null>(null);
   const columns = useMemo<ColumnDef<RemnawaveUser>[]>(
     () => [
@@ -133,6 +136,12 @@ export function SubscribersTable({
           <StatusBadge variant="success">Live data</StatusBadge>
           <Button
             className="w-fit"
+            variant="secondary"
+            text="Bulk actions"
+            onClick={() => setShowBulkModal(true)}
+          />
+          <Button
+            className="w-fit"
             text="Add subscriber"
             onClick={() => setShowCreateModal(true)}
           />
@@ -149,6 +158,67 @@ export function SubscribersTable({
           />
         }
       />
+
+      <Modal showModal={showBulkModal} setShowModal={setShowBulkModal}>
+        <ModalHeader
+          title="Bulk subscriber actions"
+          description="Apply operational changes to every Remnawave subscriber."
+        />
+        <ModalBody className="bg-bg-muted space-y-4">
+          <form
+            action={extendAllSubscribers}
+            className="border-border-subtle rounded-xl border bg-white p-4"
+          >
+            <input type="hidden" name="slug" value={slug} />
+            <div className="flex items-end gap-3">
+              <div className="grid flex-1 gap-1.5">
+                <Label htmlFor="extend-all-days">Extend subscriptions</Label>
+                <Input
+                  id="extend-all-days"
+                  name="extendDays"
+                  type="number"
+                  min={1}
+                  max={9999}
+                  defaultValue={30}
+                  required
+                />
+              </div>
+              <OperationSubmit
+                confirmMessage={`Extend all ${users.length} subscribers by the selected number of days?`}
+              >
+                Extend all
+              </OperationSubmit>
+            </div>
+          </form>
+          <form
+            action={resetAllSubscriberTraffic}
+            className="border-border-subtle flex items-center justify-between gap-4 rounded-xl border bg-white p-4"
+          >
+            <input type="hidden" name="slug" value={slug} />
+            <div>
+              <p className="text-content-emphasis text-sm font-medium">
+                Reset all traffic
+              </p>
+              <p className="text-content-subtle mt-1 text-xs">
+                Clear usage counters for every subscriber.
+              </p>
+            </div>
+            <OperationSubmit
+              confirmMessage={`Reset traffic for all ${users.length} subscribers?`}
+            >
+              Reset all
+            </OperationSubmit>
+          </form>
+        </ModalBody>
+        <ModalFooter>
+          <Button
+            className="w-fit"
+            variant="secondary"
+            text="Close"
+            onClick={() => setShowBulkModal(false)}
+          />
+        </ModalFooter>
+      </Modal>
 
       <Modal showModal={showCreateModal} setShowModal={setShowCreateModal}>
         <ModalHeader
