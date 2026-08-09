@@ -1,13 +1,14 @@
 import { getGrowthLeads } from "@/lib/growth/leads";
-import { DubCard, DubCardList } from "@/ui/vpn/server-card-list";
+import { CreateLeadButton } from "@/ui/growth/create-lead-button";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
+import { DubCard, DubCardList } from "@/ui/vpn/server-card-list";
 import { VpnStats } from "@/ui/vpn/vpn-ui";
 import { Badge, EmptyState, Input, Label } from "@dub/ui";
 import { Crosshairs3 } from "@dub/ui/icons";
-import { createGrowthLead, updateGrowthLead } from "./actions";
+import { updateGrowthLead } from "./actions";
 
 export default async function LeadsPage({
   params,
@@ -28,6 +29,7 @@ export default async function LeadsPage({
       titleInfo={{
         title: "Attributed prospects and the marketing sales pipeline.",
       }}
+      controls={<CreateLeadButton slug={slug} />}
     >
       <PageWidthWrapper className="pb-10">
         <VpnStats
@@ -47,88 +49,6 @@ export default async function LeadsPage({
             },
           ]}
         />
-        <section className="mb-6">
-          <div className="mb-3">
-            <h2 className="text-content-emphasis text-sm font-semibold">
-              Add lead
-            </h2>
-            <p className="text-content-subtle text-sm">
-              Create a contact manually when attribution is unavailable
-            </p>
-          </div>
-          <DubCardList>
-            <DubCard innerClassName="p-0" hoverStateEnabled={false}>
-              <form
-                action={createGrowthLead}
-                className="grid gap-3 p-5 md:grid-cols-2 lg:grid-cols-4"
-              >
-                <input type="hidden" name="slug" value={slug} />
-                <div className="grid gap-1.5">
-                  <Label htmlFor="new-lead-name">Name</Label>
-                  <Input id="new-lead-name" className="h-9" name="name" placeholder="Alex Smith" />
-                </div>
-                <div className="grid gap-1.5">
-                  <Label htmlFor="new-lead-email">Email</Label>
-                  <Input
-                    id="new-lead-email"
-                    className="h-9"
-                    type="email"
-                    name="email"
-                    placeholder="alex@example.com"
-                    required
-                  />
-                </div>
-                <div className="grid gap-1.5">
-                  <Label htmlFor="new-lead-country">Country</Label>
-                  <Input
-                    id="new-lead-country"
-                    className="h-9"
-                    name="country"
-                    maxLength={2}
-                    placeholder="US"
-                  />
-                </div>
-                <div className="grid gap-1.5">
-                  <Label htmlFor="new-lead-owner">Owner</Label>
-                  <Input
-                    id="new-lead-owner"
-                    className="h-9"
-                    name="owner"
-                    placeholder="Sales team"
-                  />
-                </div>
-                <div className="grid gap-1.5">
-                  <Label htmlFor="new-lead-stage">Stage</Label>
-                  <FormCombobox
-                    id="new-lead-stage"
-                    name="status"
-                    defaultValue="new"
-                    className="h-9"
-                    options={[
-                      { value: "new", label: "New" },
-                      { value: "contacted", label: "Contacted" },
-                      { value: "qualified", label: "Qualified" },
-                      { value: "won", label: "Won" },
-                      { value: "lost", label: "Lost" },
-                    ]}
-                  />
-                </div>
-                <div className="grid gap-1.5 md:col-span-2 lg:col-span-3">
-                  <Label htmlFor="new-lead-note">Note</Label>
-                  <Input
-                    id="new-lead-note"
-                    className="h-9"
-                    name="note"
-                    placeholder="Interested in annual business plan"
-                  />
-                </div>
-                <div className="lg:col-span-4">
-                  <OperationSubmit>Add lead</OperationSubmit>
-                </div>
-              </form>
-            </DubCard>
-          </DubCardList>
-        </section>
         <section>
           <div className="mb-3">
             <h2 className="text-content-emphasis text-sm font-semibold">
