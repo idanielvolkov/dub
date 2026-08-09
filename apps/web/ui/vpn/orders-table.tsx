@@ -2,6 +2,7 @@
 
 import { VpnPlan } from "@/lib/remnawave/plans";
 import { VpnOrder } from "@/lib/vpn/orders";
+import { TableRowMenu } from "@/ui/shared/table-row-menu";
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import {
@@ -37,6 +38,7 @@ export function OrdersTable({
   isOwner: boolean;
 }) {
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState<VpnOrder | null>(null);
   const columns = useMemo<ColumnDef<VpnOrder>[]>(
     () => [
       {
@@ -104,52 +106,18 @@ export function OrdersTable({
         header: "Actions",
         meta: { disableTruncate: true },
         cell: ({ row }) => (
-          <div className="flex min-w-64 flex-col gap-2 py-1">
-            {canEdit && (
-              <form action={updateVpnOrder} className="flex gap-2">
-                <input type="hidden" name="slug" value={slug} />
-                <input type="hidden" name="id" value={row.original.id} />
-                <input type="hidden" name="note" value={row.original.note} />
-                <FormCombobox
-                  name="paymentStatus"
-                  defaultValue={row.original.paymentStatus}
-                  className="h-9 min-w-32 text-xs"
-                  options={[
-                    { value: "pending", label: "Pending" },
-                    { value: "paid", label: "Paid" },
-                    { value: "refunded", label: "Refunded" },
-                    { value: "canceled", label: "Canceled" },
-                  ]}
-                />
-                <OperationSubmit>Save</OperationSubmit>
-              </form>
-            )}
-            {isOwner && row.original.fulfillmentStatus === "pending" && (
-              <form action={fulfillVpnOrder} className="flex gap-2">
-                <input type="hidden" name="slug" value={slug} />
-                <input type="hidden" name="id" value={row.original.id} />
-                <Input
-                  className="h-9 min-w-36 px-2"
-                  name="subscriberUsername"
-                  placeholder="Subscriber name"
-                  minLength={3}
-                  required
-                />
-                <OperationSubmit confirmMessage="Create this subscriber in Remnawave using the purchased plan limits?">
-                  Provision
-                </OperationSubmit>
-              </form>
-            )}
-            {row.original.fulfillmentStatus === "fulfilled" && (
-              <span className="text-content-subtle text-xs">
-                {row.original.subscriberUsername}
-              </span>
-            )}
-          </div>
+          <TableRowMenu
+            actions={[
+              {
+                label: canEdit ? "Manage order" : "View order",
+                onClick: () => setSelectedOrder(row.original),
+              },
+            ]}
+          />
         ),
       },
     ],
-    [canEdit, isOwner, slug],
+    [canEdit],
   );
   const table = useTable({ data: orders, columns });
 
@@ -242,6 +210,104 @@ export function OrdersTable({
             <OperationSubmit>Create order</OperationSubmit>
           </div>
         </form>
+      </Modal>
+
+      <Modal
+        showModal={Boolean(selectedOrder)}
+        setShowModal={(open) => !open && setSelectedOrder(null)}
+        className="max-w-xl"
+      >
+        {selectedOrder && (
+          <>
+            <div className="border-border-subtle border-b px-6 py-4">
+              <div className="flex items-center gap-2">
+                <h3 className="text-content-emphasis text-lg font-medium">
+                  {selectedOrder.customerName || selectedOrder.customerEmail}
+                </h3>
+                <StatusBadge
+                  icon={null}
+                  variant={
+                    selectedOrder.paymentStatus === "paid"
+                      ? "success"
+                      : "pending"
+                  }
+                >
+                  {selectedOrder.paymentStatus}
+                </StatusBadge>
+              </div>
+              <p className="text-content-subtle mt-1 text-sm">
+                {selectedOrder.planName} · ${selectedOrder.amount}
+              </p>
+            </div>
+            <div className="bg-bg-muted space-y-5 p-6">
+              {canEdit && (
+                <form action={updateVpnOrder} className="space-y-4">
+                  <input type="hidden" name="slug" value={slug} />
+                  <input type="hidden" name="id" value={selectedOrder.id} />
+                  <div className="grid gap-1.5">
+                    <Label htmlFor="order-payment-status">Payment status</Label>
+                    <FormCombobox
+                      id="order-payment-status"
+                      name="paymentStatus"
+                      defaultValue={selectedOrder.paymentStatus}
+                      options={[
+                        { value: "pending", label: "Pending" },
+                        { value: "paid", label: "Paid" },
+                        { value: "refunded", label: "Refunded" },
+                        { value: "canceled", label: "Canceled" },
+                      ]}
+                    />
+                  </div>
+                  <div className="grid gap-1.5">
+                    <Label htmlFor="order-manage-note">Internal note</Label>
+                    <Input
+                      id="order-manage-note"
+                      name="note"
+                      defaultValue={selectedOrder.note}
+                    />
+                  </div>
+                  <div className="flex justify-end">
+                    <OperationSubmit>Save changes</OperationSubmit>
+                  </div>
+                </form>
+              )}
+              {isOwner && selectedOrder.fulfillmentStatus === "pending" && (
+                <form
+                  action={fulfillVpnOrder}
+                  className="border-border-subtle space-y-4 border-t pt-5"
+                >
+                  <input type="hidden" name="slug" value={slug} />
+                  <input type="hidden" name="id" value={selectedOrder.id} />
+                  <div className="grid gap-1.5">
+                    <Label htmlFor="order-subscriber-name">
+                      Subscriber name
+                    </Label>
+                    <Input
+                      id="order-subscriber-name"
+                      name="subscriberUsername"
+                      placeholder="customer-name"
+                      minLength={3}
+                      required
+                    />
+                  </div>
+                  <div className="flex justify-end">
+                    <OperationSubmit confirmMessage="Create this subscriber in Remnawave using the purchased plan limits?">
+                      Provision access
+                    </OperationSubmit>
+                  </div>
+                </form>
+              )}
+              {selectedOrder.fulfillmentStatus === "fulfilled" && (
+                <div className="border-border-subtle border-t pt-5">
+                  <p className="text-content-subtle text-xs">Subscriber</p>
+                  <p className="text-content-emphasis mt-1 font-medium">
+                    {selectedOrder.subscriberUsername}
+                  </p>
+                </div>
+              )}
+            </div>
+          </>
+        )}
       </Modal>
     </>
   );
