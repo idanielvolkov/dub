@@ -170,6 +170,13 @@ export default async function CustomersPage({
                       {customer.hasAccess ? "Active" : "No access"}
                     </Badge>
                   )}
+                  <ButtonLink
+                    href={`/${slug}/vpn/customers/${encodeURIComponent(customer.email)}`}
+                    variant="secondary"
+                    className="h-8 px-3 text-xs"
+                  >
+                    View
+                  </ButtonLink>
                 </CardListCard>
               ))}
             </CardList>
