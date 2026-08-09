@@ -1,9 +1,10 @@
 import { getGrowthWorkspace } from "@/lib/growth/get-growth-workspace";
+import { DubCard, DubCardList } from "@/ui/vpn/server-card-list";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { ButtonLink } from "@/ui/placeholders/button-link";
 import { VpnStats } from "@/ui/vpn/vpn-ui";
-import { CardList, EmptyState } from "@dub/ui";
+import { EmptyState } from "@dub/ui";
 import { Megaphone } from "@dub/ui/icons";
 
 export default async function GrowthPage({
@@ -65,9 +66,9 @@ export default async function GrowthPage({
               Latest activity across marketing channels
             </p>
           </div>
-          <CardList variant="compact">
+          <DubCardList variant="compact">
             {campaigns.slice(0, 6).map((campaign) => (
-              <CardList.Card key={campaign.id} hoverStateEnabled={false}>
+              <DubCard key={campaign.id} hoverStateEnabled={false}>
                 <div className="grid gap-3 sm:grid-cols-[1fr_repeat(3,100px)] sm:items-center">
                   <div className="min-w-0">
                     <p className="text-content-emphasis truncate text-sm font-medium">
@@ -83,9 +84,9 @@ export default async function GrowthPage({
                   <span className="text-sm">{campaign.leads} leads</span>
                   <span className="text-sm">{campaign.sales} sales</span>
                 </div>
-              </CardList.Card>
+              </DubCard>
             ))}
-          </CardList>
+          </DubCardList>
           {!campaigns.length && (
             <div className="py-12">
               <EmptyState
