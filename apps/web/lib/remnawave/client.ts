@@ -24,6 +24,10 @@ export type RemnawaveRuntimeMetric = {
 
 type RemnawaveEnvelope<T> = { response: T };
 
+export type RemnawaveReadState<T> =
+  | { data: T; error: null }
+  | { data: T; error: string };
+
 export type RemnawaveUser = {
   uuid: string;
   username: string;
@@ -244,10 +248,7 @@ export function restartAllRemnawaveNodes() {
 }
 
 export function resetRemnawaveNodeTraffic(uuid: string) {
-  return remnawaveMutation(
-    `/api/nodes/${uuid}/actions/reset-traffic`,
-    "POST",
-  );
+  return remnawaveMutation(`/api/nodes/${uuid}/actions/reset-traffic`, "POST");
 }
 
 export function deleteRemnawaveNode(uuid: string) {
@@ -387,30 +388,70 @@ export async function createRemnawaveUser(input: {
   return (await response.json()) as RemnawaveEnvelope<RemnawaveUser>;
 }
 
-export async function getRemnawaveUsers() {
+export async function getRemnawaveUsersState(): Promise<
+  RemnawaveReadState<{ total: number; users: RemnawaveUser[] }>
+> {
   try {
-    return await remnawaveFetch<{ total: number; users: RemnawaveUser[] }>(
-      "/api/users",
-    );
-  } catch {
-    return { total: 0, users: [] };
+    return {
+      data: await remnawaveFetch<{
+        total: number;
+        users: RemnawaveUser[];
+      }>("/api/users"),
+      error: null,
+    };
+  } catch (error) {
+    return {
+      data: { total: 0, users: [] },
+      error:
+        error instanceof Error ? error.message : "Unable to reach Remnawave",
+    };
+  }
+}
+
+export async function getRemnawaveUsers() {
+  return (await getRemnawaveUsersState()).data;
+}
+
+export async function getRemnawaveNodesState(): Promise<
+  RemnawaveReadState<RemnawaveNode[]>
+> {
+  try {
+    return {
+      data: await remnawaveFetch<RemnawaveNode[]>("/api/nodes"),
+      error: null,
+    };
+  } catch (error) {
+    return {
+      data: [],
+      error:
+        error instanceof Error ? error.message : "Unable to reach Remnawave",
+    };
   }
 }
 
 export async function getRemnawaveNodes() {
+  return (await getRemnawaveNodesState()).data;
+}
+
+export async function getRemnawaveHostsState(): Promise<
+  RemnawaveReadState<RemnawaveHost[]>
+> {
   try {
-    return await remnawaveFetch<RemnawaveNode[]>("/api/nodes");
-  } catch {
-    return [];
+    return {
+      data: await remnawaveFetch<RemnawaveHost[]>("/api/hosts"),
+      error: null,
+    };
+  } catch (error) {
+    return {
+      data: [],
+      error:
+        error instanceof Error ? error.message : "Unable to reach Remnawave",
+    };
   }
 }
 
 export async function getRemnawaveHosts() {
-  try {
-    return await remnawaveFetch<RemnawaveHost[]>("/api/hosts");
-  } catch {
-    return [];
-  }
+  return (await getRemnawaveHostsState()).data;
 }
 
 export async function getRemnawaveConfigProfiles() {
