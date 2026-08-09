@@ -212,17 +212,19 @@ export function ConfigurationsTables({
               <input type="hidden" name="slug" value={slug} />
               <input type="hidden" name="uuid" value={selectedProfile.uuid} />
               <div className="grid gap-1.5">
-                <Label>Profile name</Label>
+                <Label htmlFor="profile-name">Profile name</Label>
                 <Input
+                  id="profile-name"
                   name="name"
                   defaultValue={selectedProfile.name}
                   required
                 />
               </div>
               <div className="grid gap-1.5">
-                <Label>Xray JSON</Label>
+                <Label htmlFor="profile-xray-json">Xray JSON</Label>
                 <TextareaAutosize
-                  className="border-border-default bg-bg-default text-content-default placeholder:text-content-subtle focus:border-border-emphasis min-h-80 w-full resize-y rounded-xl border p-3 font-mono text-xs outline-none focus:ring-4 focus:ring-neutral-100"
+                  id="profile-xray-json"
+                  className="border-neutral-300 bg-white text-neutral-900 placeholder-neutral-400 focus:border-neutral-500 focus:ring-neutral-500 min-h-80 w-full resize-y rounded-md p-3 font-mono text-xs focus:outline-none"
                   name="config"
                   defaultValue={JSON.stringify(selectedProfile.config, null, 2)}
                   minRows={18}
@@ -267,8 +269,9 @@ export function ConfigurationsTables({
                     .join(",")}
                 />
                 <div className="grid gap-1.5">
-                  <Label>Squad name</Label>
+                  <Label htmlFor="squad-name">Squad name</Label>
                   <Input
+                    id="squad-name"
                     name="name"
                     defaultValue={selectedSquad.name}
                     required
@@ -311,8 +314,9 @@ export function ConfigurationsTables({
           <input type="hidden" name="slug" value={slug} />
           <input type="hidden" name="inbounds" value={inboundIds.join(",")} />
           <div className="grid gap-1.5">
-            <Label>Squad name</Label>
+            <Label htmlFor="new-squad-name">Squad name</Label>
             <Input
+              id="new-squad-name"
               name="name"
               placeholder="Marketing-VPN"
               minLength={2}
