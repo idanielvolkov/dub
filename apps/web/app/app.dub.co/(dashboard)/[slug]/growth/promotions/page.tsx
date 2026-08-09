@@ -1,6 +1,7 @@
 import { getGrowthPromotions } from "@/lib/growth/promotions";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
+import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import { VpnPanel, VpnPanelHeader } from "@/ui/vpn/vpn-ui";
 import { Badge } from "@dub/ui";
@@ -49,14 +50,15 @@ const Fields = ({
     </label>
     <label className="grid gap-1 text-xs text-neutral-500">
       Discount type
-      <select
-        className={inputClass}
+      <FormCombobox
         name="discountType"
         defaultValue={promotion?.discountType || "percentage"}
-      >
-        <option value="percentage">Percentage</option>
-        <option value="fixed">Fixed amount</option>
-      </select>
+        className="h-9"
+        options={[
+          { value: "percentage", label: "Percentage" },
+          { value: "fixed", label: "Fixed amount" },
+        ]}
+      />
     </label>
     <label className="grid gap-1 text-xs text-neutral-500">
       Value
