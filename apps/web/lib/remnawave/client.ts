@@ -219,6 +219,11 @@ export function updateRemnawaveNode(input: {
   uuid: string;
   name?: string;
   countryCode?: string;
+  isTrafficTrackingActive?: boolean;
+  trafficLimitBytes?: number;
+  notifyPercent?: number;
+  trafficResetDay?: number;
+  consumptionMultiplier?: number;
 }) {
   return remnawaveMutation("/api/nodes", "PATCH", input);
 }
@@ -236,6 +241,17 @@ export function restartRemnawaveNode(uuid: string) {
 
 export function restartAllRemnawaveNodes() {
   return remnawaveMutation("/api/nodes/actions/restart-all", "POST");
+}
+
+export function resetRemnawaveNodeTraffic(uuid: string) {
+  return remnawaveMutation(
+    `/api/nodes/${uuid}/actions/reset-traffic`,
+    "POST",
+  );
+}
+
+export function deleteRemnawaveNode(uuid: string) {
+  return remnawaveMutation(`/api/nodes/${uuid}`, "DELETE");
 }
 
 export function updateRemnawaveHost(input: {

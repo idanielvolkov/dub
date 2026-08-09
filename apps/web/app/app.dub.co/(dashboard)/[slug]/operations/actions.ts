@@ -9,10 +9,12 @@ import {
   deleteRemnawaveExternalSquad,
   deleteRemnawaveHost,
   deleteRemnawaveHwidDevice,
+  deleteRemnawaveNode,
   deleteRemnawaveSquad,
   removeAllUsersFromRemnawaveExternalSquad,
   restartAllRemnawaveNodes,
   restartRemnawaveNode,
+  resetRemnawaveNodeTraffic,
   setRemnawaveNodeEnabled,
   updateRemnawaveConfigProfile,
   updateRemnawaveExternalSquad,
@@ -45,10 +47,43 @@ export async function saveNode(formData: FormData) {
   await authorize(slug);
   await updateRemnawaveNode({
     uuid: text(formData, "uuid"),
-    name: text(formData, "name").slice(0, 64),
+    name: text(formData, "name").slice(0, 30),
     countryCode: text(formData, "countryCode").toUpperCase().slice(0, 2),
+    isTrafficTrackingActive:
+      formData.get("isTrafficTrackingActive") === "on",
+    trafficLimitBytes: Math.round(
+      Math.max(0, Number(formData.get("trafficLimitGb")) || 0) * 1024 ** 3,
+    ),
+    notifyPercent: Math.min(
+      100,
+      Math.max(0, Number(formData.get("notifyPercent")) || 0),
+    ),
+    trafficResetDay: Math.min(
+      31,
+      Math.max(1, Number(formData.get("trafficResetDay")) || 1),
+    ),
+    consumptionMultiplier: Math.min(
+      100,
+      Math.max(0, Number(formData.get("consumptionMultiplier")) || 1),
+    ),
   });
   revalidatePath(`/${slug}/operations/nodes`);
+}
+
+export async function resetNodeTraffic(formData: FormData) {
+  const slug = text(formData, "slug");
+  await authorize(slug);
+  await resetRemnawaveNodeTraffic(text(formData, "uuid"));
+  revalidatePath(`/${slug}/operations/nodes`);
+  revalidatePath(`/${slug}/vpn/traffic`);
+}
+
+export async function removeNode(formData: FormData) {
+  const slug = text(formData, "slug");
+  await authorize(slug);
+  await deleteRemnawaveNode(text(formData, "uuid"));
+  revalidatePath(`/${slug}/operations/nodes`);
+  revalidatePath(`/${slug}/operations`);
 }
 
 export async function changeNodeState(formData: FormData) {
