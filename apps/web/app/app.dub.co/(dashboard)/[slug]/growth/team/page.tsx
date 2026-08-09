@@ -2,6 +2,7 @@ import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
+import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import { VpnPanel, VpnPanelHeader } from "@/ui/vpn/vpn-ui";
 import { Badge } from "@dub/ui";
@@ -69,10 +70,15 @@ export default async function GrowthTeamPage({
                 placeholder="marketer@company.com"
                 required
               />
-              <select className={inputClass} name="role" defaultValue="member">
-                <option value="member">Marketing member</option>
-                <option value="viewer">Viewer</option>
-              </select>
+              <FormCombobox
+                name="role"
+                defaultValue="member"
+                className="h-9"
+                options={[
+                  { value: "member", label: "Marketing member" },
+                  { value: "viewer", label: "Viewer" },
+                ]}
+              />
               <OperationSubmit>Send invite</OperationSubmit>
             </form>
           </VpnPanel>
@@ -111,14 +117,15 @@ export default async function GrowthTeamPage({
                         name="userId"
                         value={member.userId}
                       />
-                      <select
-                        className={inputClass}
+                      <FormCombobox
                         name="role"
                         defaultValue={member.role}
-                      >
-                        <option value="member">Marketing</option>
-                        <option value="viewer">Viewer</option>
-                      </select>
+                        className="h-9 min-w-32"
+                        options={[
+                          { value: "member", label: "Marketing" },
+                          { value: "viewer", label: "Viewer" },
+                        ]}
+                      />
                       <OperationSubmit>Update</OperationSubmit>
                     </form>
                     <form action={removeGrowthMember}>

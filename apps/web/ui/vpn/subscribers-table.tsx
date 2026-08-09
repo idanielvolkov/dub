@@ -1,6 +1,7 @@
 "use client";
 
 import { RemnawaveUser } from "@/lib/remnawave/client";
+import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import {
   Button,
@@ -22,9 +23,6 @@ import {
   revokeSubscriber,
   saveSubscriber,
 } from "../../app/app.dub.co/(dashboard)/[slug]/vpn/subscribers/actions";
-
-const selectClass =
-  "h-10 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-900 outline-none focus:border-neutral-500 focus:ring-neutral-500";
 
 function formatBytes(bytes: number | null) {
   if (!bytes) return "0 GB";
@@ -167,16 +165,16 @@ export function SubscribersTable({
           </label>
           <label className="text-content-default grid gap-1.5 text-sm font-medium">
             Duration
-            <select
+            <FormCombobox
               name="durationDays"
               defaultValue="30"
-              className={selectClass}
-            >
-              <option value="7">7 days</option>
-              <option value="30">30 days</option>
-              <option value="90">90 days</option>
-              <option value="365">1 year</option>
-            </select>
+              options={[
+                { value: "7", label: "7 days" },
+                { value: "30", label: "30 days" },
+                { value: "90", label: "90 days" },
+                { value: "365", label: "1 year" },
+              ]}
+            />
           </label>
           <div className="flex justify-end gap-2 pt-2">
             <Button
@@ -244,16 +242,16 @@ export function SubscribersTable({
                 </label>
                 <label className="text-content-default grid gap-1.5 text-sm font-medium">
                   Reset cycle
-                  <select
-                    className={selectClass}
+                  <FormCombobox
                     name="trafficLimitStrategy"
                     defaultValue={selectedUser.trafficLimitStrategy}
-                  >
-                    <option value="NO_RESET">Never</option>
-                    <option value="DAY">Daily</option>
-                    <option value="WEEK">Weekly</option>
-                    <option value="MONTH">Monthly</option>
-                  </select>
+                    options={[
+                      { value: "NO_RESET", label: "Never" },
+                      { value: "DAY", label: "Daily" },
+                      { value: "WEEK", label: "Weekly" },
+                      { value: "MONTH", label: "Monthly" },
+                    ]}
+                  />
                 </label>
                 <label className="text-content-default grid gap-1.5 text-sm font-medium">
                   Device limit

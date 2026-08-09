@@ -1,6 +1,7 @@
 "use client";
 
 import { VpnPlan } from "@/lib/remnawave/plans";
+import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import { Button, Checkbox, Input, Modal } from "@dub/ui";
 import { useState } from "react";
@@ -10,9 +11,6 @@ import {
   setVpnPlanArchived,
   updateVpnPlan,
 } from "../../app/app.dub.co/(dashboard)/[slug]/vpn/plans/actions";
-
-const selectClass =
-  "h-10 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-900 outline-none focus:border-neutral-500 focus:ring-neutral-500";
 
 function PlanFields({ plan }: { plan?: VpnPlan }) {
   return (
@@ -65,16 +63,16 @@ function PlanFields({ plan }: { plan?: VpnPlan }) {
       </label>
       <label className="text-content-default grid gap-1.5 text-sm font-medium">
         Traffic reset
-        <select
-          className={selectClass}
+        <FormCombobox
           name="reset"
           defaultValue={plan?.reset ?? "MONTH"}
-        >
-          <option value="NO_RESET">No reset</option>
-          <option value="DAY">Daily</option>
-          <option value="WEEK">Weekly</option>
-          <option value="MONTH">Monthly</option>
-        </select>
+          options={[
+            { value: "NO_RESET", label: "No reset" },
+            { value: "DAY", label: "Daily" },
+            { value: "WEEK", label: "Weekly" },
+            { value: "MONTH", label: "Monthly" },
+          ]}
+        />
       </label>
       <label className="text-content-default grid gap-1.5 text-sm font-medium sm:col-span-2">
         Description
