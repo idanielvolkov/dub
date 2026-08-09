@@ -42,14 +42,15 @@ export default async function PlansPage({
       titleInfo={{ title: "Manage the catalog and provision VPN access." }}
     >
       <PageWidthWrapper className="space-y-6 pb-10">
-        <div className="grid gap-4 lg:grid-cols-3">
+        <div className="grid items-stretch gap-4 lg:grid-cols-3">
           {activePlans.map((plan) => (
-            <CardList key={plan.id}>
+            <CardList key={plan.id} className="h-full">
               <CardList.Card
+                hoverStateEnabled={false}
                 outerClassName={
-                  plan.featured ? "border-neutral-900" : undefined
+                  plan.featured ? "h-full border-neutral-900" : "h-full"
                 }
-                innerClassName="relative flex flex-col p-5"
+                innerClassName="relative flex h-full flex-col p-5"
               >
                 {plan.featured && (
                   <Badge variant="black" className="absolute right-4 top-4">
@@ -90,7 +91,11 @@ export default async function PlansPage({
                     </dd>
                   </div>
                 </dl>
-                {isOwner && <PlanCardActions slug={slug} plan={plan} />}
+                {isOwner && (
+                  <div className="mt-auto pt-5">
+                    <PlanCardActions slug={slug} plan={plan} />
+                  </div>
+                )}
               </CardList.Card>
             </CardList>
           ))}

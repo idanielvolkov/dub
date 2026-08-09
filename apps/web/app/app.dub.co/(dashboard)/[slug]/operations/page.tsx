@@ -12,6 +12,7 @@ import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { ButtonLink } from "@/ui/placeholders/button-link";
 import { VpnStats } from "@/ui/vpn/vpn-ui";
 import { CardList, StatusBadge } from "@dub/ui";
+import { ChevronRight } from "@dub/ui/icons";
 import Link from "next/link";
 
 export default async function OperationsPage({
@@ -105,12 +106,15 @@ export default async function OperationsPage({
               <CardList.Card key={name}>
                 <Link
                   href={href}
-                  className="flex min-h-9 items-center justify-between text-sm"
+                  className="group flex min-h-9 items-center justify-between text-sm"
                 >
                   <span className="text-content-emphasis font-medium">
                     {name}
                   </span>
-                  <span className="text-content-subtle">{count} →</span>
+                  <span className="text-content-subtle flex items-center gap-2">
+                    {count}
+                    <ChevronRight className="size-3.5 transition-transform duration-150 group-hover:translate-x-0.5" />
+                  </span>
                 </Link>
               </CardList.Card>
             ))}

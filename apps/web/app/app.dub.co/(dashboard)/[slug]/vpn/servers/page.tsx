@@ -16,7 +16,7 @@ export default async function ServersPage() {
         <div className="grid gap-4 md:grid-cols-2">
           {nodes.map((node) => (
             <CardList key={node.uuid}>
-              <CardList.Card innerClassName="p-0">
+              <CardList.Card innerClassName="p-0" hoverStateEnabled={false}>
                 <div className="p-5">
                   <div className="flex items-start justify-between gap-4">
                     <div>

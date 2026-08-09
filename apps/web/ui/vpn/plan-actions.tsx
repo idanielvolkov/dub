@@ -3,7 +3,7 @@
 import { VpnPlan } from "@/lib/remnawave/plans";
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
-import { Button, Checkbox, Input, Modal } from "@dub/ui";
+import { Button, Checkbox, Input, Label, Modal } from "@dub/ui";
 import { useState } from "react";
 import {
   createVpnPlan,
@@ -15,12 +15,12 @@ import {
 function PlanFields({ plan }: { plan?: VpnPlan }) {
   return (
     <div className="grid gap-4 sm:grid-cols-2">
-      <label className="text-content-default grid gap-1.5 text-sm font-medium">
-        Name
+      <div className="grid gap-1.5">
+        <Label>Name</Label>
         <Input name="name" defaultValue={plan?.name} required />
-      </label>
-      <label className="text-content-default grid gap-1.5 text-sm font-medium">
-        Price, USD
+      </div>
+      <div className="grid gap-1.5">
+        <Label>Price, USD</Label>
         <Input
           name="price"
           type="number"
@@ -29,9 +29,9 @@ function PlanFields({ plan }: { plan?: VpnPlan }) {
           defaultValue={plan?.price}
           required
         />
-      </label>
-      <label className="text-content-default grid gap-1.5 text-sm font-medium">
-        Duration, days
+      </div>
+      <div className="grid gap-1.5">
+        <Label>Duration, days</Label>
         <Input
           name="durationDays"
           type="number"
@@ -39,9 +39,9 @@ function PlanFields({ plan }: { plan?: VpnPlan }) {
           defaultValue={plan?.durationDays ?? 30}
           required
         />
-      </label>
-      <label className="text-content-default grid gap-1.5 text-sm font-medium">
-        Traffic, GB
+      </div>
+      <div className="grid gap-1.5">
+        <Label>Traffic, GB</Label>
         <Input
           name="trafficGb"
           type="number"
@@ -50,9 +50,9 @@ function PlanFields({ plan }: { plan?: VpnPlan }) {
           defaultValue={plan?.trafficGb}
           required
         />
-      </label>
-      <label className="text-content-default grid gap-1.5 text-sm font-medium">
-        Devices
+      </div>
+      <div className="grid gap-1.5">
+        <Label>Devices</Label>
         <Input
           name="devices"
           type="number"
@@ -60,9 +60,9 @@ function PlanFields({ plan }: { plan?: VpnPlan }) {
           defaultValue={plan?.devices}
           required
         />
-      </label>
-      <label className="text-content-default grid gap-1.5 text-sm font-medium">
-        Traffic reset
+      </div>
+      <div className="grid gap-1.5">
+        <Label>Traffic reset</Label>
         <FormCombobox
           name="reset"
           defaultValue={plan?.reset ?? "MONTH"}
@@ -73,19 +73,19 @@ function PlanFields({ plan }: { plan?: VpnPlan }) {
             { value: "MONTH", label: "Monthly" },
           ]}
         />
-      </label>
-      <label className="text-content-default grid gap-1.5 text-sm font-medium sm:col-span-2">
-        Description
+      </div>
+      <div className="grid gap-1.5 sm:col-span-2">
+        <Label>Description</Label>
         <Input name="description" defaultValue={plan?.description} />
-      </label>
-      <label className="text-content-default flex items-center gap-2 text-sm sm:col-span-2">
+      </div>
+      <Label className="flex items-center gap-2 font-normal sm:col-span-2">
         <Checkbox
           name="featured"
           defaultChecked={plan?.featured}
           className="size-4 rounded"
         />
         Mark as most popular
-      </label>
+      </Label>
     </div>
   );
 }
@@ -158,7 +158,7 @@ export function PlanCardActions({
   const [provisionOpen, setProvisionOpen] = useState(false);
   return (
     <>
-      <div className="mt-5 grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-2 gap-2">
         <Button text="Provision" onClick={() => setProvisionOpen(true)} />
         <Button
           variant="secondary"
