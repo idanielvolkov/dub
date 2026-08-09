@@ -2,7 +2,16 @@
 
 import { RemnawaveNode } from "@/lib/remnawave/client";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
-import { Button, Input, Modal, StatusBadge, Table, useTable } from "@dub/ui";
+import {
+  Button,
+  EmptyState,
+  Input,
+  Modal,
+  StatusBadge,
+  Table,
+  useTable,
+} from "@dub/ui";
+import { Nodes4 } from "@dub/ui/icons";
 import { ColumnDef } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 import {
@@ -124,14 +133,11 @@ export function NodesTable({
         {...table}
         resourceName={(plural) => (plural ? "nodes" : "node")}
         emptyState={
-          <div className="flex flex-col items-center gap-2 text-center">
-            <p className="text-content-emphasis text-sm font-medium">
-              No nodes found
-            </p>
-            <p className="text-content-subtle text-xs">
-              Add a node in Remnawave to manage it here.
-            </p>
-          </div>
+          <EmptyState
+            icon={Nodes4}
+            title="No nodes found"
+            description="Add a node in Remnawave to manage it here."
+          />
         }
       />
 

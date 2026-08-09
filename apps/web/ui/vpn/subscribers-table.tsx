@@ -2,7 +2,16 @@
 
 import { RemnawaveUser } from "@/lib/remnawave/client";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
-import { Button, Input, Modal, StatusBadge, Table, useTable } from "@dub/ui";
+import {
+  Button,
+  EmptyState,
+  Input,
+  Modal,
+  StatusBadge,
+  Table,
+  useTable,
+} from "@dub/ui";
+import { ShieldUser } from "@dub/ui/icons";
 import { ColumnDef } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 import {
@@ -133,14 +142,11 @@ export function SubscribersTable({
         {...table}
         resourceName={(plural) => (plural ? "subscribers" : "subscriber")}
         emptyState={
-          <div className="flex flex-col items-center gap-2 text-center">
-            <p className="text-content-emphasis text-sm font-medium">
-              No subscribers yet
-            </p>
-            <p className="text-content-subtle text-xs">
-              Add a subscriber to create VPN access in Remnawave.
-            </p>
-          </div>
+          <EmptyState
+            icon={ShieldUser}
+            title="No subscribers yet"
+            description="Add a subscriber to create VPN access in Remnawave."
+          />
         }
       />
 
