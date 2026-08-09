@@ -1,6 +1,5 @@
 import { MainNav } from "@/ui/layout/main-nav";
 import { AppSidebarNav } from "@/ui/layout/sidebar/app-sidebar-nav";
-import Toolbar from "@/ui/layout/toolbar/toolbar";
 import { constructMetadata } from "@dub/utils";
 import type { Viewport } from "next";
 import { ReactNode } from "react";
@@ -13,11 +12,8 @@ export const viewport: Viewport = {
 
 export default async function Layout({ children }: { children: ReactNode }) {
   return (
-    <>
-      <div className="min-h-screen w-full bg-white">
-        <MainNav sidebar={AppSidebarNav}>{children}</MainNav>
-      </div>
-      <Toolbar show={["onboarding"]} />
-    </>
+    <div className="min-h-screen w-full bg-white">
+      <MainNav sidebar={AppSidebarNav}>{children}</MainNav>
+    </div>
   );
 }
