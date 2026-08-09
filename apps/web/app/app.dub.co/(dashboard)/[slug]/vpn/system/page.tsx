@@ -1,9 +1,14 @@
 import { getRemnawaveHealth, getRemnawaveNodes } from "@/lib/remnawave/client";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import { ButtonLink } from "@/ui/placeholders/button-link";
 import { VpnStats } from "@/ui/vpn/vpn-ui";
-import { CardList, CardListCard, EmptyState, StatusBadge } from "@dub/ui";
+import {
+  ButtonLink,
+  CardList,
+  CardListCard,
+  EmptyState,
+  StatusBadge,
+} from "@dub/ui";
 import { ArrowUpRight2, WindowSettings } from "@dub/ui/icons";
 
 const formatMemory = (bytes: number) => `${Math.round(bytes / 1024 / 1024)} MB`;

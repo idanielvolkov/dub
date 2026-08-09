@@ -2,9 +2,8 @@
 
 import useWorkspace from "@/lib/swr/use-workspace";
 import { UserAvatar } from "@/ui/users/user-avatar";
-import { Icon, Popover, User } from "@dub/ui";
+import { Icon, Popover, User, UserArrowLeft } from "@dub/ui";
 import { cn } from "@dub/utils";
-import { LogOut } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import {
@@ -38,7 +37,7 @@ export function UserDropdown() {
     options.push({
       type: "button",
       label: "Log out",
-      icon: LogOut,
+      icon: UserArrowLeft,
       onClick: () => {
         signOut({
           callbackUrl: "/login",
