@@ -7,7 +7,7 @@ import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { UserAvatar } from "@/ui/users/user-avatar";
 import { VpnStats } from "@/ui/vpn/vpn-ui";
 import { Badge, ButtonLink, CardList, CardListCard, EmptyState } from "@dub/ui";
-import { Users } from "@dub/ui/icons";
+import { User } from "@dub/ui/icons";
 
 type Customer = {
   email: string;
@@ -183,7 +183,7 @@ export default async function CustomersPage({
           ) : (
             <div className="py-16">
               <EmptyState
-                icon={Users}
+                icon={User}
                 title="No customers yet"
                 description="Customers appear after their first order or support request."
               />
