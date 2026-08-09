@@ -7,7 +7,7 @@ import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import { VpnStats } from "@/ui/vpn/vpn-ui";
-import { Badge, Checkbox, EmptyState } from "@dub/ui";
+import { Badge, Checkbox, EmptyState, Label } from "@dub/ui";
 import { QRCode } from "@dub/ui/icons";
 import { saveSubscriptionSettings } from "../actions";
 
@@ -70,30 +70,42 @@ export default async function SubscriptionsPage({
                 >
                   <input type="hidden" name="slug" value={slug} />
                   <input type="hidden" name="uuid" value={settings.uuid} />
-                  <label className="flex items-center gap-2 text-sm">
+                  <Label
+                    htmlFor="randomize-hosts"
+                    className="flex cursor-pointer items-center gap-2 font-normal"
+                  >
                     <Checkbox
+                      id="randomize-hosts"
                       name="randomizeHosts"
                       defaultChecked={settings.randomizeHosts}
                       className="size-4"
                     />
                     Randomize hosts
-                  </label>
-                  <label className="flex items-center gap-2 text-sm">
+                  </Label>
+                  <Label
+                    htmlFor="serve-base-json"
+                    className="flex cursor-pointer items-center gap-2 font-normal"
+                  >
                     <Checkbox
+                      id="serve-base-json"
                       name="serveJsonAtBaseSubscription"
                       defaultChecked={settings.serveJsonAtBaseSubscription}
                       className="size-4"
                     />
                     Serve base JSON
-                  </label>
-                  <label className="flex items-center gap-2 text-sm">
+                  </Label>
+                  <Label
+                    htmlFor="custom-remarks"
+                    className="flex cursor-pointer items-center gap-2 font-normal"
+                  >
                     <Checkbox
+                      id="custom-remarks"
                       name="isShowCustomRemarks"
                       defaultChecked={settings.isShowCustomRemarks}
                       className="size-4"
                     />
                     Custom remarks
-                  </label>
+                  </Label>
                   <div className="ml-auto">
                     <OperationSubmit>Save settings</OperationSubmit>
                   </div>
