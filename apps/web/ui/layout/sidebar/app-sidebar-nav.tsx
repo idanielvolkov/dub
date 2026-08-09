@@ -1,5 +1,6 @@
 "use client";
 
+import { canAccessPlatformArea } from "@/lib/platform-access";
 import useWorkspace from "@/lib/swr/use-workspace";
 import {
   Cards,
@@ -34,7 +35,9 @@ import { WorkspaceDropdown } from "./workspace-dropdown";
 type SidebarNavData = {
   slug: string;
   pathname: string;
-  isOwner: boolean;
+  workspaceAccess: boolean;
+  remnawaveAccess: boolean;
+  marketingAccess: boolean;
 };
 
 const iconOr = <T,>(icon: T | undefined, fallback: T) => icon ?? fallback;
@@ -42,17 +45,23 @@ const iconOr = <T,>(icon: T | undefined, fallback: T) => icon ?? fallback;
 const NAV_GROUPS: SidebarNavGroups<SidebarNavData> = ({
   slug,
   pathname,
-  isOwner,
+  workspaceAccess,
+  remnawaveAccess,
+  marketingAccess,
 }) => [
-  {
-    id: "vpn",
-    name: "Workspace",
-    description: "Manage plans, orders, revenue, and customer sales.",
-    icon: ShieldCheck,
-    href: slug ? `/${slug}/vpn` : "/vpn",
-    active: pathname.startsWith(`/${slug}/vpn`),
-  },
-  ...(isOwner
+  ...(workspaceAccess
+    ? [
+        {
+          id: "vpn",
+          name: "Workspace",
+          description: "Manage plans, orders, revenue, and customer sales.",
+          icon: ShieldCheck,
+          href: slug ? `/${slug}/vpn` : "/vpn",
+          active: pathname.startsWith(`/${slug}/vpn`),
+        },
+      ]
+    : []),
+  ...(remnawaveAccess
     ? [
         {
           id: "operations",
@@ -65,14 +74,18 @@ const NAV_GROUPS: SidebarNavGroups<SidebarNavData> = ({
         },
       ]
     : []),
-  {
-    id: "growth",
-    name: "Marketing",
-    description: "Manage campaigns, leads, promotions, and analytics.",
-    icon: MarketingTarget,
-    href: slug ? `/${slug}/growth` : "/growth",
-    active: pathname.startsWith(`/${slug}/growth`),
-  },
+  ...(marketingAccess
+    ? [
+        {
+          id: "growth",
+          name: "Marketing",
+          description: "Manage campaigns, leads, promotions, and analytics.",
+          icon: MarketingTarget,
+          href: slug ? `/${slug}/growth` : "/growth",
+          active: pathname.startsWith(`/${slug}/growth`),
+        },
+      ]
+    : []),
 ];
 
 const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
@@ -245,7 +258,24 @@ export function AppSidebarNav({
 }) {
   const { slug } = useParams() as { slug?: string };
   const pathname = usePathname();
-  const { isOwner } = useWorkspace();
+  const workspace = useWorkspace();
+  const role = workspace.role || "member";
+  const workspacePreferences = workspace.users?.[0]?.workspacePreferences;
+  const workspaceAccess = canAccessPlatformArea({
+    role,
+    workspacePreferences,
+    area: "workspace",
+  });
+  const remnawaveAccess = canAccessPlatformArea({
+    role,
+    workspacePreferences,
+    area: "remnawave",
+  });
+  const marketingAccess = canAccessPlatformArea({
+    role,
+    workspacePreferences,
+    area: "marketing",
+  });
 
   return (
     <SidebarNav
@@ -263,7 +293,9 @@ export function AppSidebarNav({
       data={{
         slug: slug || "",
         pathname,
-        isOwner: Boolean(isOwner),
+        workspaceAccess,
+        remnawaveAccess,
+        marketingAccess,
       }}
       toolContent={toolContent}
       switcher={<WorkspaceDropdown />}

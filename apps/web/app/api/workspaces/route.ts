@@ -33,6 +33,7 @@ export const GET = withSession(async ({ session }) => {
         select: {
           role: true,
           defaultFolderId: true,
+          workspacePreferences: true,
         },
       },
       domains: {
@@ -131,6 +132,7 @@ export const POST = withSession(async ({ req, session }) => {
               select: {
                 role: true,
                 defaultFolderId: true,
+                workspacePreferences: true,
               },
             },
             domains: {

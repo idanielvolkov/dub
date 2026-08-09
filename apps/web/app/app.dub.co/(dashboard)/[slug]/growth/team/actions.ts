@@ -2,8 +2,10 @@
 
 import { hashToken } from "@/lib/auth/hash-token";
 import { getSession } from "@/lib/auth/utils";
+import { PLATFORM_AREAS, PlatformAccessLevel } from "@/lib/platform-access";
 import { prisma } from "@/lib/prisma";
 import { sendEmail } from "@dub/email";
+import { Prisma } from "@prisma/client";
 import { randomBytes } from "crypto";
 import { revalidatePath } from "next/cache";
 
@@ -82,6 +84,46 @@ export async function changeGrowthMemberRole(formData: FormData) {
       role: { not: "owner" },
     },
     data: { role },
+  });
+  revalidatePath(`/${slug}/growth/team`);
+}
+
+export async function changeMemberAccess(formData: FormData) {
+  const slug = text(formData, "slug");
+  const { workspace } = await ownerContext(slug);
+  const userId = text(formData, "userId");
+  const current = await prisma.projectUsers.findUniqueOrThrow({
+    where: { userId_projectId: { userId, projectId: workspace.id } },
+    select: { role: true, workspacePreferences: true },
+  });
+  if (current.role === "owner") return;
+
+  const allowedLevels = new Set<PlatformAccessLevel>([
+    "none",
+    "view",
+    "manage",
+  ]);
+  const platformAccess = Object.fromEntries(
+    PLATFORM_AREAS.map((area) => {
+      const value = text(formData, area) as PlatformAccessLevel;
+      return [area, allowedLevels.has(value) ? value : "none"];
+    }),
+  );
+  const preferences =
+    current.workspacePreferences &&
+    typeof current.workspacePreferences === "object" &&
+    !Array.isArray(current.workspacePreferences)
+      ? current.workspacePreferences
+      : {};
+
+  await prisma.projectUsers.update({
+    where: { userId_projectId: { userId, projectId: workspace.id } },
+    data: {
+      workspacePreferences: {
+        ...(preferences as Record<string, Prisma.JsonValue>),
+        platformAccess,
+      },
+    },
   });
   revalidatePath(`/${slug}/growth/team`);
 }

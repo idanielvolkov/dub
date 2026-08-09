@@ -25,6 +25,7 @@ export type WorkspaceProps = Project & {
   users: {
     role: WorkspaceRole;
     defaultFolderId: string | null;
+    workspacePreferences?: Record<string, unknown> | null;
   }[];
   flags?: Record<string, boolean>;
   store: Record<string, unknown> | null;

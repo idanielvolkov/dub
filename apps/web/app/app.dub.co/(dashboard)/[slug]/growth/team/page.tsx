@@ -1,4 +1,5 @@
 import { getSession } from "@/lib/auth/utils";
+import { getPlatformAccess } from "@/lib/platform-access";
 import { prisma } from "@/lib/prisma";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
@@ -8,6 +9,7 @@ import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import { Badge, CardList, CardListCard, Input } from "@dub/ui";
 import {
   changeGrowthMemberRole,
+  changeMemberAccess,
   inviteGrowthMember,
   removeGrowthMember,
   revokeGrowthInvite,
@@ -28,6 +30,7 @@ export default async function GrowthTeamPage({
           userId: true,
           role: true,
           createdAt: true,
+          workspacePreferences: true,
           user: { select: { id: true, name: true, email: true, image: true } },
         },
       },
@@ -121,10 +124,10 @@ export default async function GrowthTeamPage({
                   {member.role === "member" ? "Marketing" : member.role}
                 </Badge>
                 {isOwner && member.role !== "owner" && (
-                  <>
+                  <div className="flex w-full flex-col gap-3 border-t border-neutral-200 pt-4 sm:ml-11">
                     <form
-                      action={changeGrowthMemberRole}
-                      className="flex gap-2"
+                      action={changeMemberAccess}
+                      className="grid gap-2 sm:grid-cols-3 lg:grid-cols-[repeat(3,minmax(0,1fr))_auto]"
                     >
                       <input type="hidden" name="slug" value={slug} />
                       <input
@@ -132,32 +135,76 @@ export default async function GrowthTeamPage({
                         name="userId"
                         value={member.userId}
                       />
-                      <FormCombobox
-                        name="role"
-                        defaultValue={member.role}
-                        className="h-9 min-w-32"
-                        options={[
-                          { value: "member", label: "Marketing" },
-                          { value: "viewer", label: "Viewer" },
-                        ]}
-                      />
-                      <OperationSubmit>Update</OperationSubmit>
+                      {(
+                        [
+                          ["workspace", "Workspace"],
+                          ["remnawave", "Remnawave API"],
+                          ["marketing", "Marketing"],
+                        ] as const
+                      ).map(([area, label]) => (
+                        <label key={area} className="space-y-1">
+                          <span className="text-content-subtle text-xs font-medium">
+                            {label}
+                          </span>
+                          <FormCombobox
+                            name={area}
+                            defaultValue={
+                              getPlatformAccess(
+                                member.role,
+                                member.workspacePreferences,
+                              )[area]
+                            }
+                            className="h-9 w-full"
+                            options={[
+                              { value: "none", label: "No access" },
+                              { value: "view", label: "View" },
+                              { value: "manage", label: "Manage" },
+                            ]}
+                          />
+                        </label>
+                      ))}
+                      <div className="self-end">
+                        <OperationSubmit>Save access</OperationSubmit>
+                      </div>
                     </form>
-                    <form action={removeGrowthMember}>
-                      <input type="hidden" name="slug" value={slug} />
-                      <input
-                        type="hidden"
-                        name="userId"
-                        value={member.userId}
-                      />
-                      <OperationSubmit
-                        destructive
-                        confirmMessage={`Remove ${member.user.email} from this workspace?`}
+                    <div className="flex flex-wrap items-center justify-end gap-2">
+                      <form
+                        action={changeGrowthMemberRole}
+                        className="flex gap-2"
                       >
-                        Remove
-                      </OperationSubmit>
-                    </form>
-                  </>
+                        <input type="hidden" name="slug" value={slug} />
+                        <input
+                          type="hidden"
+                          name="userId"
+                          value={member.userId}
+                        />
+                        <FormCombobox
+                          name="role"
+                          defaultValue={member.role}
+                          className="h-9 min-w-32"
+                          options={[
+                            { value: "member", label: "Marketing" },
+                            { value: "viewer", label: "Viewer" },
+                          ]}
+                        />
+                        <OperationSubmit>Update</OperationSubmit>
+                      </form>
+                      <form action={removeGrowthMember}>
+                        <input type="hidden" name="slug" value={slug} />
+                        <input
+                          type="hidden"
+                          name="userId"
+                          value={member.userId}
+                        />
+                        <OperationSubmit
+                          destructive
+                          confirmMessage={`Remove ${member.user.email} from this workspace?`}
+                        >
+                          Remove
+                        </OperationSubmit>
+                      </form>
+                    </div>
+                  </div>
                 )}
               </CardListCard>
             ))}
