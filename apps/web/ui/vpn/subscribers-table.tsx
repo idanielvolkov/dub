@@ -239,13 +239,17 @@ export function SubscribersTable({
         </ModalFooter>
       </Modal>
 
-      <Modal showModal={showCreateModal} setShowModal={setShowCreateModal}>
+      <Modal
+        showModal={showCreateModal}
+        setShowModal={setShowCreateModal}
+        className="max-w-xl"
+      >
         <ModalHeader
           title="Add subscriber"
           description="Create VPN access directly in Remnawave."
         />
         <ModalBody asChild className="bg-bg-muted">
-          <form action={createSubscriber} className="space-y-4">
+          <form action={createSubscriber} className="grid gap-4 sm:grid-cols-2">
             <input type="hidden" name="slug" value={slug} />
             <div className="grid gap-1.5">
               <Label htmlFor="subscriber-username">Subscriber name</Label>
@@ -253,6 +257,7 @@ export function SubscribersTable({
                 id="subscriber-username"
                 name="username"
                 minLength={3}
+                maxLength={36}
                 required
               />
             </div>
@@ -270,7 +275,64 @@ export function SubscribersTable({
                 ]}
               />
             </div>
-            <ModalFooter className="-mx-6 -mb-5">
+            <div className="grid gap-1.5 sm:col-span-2">
+              <Label htmlFor="new-subscriber-email">Email</Label>
+              <Input
+                id="new-subscriber-email"
+                name="email"
+                type="email"
+                maxLength={128}
+                placeholder="customer@example.com"
+              />
+            </div>
+            <div className="grid gap-1.5">
+              <Label htmlFor="new-subscriber-traffic">Traffic, GB</Label>
+              <Input
+                id="new-subscriber-traffic"
+                name="trafficGb"
+                type="number"
+                min={0}
+                max={1000000}
+                defaultValue={0}
+              />
+            </div>
+            <div className="grid gap-1.5">
+              <Label htmlFor="new-subscriber-reset-cycle">Reset cycle</Label>
+              <FormCombobox
+                id="new-subscriber-reset-cycle"
+                name="trafficLimitStrategy"
+                defaultValue="NO_RESET"
+                options={[
+                  { value: "NO_RESET", label: "Never" },
+                  { value: "DAY", label: "Daily" },
+                  { value: "WEEK", label: "Weekly" },
+                  { value: "MONTH", label: "Monthly" },
+                ]}
+              />
+            </div>
+            <div className="grid gap-1.5">
+              <Label htmlFor="new-subscriber-device-limit">Device limit</Label>
+              <Input
+                id="new-subscriber-device-limit"
+                name="deviceLimit"
+                type="number"
+                min={0}
+                max={999}
+                defaultValue={0}
+              />
+              <p className="text-content-subtle text-xs">
+                Use 0 for unlimited devices.
+              </p>
+            </div>
+            <div className="grid gap-1.5">
+              <Label htmlFor="new-subscriber-description">Internal note</Label>
+              <Input
+                id="new-subscriber-description"
+                name="description"
+                maxLength={500}
+              />
+            </div>
+            <ModalFooter className="-mx-6 -mb-5 sm:col-span-2">
               <Button
                 className="w-fit"
                 variant="secondary"
