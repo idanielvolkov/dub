@@ -1,7 +1,6 @@
 "use client";
 
 import { ErrorCodes } from "@/lib/api/error-codes";
-import { canAccessPlatformArea } from "@/lib/platform-access";
 import useWorkspace from "@/lib/swr/use-workspace";
 import LayoutLoader from "@/ui/layout/layout-loader";
 import { notFound, redirect, useParams, usePathname } from "next/navigation";
@@ -36,35 +35,6 @@ export default function WorkspaceAuth({ children }: { children: ReactNode }) {
 
   if (!isProductPath) {
     redirect(`/${slug}/vpn`);
-  }
-
-  const area = pathname.startsWith(`/${slug}/operations`)
-    ? "remnawave"
-    : pathname.startsWith(`/${slug}/growth`)
-      ? "marketing"
-      : "workspace";
-  const allowed = canAccessPlatformArea({
-    role: workspace.role || "member",
-    workspacePreferences: workspace.users?.[0]?.workspacePreferences,
-    area,
-  });
-  if (!allowed) {
-    const firstAllowed = (
-      ["workspace", "remnawave", "marketing"] as const
-    ).find((candidate) =>
-      canAccessPlatformArea({
-        role: workspace.role || "member",
-        workspacePreferences: workspace.users?.[0]?.workspacePreferences,
-        area: candidate,
-      }),
-    );
-    redirect(
-      firstAllowed === "remnawave"
-        ? `/${slug}/operations`
-        : firstAllowed === "marketing"
-          ? `/${slug}/growth`
-          : `/${slug}/vpn`,
-    );
   }
 
   return children;
