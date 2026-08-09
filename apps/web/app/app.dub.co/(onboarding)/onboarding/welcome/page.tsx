@@ -1,5 +1,4 @@
 import { NewBackground } from "@/ui/shared/new-background";
-import { Wordmark } from "@dub/ui";
 import { cn } from "@dub/utils/src";
 import { NextButton } from "../next-button";
 import TrackSignup from "./track-signup";
@@ -13,15 +12,17 @@ export default function Welcome() {
         <div className="flex max-w-sm flex-col items-center px-4 py-16 text-center">
           <div className="animate-slide-up-fade relative flex w-auto items-center justify-center px-6 py-2 [--offset:20px] [animation-duration:1.3s] [animation-fill-mode:both]">
             <Gradient className="opacity-10 mix-blend-overlay" />
-            <Wordmark className="relative h-24 sm:h-36" />
+            <span className="relative text-5xl font-semibold tracking-tight sm:text-7xl">
+              detzvpn
+            </span>
             <Gradient className="opacity-50 mix-blend-hard-light" />
           </div>
           <h1 className="animate-slide-up-fade mt-14 text-xl font-semibold text-neutral-900 [--offset:10px] [animation-delay:250ms] [animation-duration:1s] [animation-fill-mode:both]">
-            Welcome to Dub
+            Welcome to Detz VPN
           </h1>
           <p className="animate-slide-up-fade mt-2 text-balance text-base text-neutral-500 [--offset:10px] [animation-delay:500ms] [animation-duration:1s] [animation-fill-mode:both]">
-            Dub gives you superpowers to track how your marketing efforts
-            convert to revenue.
+            Run subscribers, infrastructure, operations, and growth from one
+            workspace.
           </p>
           <div className="animate-slide-up-fade mt-8 w-full [--offset:10px] [animation-delay:750ms] [animation-duration:1s] [animation-fill-mode:both]">
             <NextButton text="Get started" step="workspace" />
