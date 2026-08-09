@@ -1,6 +1,7 @@
 import { getGrowthWorkspace } from "@/lib/growth/get-growth-workspace";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
+import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import { VpnPanel, VpnPanelHeader } from "@/ui/vpn/vpn-ui";
 import { Badge } from "@dub/ui";
@@ -61,15 +62,15 @@ export default async function CampaignsPage({
               </label>
               <label className="grid gap-1 text-xs text-neutral-500">
                 Short domain
-                <select
-                  className={inputClass}
+                <FormCombobox
                   name="domain"
                   defaultValue={domain}
-                >
-                  {workspace.domains.map((item) => (
-                    <option key={item.slug}>{item.slug}</option>
-                  ))}
-                </select>
+                  className="h-9"
+                  options={workspace.domains.map((item) => ({
+                    value: item.slug,
+                    label: item.slug,
+                  }))}
+                />
               </label>
               <label className="grid gap-1 text-xs text-neutral-500">
                 Short path
@@ -126,16 +127,17 @@ export default async function CampaignsPage({
               </label>
               <label className="grid gap-1 text-xs text-neutral-500">
                 Status
-                <select
-                  className={inputClass}
+                <FormCombobox
                   name="status"
                   defaultValue="draft"
-                >
-                  <option value="draft">Draft</option>
-                  <option value="active">Active</option>
-                  <option value="paused">Paused</option>
-                  <option value="completed">Completed</option>
-                </select>
+                  className="h-9"
+                  options={[
+                    { value: "draft", label: "Draft" },
+                    { value: "active", label: "Active" },
+                    { value: "paused", label: "Paused" },
+                    { value: "completed", label: "Completed" },
+                  ]}
+                />
               </label>
               <div className="lg:col-span-4">
                 <OperationSubmit>Create campaign</OperationSubmit>
@@ -219,16 +221,17 @@ export default async function CampaignsPage({
                   </label>
                   <label className="grid gap-1 text-xs text-neutral-500">
                     Status
-                    <select
-                      className={inputClass}
+                    <FormCombobox
                       name="status"
                       defaultValue={campaign.meta.status}
-                    >
-                      <option value="draft">Draft</option>
-                      <option value="active">Active</option>
-                      <option value="paused">Paused</option>
-                      <option value="completed">Completed</option>
-                    </select>
+                      className="h-9"
+                      options={[
+                        { value: "draft", label: "Draft" },
+                        { value: "active", label: "Active" },
+                        { value: "paused", label: "Paused" },
+                        { value: "completed", label: "Completed" },
+                      ]}
+                    />
                   </label>
                   <div className="flex items-end lg:col-span-2">
                     <OperationSubmit>Save campaign</OperationSubmit>
