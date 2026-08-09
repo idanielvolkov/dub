@@ -240,7 +240,7 @@ export function OrdersTable({
                 {selectedOrder.planName} · ${selectedOrder.amount}
               </p>
             </ModalHeader>
-            <div className="bg-bg-muted space-y-5 p-6">
+            <ModalBody className="bg-bg-muted space-y-5">
               {canEdit && (
                 <form action={updateVpnOrder} className="space-y-4">
                   <input type="hidden" name="slug" value={slug} />
@@ -306,7 +306,7 @@ export function OrdersTable({
                   </p>
                 </div>
               )}
-            </div>
+            </ModalBody>
           </>
         )}
       </Modal>

@@ -233,7 +233,7 @@ export function PlanCardActions({
         title={`Edit ${plan.name}`}
         description="Update pricing and Remnawave access limits."
       >
-        <div className="bg-bg-muted p-6">
+        <ModalBody className="bg-bg-muted">
           <form action={updateVpnPlan} className="space-y-5">
             <input type="hidden" name="slug" value={slug} />
             <input type="hidden" name="id" value={plan.id} />
@@ -253,7 +253,7 @@ export function PlanCardActions({
               Archive plan
             </OperationSubmit>
           </form>
-        </div>
+        </ModalBody>
       </FormModal>
     </>
   );

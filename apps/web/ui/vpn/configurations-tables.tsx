@@ -212,35 +212,41 @@ export function ConfigurationsTables({
               title={`Edit ${selectedProfile.name}`}
               description="Validate and apply the complete Xray configuration."
             />
-            <form action={saveProfile} className="bg-bg-muted space-y-4 p-6">
-              <input type="hidden" name="slug" value={slug} />
-              <input type="hidden" name="uuid" value={selectedProfile.uuid} />
-              <div className="grid gap-1.5">
-                <Label htmlFor="profile-name">Profile name</Label>
-                <Input
-                  id="profile-name"
-                  name="name"
-                  defaultValue={selectedProfile.name}
-                  required
-                />
-              </div>
-              <div className="grid gap-1.5">
-                <Label htmlFor="profile-xray-json">Xray JSON</Label>
-                <Textarea
-                  id="profile-xray-json"
-                  className="min-h-80 w-full resize-y rounded-md border-neutral-300 bg-white p-3 font-mono text-xs text-neutral-900 placeholder-neutral-400 focus:border-neutral-500 focus:outline-none focus:ring-neutral-500"
-                  name="config"
-                  defaultValue={JSON.stringify(selectedProfile.config, null, 2)}
-                  rows={18}
-                  spellCheck={false}
-                />
-              </div>
-              <div className="flex justify-end">
-                <OperationSubmit confirmMessage="Apply this Xray configuration to the profile?">
-                  Validate & save
-                </OperationSubmit>
-              </div>
-            </form>
+            <ModalBody asChild className="bg-bg-muted">
+              <form action={saveProfile} className="space-y-4">
+                <input type="hidden" name="slug" value={slug} />
+                <input type="hidden" name="uuid" value={selectedProfile.uuid} />
+                <div className="grid gap-1.5">
+                  <Label htmlFor="profile-name">Profile name</Label>
+                  <Input
+                    id="profile-name"
+                    name="name"
+                    defaultValue={selectedProfile.name}
+                    required
+                  />
+                </div>
+                <div className="grid gap-1.5">
+                  <Label htmlFor="profile-xray-json">Xray JSON</Label>
+                  <Textarea
+                    id="profile-xray-json"
+                    className="min-h-80 w-full resize-y rounded-md border-neutral-300 bg-white p-3 font-mono text-xs text-neutral-900 placeholder-neutral-400 focus:border-neutral-500 focus:outline-none focus:ring-neutral-500"
+                    name="config"
+                    defaultValue={JSON.stringify(
+                      selectedProfile.config,
+                      null,
+                      2,
+                    )}
+                    rows={18}
+                    spellCheck={false}
+                  />
+                </div>
+                <div className="flex justify-end">
+                  <OperationSubmit confirmMessage="Apply this Xray configuration to the profile?">
+                    Validate & save
+                  </OperationSubmit>
+                </div>
+              </form>
+            </ModalBody>
           </>
         )}
       </Modal>
@@ -255,7 +261,7 @@ export function ConfigurationsTables({
               title="Manage squad"
               description={`${selectedSquad.info?.membersCount || 0} members · ${selectedSquad.inbounds.length} inbounds`}
             />
-            <div className="bg-bg-muted p-6">
+            <ModalBody className="bg-bg-muted">
               <form action={saveSquad} className="space-y-4">
                 <input type="hidden" name="slug" value={slug} />
                 <input type="hidden" name="uuid" value={selectedSquad.uuid} />
@@ -295,7 +301,7 @@ export function ConfigurationsTables({
                   </OperationSubmit>
                 </form>
               </div>
-            </div>
+            </ModalBody>
           </>
         )}
       </Modal>

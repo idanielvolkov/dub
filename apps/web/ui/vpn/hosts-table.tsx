@@ -9,6 +9,7 @@ import {
   Input,
   Label,
   Modal,
+  ModalBody,
   ModalHeader,
   StatusBadge,
   Table,
@@ -160,7 +161,7 @@ export function HostsTable({
                 {selectedHost.uuid}
               </p>
             </ModalHeader>
-            <div className="bg-bg-muted p-6">
+            <ModalBody className="bg-bg-muted">
               <form action={saveHost} className="grid gap-4 sm:grid-cols-2">
                 <input type="hidden" name="slug" value={slug} />
                 <input type="hidden" name="uuid" value={selectedHost.uuid} />
@@ -238,7 +239,7 @@ export function HostsTable({
                   </OperationSubmit>
                 </form>
               </div>
-            </div>
+            </ModalBody>
           </>
         )}
       </Modal>

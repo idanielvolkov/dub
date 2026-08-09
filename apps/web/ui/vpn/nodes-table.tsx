@@ -8,6 +8,7 @@ import {
   Input,
   Label,
   Modal,
+  ModalBody,
   ModalHeader,
   StatusBadge,
   Table,
@@ -168,7 +169,7 @@ export function NodesTable({
                 {selectedNode.address}:{selectedNode.port}
               </p>
             </ModalHeader>
-            <div className="bg-bg-muted p-6">
+            <ModalBody className="bg-bg-muted">
               <form
                 action={saveNode}
                 className="grid gap-4 sm:grid-cols-[1fr_120px]"
@@ -240,7 +241,7 @@ export function NodesTable({
                   </OperationSubmit>
                 </form>
               </div>
-            </div>
+            </ModalBody>
           </>
         )}
       </Modal>

@@ -219,7 +219,7 @@ export function SubscribersTable({
                 {selectedUser.uuid}
               </p>
             </ModalHeader>
-            <div className="bg-bg-muted p-6">
+            <ModalBody className="bg-bg-muted">
               <form
                 action={saveSubscriber}
                 className="grid gap-4 sm:grid-cols-2"
@@ -335,7 +335,7 @@ export function SubscribersTable({
                   </OperationSubmit>
                 </form>
               </div>
-            </div>
+            </ModalBody>
           </>
         )}
       </Modal>
