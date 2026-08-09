@@ -9,6 +9,7 @@ import {
   Label,
   Modal,
   ModalBody,
+  ModalFooter,
   ModalHeader,
   StatusBadge,
   Table,
@@ -218,30 +219,30 @@ export function NodesTable({
                   </dd>
                 </div>
               </dl>
-              <div className="border-border-subtle mt-5 flex gap-2 border-t pt-5">
-                <form action={changeNodeState}>
-                  <input type="hidden" name="slug" value={slug} />
-                  <input type="hidden" name="uuid" value={selectedNode.uuid} />
-                  <input
-                    type="hidden"
-                    name="enabled"
-                    value={String(selectedNode.isDisabled)}
-                  />
-                  <OperationSubmit>
-                    {selectedNode.isDisabled ? "Enable node" : "Disable node"}
-                  </OperationSubmit>
-                </form>
-                <form action={restartNode}>
-                  <input type="hidden" name="slug" value={slug} />
-                  <input type="hidden" name="uuid" value={selectedNode.uuid} />
-                  <OperationSubmit
-                    confirmMessage={`Restart ${selectedNode.name}?`}
-                  >
-                    Restart node
-                  </OperationSubmit>
-                </form>
-              </div>
             </ModalBody>
+            <ModalFooter className="justify-start">
+              <form action={changeNodeState}>
+                <input type="hidden" name="slug" value={slug} />
+                <input type="hidden" name="uuid" value={selectedNode.uuid} />
+                <input
+                  type="hidden"
+                  name="enabled"
+                  value={String(selectedNode.isDisabled)}
+                />
+                <OperationSubmit>
+                  {selectedNode.isDisabled ? "Enable node" : "Disable node"}
+                </OperationSubmit>
+              </form>
+              <form action={restartNode}>
+                <input type="hidden" name="slug" value={slug} />
+                <input type="hidden" name="uuid" value={selectedNode.uuid} />
+                <OperationSubmit
+                  confirmMessage={`Restart ${selectedNode.name}?`}
+                >
+                  Restart node
+                </OperationSubmit>
+              </form>
+            </ModalFooter>
           </>
         )}
       </Modal>

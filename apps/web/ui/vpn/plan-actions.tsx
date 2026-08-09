@@ -242,7 +242,9 @@ export function PlanCardActions({
               <OperationSubmit>Save changes</OperationSubmit>
             </div>
           </form>
-          <form action={setVpnPlanArchived} className="mt-3 flex justify-end">
+        </ModalBody>
+        <ModalFooter>
+          <form action={setVpnPlanArchived}>
             <input type="hidden" name="slug" value={slug} />
             <input type="hidden" name="id" value={plan.id} />
             <input type="hidden" name="archived" value="true" />
@@ -253,7 +255,7 @@ export function PlanCardActions({
               Archive plan
             </OperationSubmit>
           </form>
-        </ModalBody>
+        </ModalFooter>
       </FormModal>
     </>
   );
