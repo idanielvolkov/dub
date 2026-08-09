@@ -1,6 +1,13 @@
 import { getRemnawaveNodes, getRemnawaveUsers } from "@/lib/remnawave/client";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
+import {
+  VpnMetricCard,
+  VpnPanel,
+  VpnPanelHeader,
+  VpnProgress,
+} from "@/ui/vpn/vpn-ui";
+import { StatusBadge } from "@dub/ui";
 
 const formatBytes = (bytes: number) => {
   if (!bytes) return "0 B";
@@ -31,8 +38,11 @@ export default async function TrafficPage() {
     .slice(0, 8);
 
   return (
-    <PageContent title="Traffic">
-      <PageWidthWrapper className="py-6">
+    <PageContent
+      title="Traffic"
+      titleInfo={{ title: "Live usage totals reported by Remnawave." }}
+    >
+      <PageWidthWrapper className="pb-10">
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {[
             ["Subscriber usage", formatBytes(used), `${users.length} accounts`],
@@ -54,31 +64,23 @@ export default async function TrafficPage() {
               "Live connections",
             ],
           ].map(([label, value, hint]) => (
-            <div
+            <VpnMetricCard
               key={label}
-              className="rounded-xl border border-neutral-200 bg-white p-5 shadow-sm"
-            >
-              <p className="text-sm text-neutral-500">{label}</p>
-              <p className="mt-2 text-2xl font-semibold tracking-tight text-neutral-950">
-                {value}
-              </p>
-              <p className="mt-1 text-xs text-neutral-500">{hint}</p>
-            </div>
+              label={label}
+              value={value}
+              detail={hint}
+            />
           ))}
         </div>
 
         <div className="mt-4 grid gap-4 lg:grid-cols-[1.35fr_1fr]">
-          <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm">
-            <div className="border-b border-neutral-200 px-5 py-4">
-              <p className="font-medium text-neutral-950">
-                Subscriber consumption
-              </p>
-              <p className="mt-0.5 text-sm text-neutral-500">
-                Live totals reported by Remnawave
-              </p>
-            </div>
+          <VpnPanel>
+            <VpnPanelHeader
+              title="Subscriber consumption"
+              description="Usage against the assigned plan allowance"
+            />
             {topUsers.length ? (
-              <div className="divide-y divide-neutral-100">
+              <div className="divide-border-subtle divide-y">
                 {topUsers.map((user) => {
                   const consumed = user.usedTrafficBytes || 0;
                   const percent = user.trafficLimitBytes
@@ -87,22 +89,21 @@ export default async function TrafficPage() {
                   return (
                     <div key={user.uuid} className="px-5 py-4">
                       <div className="flex items-center justify-between gap-3 text-sm">
-                        <span className="font-medium text-neutral-900">
+                        <span className="text-content-emphasis font-medium">
                           {user.username}
                         </span>
-                        <span className="text-neutral-500">
+                        <span className="text-content-subtle">
                           {formatBytes(consumed)}
                           {user.trafficLimitBytes
                             ? ` / ${formatBytes(user.trafficLimitBytes)}`
                             : " / Unlimited"}
                         </span>
                       </div>
-                      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-neutral-100">
-                        <div
-                          className="h-full rounded-full bg-neutral-950 transition-all"
-                          style={{
-                            width: `${user.trafficLimitBytes ? Math.max(1, percent) : 0}%`,
-                          }}
+                      <div className="mt-2">
+                        <VpnProgress
+                          value={
+                            user.trafficLimitBytes ? Math.max(1, percent) : 0
+                          }
                         />
                       </div>
                     </div>
@@ -114,33 +115,34 @@ export default async function TrafficPage() {
                 Traffic appears after subscribers start using the VPN.
               </div>
             )}
-          </div>
+          </VpnPanel>
 
-          <div className="rounded-xl border border-neutral-200 bg-white p-5 shadow-sm">
-            <p className="font-medium text-neutral-950">Server distribution</p>
-            <div className="mt-4 space-y-3">
+          <VpnPanel>
+            <VpnPanelHeader
+              title="Server distribution"
+              description="Current load across VPN nodes"
+            />
+            <div className="divide-border-subtle divide-y px-5">
               {nodes.map((node) => (
-                <div key={node.uuid} className="rounded-lg bg-neutral-50 p-3">
+                <div key={node.uuid} className="py-4">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="font-medium text-neutral-900">
+                    <span className="text-content-emphasis font-medium">
                       {node.name}
                     </span>
-                    <span
-                      className={
-                        node.isConnected ? "text-green-700" : "text-amber-700"
-                      }
+                    <StatusBadge
+                      variant={node.isConnected ? "success" : "warning"}
                     >
                       {node.isConnected ? "Online" : "Offline"}
-                    </span>
+                    </StatusBadge>
                   </div>
-                  <div className="mt-2 flex justify-between text-xs text-neutral-500">
+                  <div className="text-content-subtle mt-2 flex justify-between text-xs">
                     <span>{node.usersOnline} connected</span>
                     <span>{formatBytes(node.trafficUsedBytes || 0)}</span>
                   </div>
                 </div>
               ))}
             </div>
-          </div>
+          </VpnPanel>
         </div>
       </PageWidthWrapper>
     </PageContent>

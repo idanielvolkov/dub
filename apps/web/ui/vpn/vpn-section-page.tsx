@@ -12,10 +12,10 @@ export function VpnSectionPage({
   children?: ReactNode;
 }) {
   return (
-    <PageContent title={title}>
-      <PageWidthWrapper className="py-6">
-        <div className="rounded-xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <p className="max-w-2xl text-sm leading-6 text-neutral-600">
+    <PageContent title={title} titleInfo={{ title: description }}>
+      <PageWidthWrapper className="pb-10">
+        <div className="border-border-subtle bg-bg-default rounded-xl border p-6">
+          <p className="text-content-default max-w-2xl text-sm leading-6">
             {description}
           </p>
           {children}
