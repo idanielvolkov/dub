@@ -2,16 +2,35 @@
 
 import useWorkspace from "@/lib/swr/use-workspace";
 import {
+  Cards,
+  ChartActivity2,
+  ChartLine,
   ConnectedDots,
+  Crosshairs3,
   CubeSettings,
+  Discount,
   Gauge6,
   Gear2,
   Globe,
+  GlobePointer,
+  InvoiceDollar,
   LinesY,
   MarketingTarget,
+  Megaphone,
+  Nodes4,
+  QRCode,
   Receipt2,
+  Rocket,
+  SatelliteDish,
   ShieldCheck,
+  ShieldKeyhole,
+  ShieldUser,
+  Sliders,
+  SquareCheck,
+  UserFocus,
   Users,
+  UsersSettings,
+  WindowSettings,
 } from "@dub/ui/icons";
 import { useParams, usePathname } from "next/navigation";
 import { ReactNode } from "react";
@@ -23,6 +42,8 @@ type SidebarNavData = {
   pathname: string;
   isOwner: boolean;
 };
+
+const iconOr = <T,>(icon: T | undefined, fallback: T) => icon ?? fallback;
 
 const NAV_GROUPS: SidebarNavGroups<SidebarNavData> = ({
   slug,
@@ -77,7 +98,7 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
           },
           {
             name: "Subscribers",
-            icon: Users,
+            icon: iconOr(ShieldUser, Users),
             href: `/${slug}/vpn/subscribers`,
           },
         ],
@@ -87,17 +108,17 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
         items: [
           {
             name: "Plans",
-            icon: Receipt2,
+            icon: iconOr(Cards, Receipt2),
             href: `/${slug}/vpn/plans`,
           },
           {
             name: "Orders",
-            icon: Receipt2,
+            icon: iconOr(InvoiceDollar, Receipt2),
             href: `/${slug}/vpn/orders`,
           },
           {
             name: "Traffic",
-            icon: LinesY,
+            icon: iconOr(ChartActivity2, LinesY),
             href: `/${slug}/vpn/traffic`,
           },
         ],
@@ -112,15 +133,23 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
         items: [
           {
             name: "Overview",
-            icon: Gauge6,
+            icon: iconOr(SatelliteDish, Gauge6),
             href: `/${slug}/operations`,
             exact: true,
           },
-          { name: "Users", icon: Users, href: `/${slug}/operations/users` },
-          { name: "Nodes", icon: Globe, href: `/${slug}/operations/nodes` },
+          {
+            name: "Users",
+            icon: iconOr(UserFocus, Users),
+            href: `/${slug}/operations/users`,
+          },
+          {
+            name: "Nodes",
+            icon: iconOr(Nodes4, Globe),
+            href: `/${slug}/operations/nodes`,
+          },
           {
             name: "Hosts",
-            icon: ConnectedDots,
+            icon: iconOr(GlobePointer, ConnectedDots),
             href: `/${slug}/operations/hosts`,
           },
         ],
@@ -130,18 +159,23 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
         items: [
           {
             name: "Profiles & squads",
-            icon: ShieldCheck,
+            icon: iconOr(Sliders, ShieldCheck),
             href: `/${slug}/operations/configurations`,
           },
           {
             name: "Subscriptions",
-            icon: Receipt2,
+            icon: iconOr(QRCode, Receipt2),
             href: `/${slug}/operations/subscriptions`,
           },
           {
             name: "System",
-            icon: CubeSettings,
+            icon: iconOr(WindowSettings, CubeSettings),
             href: `/${slug}/operations/system`,
+          },
+          {
+            name: "Insights & billing",
+            icon: iconOr(ChartActivity2, LinesY),
+            href: `/${slug}/operations/insights`,
           },
         ],
       },
@@ -155,21 +189,33 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
         items: [
           {
             name: "Overview",
-            icon: Gauge6,
+            icon: iconOr(Rocket, Gauge6),
             href: `/${slug}/growth`,
             exact: true,
           },
           {
             name: "Campaigns",
-            icon: MarketingTarget,
+            icon: iconOr(Megaphone, MarketingTarget),
             href: `/${slug}/growth/campaigns`,
           },
-          { name: "Leads", icon: Users, href: `/${slug}/growth/leads` },
-          { name: "Tasks", icon: LinesY, href: `/${slug}/growth/tasks` },
-          { name: "Team", icon: Users, href: `/${slug}/growth/team` },
+          {
+            name: "Leads",
+            icon: iconOr(Crosshairs3, Users),
+            href: `/${slug}/growth/leads`,
+          },
+          {
+            name: "Tasks",
+            icon: iconOr(SquareCheck, LinesY),
+            href: `/${slug}/growth/tasks`,
+          },
+          {
+            name: "Team",
+            icon: iconOr(UsersSettings, Users),
+            href: `/${slug}/growth/team`,
+          },
           {
             name: "Promo codes",
-            icon: Receipt2,
+            icon: iconOr(Discount, Receipt2),
             href: `/${slug}/growth/promotions`,
           },
         ],
@@ -179,7 +225,7 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
         items: [
           {
             name: "Analytics",
-            icon: LinesY,
+            icon: iconOr(ChartLine, LinesY),
             href: `/${slug}/growth/analytics`,
           },
         ],
@@ -200,7 +246,7 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
           },
           {
             name: "Security",
-            icon: ShieldCheck,
+            icon: iconOr(ShieldKeyhole, ShieldCheck),
             href: "/account/settings/security",
           },
         ],
