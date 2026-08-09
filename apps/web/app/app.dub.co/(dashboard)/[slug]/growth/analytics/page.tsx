@@ -18,7 +18,7 @@ export default async function GrowthAnalyticsPage({
   const sales = totals._sum.sales || 0;
   return (
     <PageContent
-      title="Growth analytics"
+      title="Analytics"
       titleInfo={{ title: "Marketing funnel and campaign performance." }}
     >
       <PageWidthWrapper className="pb-10">

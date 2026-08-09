@@ -22,7 +22,14 @@ export async function GET(
 
   const { searchParams } = new URL(req.url);
   const seed = params.seed?.[0] ?? searchParams.get("seed");
-  const theme = getAvatarTheme(seed);
+  const role = searchParams.get("role");
+  const roleThemes: Record<string, { bg: string; fg: string }> = {
+    owner: { bg: "#f3e8ff", fg: "#a855f7" },
+    member: { bg: "#dbeafe", fg: "#3b82f6" },
+    viewer: { bg: "#dcfce7", fg: "#22c55e" },
+    billing: { bg: "#fef3c7", fg: "#f59e0b" },
+  };
+  const theme = (role && roleThemes[role]) || getAvatarTheme(seed);
 
   return new ImageResponse(
     (

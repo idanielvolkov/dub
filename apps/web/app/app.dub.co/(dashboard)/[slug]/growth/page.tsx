@@ -18,7 +18,7 @@ export default async function GrowthPage({
 
   return (
     <PageContent
-      title="Growth Workspace"
+      title="Overview"
       titleInfo={{
         title: "A dedicated workspace for your marketing and growth team.",
       }}

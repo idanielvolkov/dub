@@ -51,7 +51,7 @@ export default async function OperationsPage({
 
   return (
     <PageContent
-      title="Remnawave"
+      title="Overview"
       titleInfo={{
         title: "Technical control plane backed by the Remnawave API.",
       }}

@@ -1,6 +1,6 @@
 "use client";
 
-import { cn, hashStringSHA256 } from "@dub/utils";
+import { cn } from "@dub/utils";
 import { useEffect, useState } from "react";
 
 type User = {
@@ -8,6 +8,7 @@ type User = {
   name?: string | null | undefined;
   email?: string | null | undefined;
   image?: string | null | undefined;
+  role?: "owner" | "member" | "viewer" | "billing" | string | null;
 };
 
 export async function getUserAvatarUrl(user?: User | null) {
@@ -15,11 +16,8 @@ export async function getUserAvatarUrl(user?: User | null) {
 
   if (!user?.id) return "/api/og/avatar";
 
-  const ogAvatar = `/api/og/avatar/${user.id}`;
-
-  return user.email
-    ? `https://0.gravatar.com/avatar/${await hashStringSHA256(user.email)}?d=${ogAvatar}`
-    : ogAvatar;
+  const role = user.role ? `?role=${encodeURIComponent(user.role)}` : "";
+  return `/api/og/avatar/${user.id}${role}`;
 }
 
 export function UserAvatar({
@@ -39,7 +37,7 @@ export function UserAvatar({
     return () => {
       cancelled = true;
     };
-  }, [user?.id, user?.email, user?.image]);
+  }, [user?.id, user?.email, user?.image, user?.role]);
 
   if (!user || !src) {
     return (

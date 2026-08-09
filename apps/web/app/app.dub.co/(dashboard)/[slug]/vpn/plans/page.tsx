@@ -39,7 +39,7 @@ export default async function PlansPage({
 
   return (
     <PageContent
-      title="VPN plans"
+      title="Plans"
       titleInfo={{ title: "Manage the catalog and provision VPN access." }}
     >
       <PageWidthWrapper className="space-y-6 pb-10">
