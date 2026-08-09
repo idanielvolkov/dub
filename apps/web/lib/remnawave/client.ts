@@ -406,6 +406,32 @@ export async function getRemnawaveExternalSquads() {
   }
 }
 
+export function createRemnawaveExternalSquad(name: string) {
+  return remnawaveMutation("/api/external-squads", "POST", { name });
+}
+
+export function updateRemnawaveExternalSquad(uuid: string, name: string) {
+  return remnawaveMutation("/api/external-squads", "PATCH", { uuid, name });
+}
+
+export function deleteRemnawaveExternalSquad(uuid: string) {
+  return remnawaveMutation(`/api/external-squads/${uuid}`, "DELETE");
+}
+
+export function addAllUsersToRemnawaveExternalSquad(uuid: string) {
+  return remnawaveMutation(
+    `/api/external-squads/${uuid}/bulk-actions/add-users`,
+    "POST",
+  );
+}
+
+export function removeAllUsersFromRemnawaveExternalSquad(uuid: string) {
+  return remnawaveMutation(
+    `/api/external-squads/${uuid}/bulk-actions/remove-users`,
+    "DELETE",
+  );
+}
+
 export async function getRemnawaveDeviceStats() {
   try {
     return await remnawaveFetch<RemnawaveDeviceStats>("/api/hwid/devices/stats");
