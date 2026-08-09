@@ -48,6 +48,11 @@ export type RemnawaveNode = {
   trafficUsedBytes: number;
   lastStatusMessage: string | null;
   countryCode: string;
+  isTrafficTrackingActive: boolean;
+  trafficLimitBytes: number;
+  notifyPercent: number;
+  trafficResetDay: number;
+  consumptionMultiplier: number;
 };
 
 export type RemnawaveHost = {
@@ -59,6 +64,10 @@ export type RemnawaveHost = {
   isHidden: boolean;
   securityLayer: string | null;
   nodes: { uuid: string; name: string }[];
+  inbound?: {
+    configProfileUuid: string;
+    configProfileInboundUuid: string;
+  };
 };
 
 export type RemnawaveConfigProfile = {
@@ -66,13 +75,14 @@ export type RemnawaveConfigProfile = {
   name: string;
   inbounds: unknown[];
   nodes: unknown[];
+  config: Record<string, unknown>;
   updatedAt: string;
 };
 
 export type RemnawaveSquad = {
   uuid: string;
   name: string;
-  info: string | null;
+  info: { membersCount?: number; inboundsCount?: number } | null;
   inbounds: unknown[];
   updatedAt: string;
 };
@@ -109,6 +119,107 @@ async function remnawaveFetch<T>(path: string): Promise<T> {
 
   const data = (await response.json()) as RemnawaveEnvelope<T>;
   return data.response;
+}
+
+async function remnawaveMutation<T = unknown>(
+  path: string,
+  method: "POST" | "PATCH" | "PUT" | "DELETE",
+  body?: unknown,
+): Promise<T | null> {
+  if (!process.env.REMNAWAVE_API_TOKEN) {
+    throw new Error("REMNAWAVE_API_TOKEN is not configured");
+  }
+
+  const response = await fetch(`${REMNAWAVE_API_URL}${path}`, {
+    method,
+    headers: {
+      Authorization: `Bearer ${process.env.REMNAWAVE_API_TOKEN}`,
+      ...(body === undefined ? {} : { "Content-Type": "application/json" }),
+    },
+    body: body === undefined ? undefined : JSON.stringify(body),
+    cache: "no-store",
+    signal: AbortSignal.timeout(10_000),
+  });
+
+  if (!response.ok) {
+    const message = await response.text().catch(() => "");
+    throw new Error(
+      `Remnawave mutation failed (HTTP ${response.status})${message ? `: ${message.slice(0, 240)}` : ""}`,
+    );
+  }
+
+  if (response.status === 204) return null;
+  return (await response.json()) as T;
+}
+
+export function updateRemnawaveNode(input: {
+  uuid: string;
+  name?: string;
+  countryCode?: string;
+}) {
+  return remnawaveMutation("/api/nodes", "PATCH", input);
+}
+
+export function setRemnawaveNodeEnabled(uuid: string, enabled: boolean) {
+  return remnawaveMutation(
+    `/api/nodes/${uuid}/actions/${enabled ? "enable" : "disable"}`,
+    "POST",
+  );
+}
+
+export function restartRemnawaveNode(uuid: string) {
+  return remnawaveMutation(`/api/nodes/${uuid}/actions/restart`, "POST");
+}
+
+export function updateRemnawaveHost(input: {
+  uuid: string;
+  remark?: string;
+  address?: string;
+  port?: number;
+  isDisabled?: boolean;
+  isHidden?: boolean;
+}) {
+  return remnawaveMutation("/api/hosts", "PATCH", input);
+}
+
+export function deleteRemnawaveHost(uuid: string) {
+  return remnawaveMutation(`/api/hosts/${uuid}`, "DELETE");
+}
+
+export function updateRemnawaveConfigProfile(input: {
+  uuid: string;
+  name?: string;
+  config?: Record<string, unknown>;
+}) {
+  return remnawaveMutation("/api/config-profiles", "PATCH", input);
+}
+
+export function createRemnawaveSquad(input: {
+  name: string;
+  inbounds: string[];
+}) {
+  return remnawaveMutation("/api/internal-squads", "POST", input);
+}
+
+export function updateRemnawaveSquad(input: {
+  uuid: string;
+  name?: string;
+  inbounds?: string[];
+}) {
+  return remnawaveMutation("/api/internal-squads", "PATCH", input);
+}
+
+export function deleteRemnawaveSquad(uuid: string) {
+  return remnawaveMutation(`/api/internal-squads/${uuid}`, "DELETE");
+}
+
+export function updateRemnawaveSubscriptionSettings(input: {
+  uuid: string;
+  randomizeHosts?: boolean;
+  serveJsonAtBaseSubscription?: boolean;
+  isShowCustomRemarks?: boolean;
+}) {
+  return remnawaveMutation("/api/subscription-settings", "PATCH", input);
 }
 
 export async function createRemnawaveUser(input: {
