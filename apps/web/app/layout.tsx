@@ -19,6 +19,44 @@ export default function RootLayout({
       <body>
         <RootProviders>{children}</RootProviders>
 
+        <Script id="recover-stale-client-bundle" strategy="beforeInteractive">
+          {`
+          (() => {
+            const recoveryKey = "detz:last-client-recovery";
+
+            window.__detzRecoverFromClientError = (error) => {
+              const now = Date.now();
+              const previousRecovery = Number(sessionStorage.getItem(recoveryKey) || 0);
+
+              if (now - previousRecovery < 30000) return false;
+
+              sessionStorage.setItem(recoveryKey, String(now));
+              const url = new URL(window.location.href);
+              url.searchParams.set("__detz_reload", String(now));
+              window.location.replace(url.toString());
+              return true;
+            };
+
+            const isStaleBundleError = (value) => {
+              const message = String(value?.message || value?.reason?.message || value?.reason || value || "");
+              return /ChunkLoadError|Loading chunk|Failed to fetch dynamically imported module|Importing a module script failed|module script.*failed|CSS_CHUNK_LOAD_FAILED/i.test(message);
+            };
+
+            window.addEventListener("error", (event) => {
+              if (isStaleBundleError(event.error || event.message)) {
+                window.__detzRecoverFromClientError(event.error || event.message);
+              }
+            });
+
+            window.addEventListener("unhandledrejection", (event) => {
+              if (isStaleBundleError(event.reason)) {
+                window.__detzRecoverFromClientError(event.reason);
+              }
+            });
+          })();
+        `}
+        </Script>
+
         <Script id="set-theme" strategy="beforeInteractive">
           {`
           (() => {
