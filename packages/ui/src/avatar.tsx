@@ -18,22 +18,26 @@ export function Avatar({
   imageUrl,
   identifier,
   className,
+  theme: themeOverride,
 }: {
   imageUrl?: string | null;
   identifier: string;
   className?: string;
+  theme?: { bg: string; fg: string };
 }) {
   if (imageUrl) {
     return (
       <img
         src={imageUrl}
         alt={identifier}
+        referrerPolicy="no-referrer"
+        draggable={false}
         className={cn("shrink-0 rounded-full", className)}
       />
     );
   }
 
-  const theme = getAvatarTheme(identifier);
+  const theme = themeOverride ?? getAvatarTheme(identifier);
 
   return (
     <div
