@@ -46,7 +46,7 @@ const NAV_GROUPS: SidebarNavGroups<SidebarNavData> = ({
 }) => [
   {
     id: "vpn",
-    name: "Business",
+    name: "Workspace",
     description: "Manage plans, orders, revenue, and customer sales.",
     icon: ShieldCheck,
     href: slug ? `/${slug}/vpn` : "/vpn",
@@ -56,7 +56,7 @@ const NAV_GROUPS: SidebarNavGroups<SidebarNavData> = ({
     ? [
         {
           id: "operations",
-          name: "Remnawave",
+          name: "Remnawave API",
           description:
             "Technical control of users, nodes, hosts, profiles, and subscriptions.",
           icon: CubeSettings,
@@ -77,7 +77,7 @@ const NAV_GROUPS: SidebarNavGroups<SidebarNavData> = ({
 
 const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
   vpn: ({ slug }) => ({
-    title: "Business",
+    title: "Workspace",
     direction: "left",
     content: [
       {
@@ -103,7 +103,7 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
     ],
   }),
   operations: ({ slug }) => ({
-    title: "Remnawave",
+    title: "Remnawave API",
     direction: "left",
     content: [
       {
