@@ -2,7 +2,7 @@
 
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
-import { Button, Input, Label, Modal } from "@dub/ui";
+import { Button, Input, Label, Modal, ModalHeader } from "@dub/ui";
 import { useState } from "react";
 import { createGrowthCampaign } from "../../app/app.dub.co/(dashboard)/[slug]/growth/campaigns/actions";
 
@@ -32,14 +32,10 @@ export function CreateCampaignButton({
         setShowModal={setShowModal}
         className="max-w-2xl"
       >
-        <div className="border-border-subtle border-b px-6 py-4">
-          <h3 className="text-content-emphasis text-lg font-medium">
-            Create campaign
-          </h3>
-          <p className="text-content-subtle mt-1 text-sm">
-            Create a trackable campaign link with UTM attribution.
-          </p>
-        </div>
+        <ModalHeader
+          title="Create campaign"
+          description="Create a trackable campaign link with UTM attribution."
+        />
         <form
           action={createGrowthCampaign}
           className="bg-bg-muted grid gap-4 p-6 md:grid-cols-2"

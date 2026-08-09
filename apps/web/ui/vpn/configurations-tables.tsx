@@ -11,12 +11,12 @@ import {
   Modal,
   StatusBadge,
   Table,
+  Textarea,
   useTable,
 } from "@dub/ui";
 import { Sliders, UsersSettings } from "@dub/ui/icons";
 import { ColumnDef } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
-import TextareaAutosize from "react-textarea-autosize";
 import {
   addSquad,
   removeSquad,
@@ -227,12 +227,12 @@ export function ConfigurationsTables({
               </div>
               <div className="grid gap-1.5">
                 <Label htmlFor="profile-xray-json">Xray JSON</Label>
-                <TextareaAutosize
+                <Textarea
                   id="profile-xray-json"
                   className="min-h-80 w-full resize-y rounded-md border-neutral-300 bg-white p-3 font-mono text-xs text-neutral-900 placeholder-neutral-400 focus:border-neutral-500 focus:outline-none focus:ring-neutral-500"
                   name="config"
                   defaultValue={JSON.stringify(selectedProfile.config, null, 2)}
-                  minRows={18}
+                  rows={18}
                   spellCheck={false}
                 />
               </div>

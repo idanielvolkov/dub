@@ -4,7 +4,13 @@ import { cn } from "@dub/utils";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { useRouter } from "next/navigation";
-import { ComponentProps, Dispatch, SetStateAction } from "react";
+import {
+  ComponentProps,
+  Dispatch,
+  HTMLAttributes,
+  ReactNode,
+  SetStateAction,
+} from "react";
 import { Drawer } from "vaul";
 import { useMediaQuery } from "./hooks";
 
@@ -140,5 +146,56 @@ function DrawerIsland() {
     <div className="sticky top-0 z-20 flex items-center justify-center rounded-t-[10px] bg-inherit">
       <div className="my-3 h-1 w-12 rounded-full bg-neutral-300" />
     </div>
+  );
+}
+
+export function ModalHeader({
+  title,
+  description,
+  className,
+  children,
+}: {
+  title?: ReactNode;
+  description?: ReactNode;
+  className?: string;
+  children?: ReactNode;
+}) {
+  return (
+    <div className={cn("border-border-subtle border-b px-6 py-4", className)}>
+      {children ?? (
+        <>
+          {title && (
+            <h3 className="text-content-emphasis text-lg font-medium">
+              {title}
+            </h3>
+          )}
+          {description && (
+            <p className="text-content-subtle mt-1 text-sm">{description}</p>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
+export function ModalBody({
+  className,
+  ...props
+}: HTMLAttributes<HTMLDivElement>) {
+  return <div className={cn("px-6 py-5", className)} {...props} />;
+}
+
+export function ModalFooter({
+  className,
+  ...props
+}: HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div
+      className={cn(
+        "border-border-subtle bg-bg-muted flex items-center justify-end gap-2 border-t px-6 py-4",
+        className,
+      )}
+      {...props}
+    />
   );
 }
