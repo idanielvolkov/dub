@@ -1,9 +1,9 @@
 "use client";
 
 import { RemnawaveNode } from "@/lib/remnawave/client";
+import { TableRowMenu } from "@/ui/shared/table-row-menu";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import {
-  Button,
   EmptyState,
   Input,
   Label,
@@ -104,11 +104,13 @@ export function NodesTable({
         header: "Actions",
         meta: { disableTruncate: true },
         cell: ({ row }) => (
-          <Button
-            className="h-9 w-fit"
-            variant="secondary"
-            text="Manage"
-            onClick={() => setSelectedNode(row.original)}
+          <TableRowMenu
+            actions={[
+              {
+                label: "Manage node",
+                onClick: () => setSelectedNode(row.original),
+              },
+            ]}
           />
         ),
       },

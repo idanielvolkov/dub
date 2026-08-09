@@ -1,6 +1,7 @@
 "use client";
 
 import { RemnawaveUser } from "@/lib/remnawave/client";
+import { TableRowMenu } from "@/ui/shared/table-row-menu";
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import {
@@ -94,22 +95,19 @@ export function SubscribersTable({
         header: "Actions",
         meta: { disableTruncate: true },
         cell: ({ row }) => (
-          <div className="flex gap-2">
-            <Button
-              className="h-9 w-fit"
-              variant="secondary"
-              text="Edit"
-              onClick={() => setSelectedUser(row.original)}
-            />
-            <Button
-              className="h-9 w-fit"
-              variant="secondary"
-              text="Open link"
-              onClick={() =>
-                window.open(row.original.subscriptionUrl, "_blank")
-              }
-            />
-          </div>
+          <TableRowMenu
+            actions={[
+              {
+                label: "Edit subscriber",
+                onClick: () => setSelectedUser(row.original),
+              },
+              {
+                label: "Open subscription link",
+                onClick: () =>
+                  window.open(row.original.subscriptionUrl, "_blank"),
+              },
+            ]}
+          />
         ),
       },
     ],
