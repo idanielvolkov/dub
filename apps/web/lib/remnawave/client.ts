@@ -114,7 +114,11 @@ export type RemnawaveExternalSquad = {
 };
 
 export type RemnawaveDeviceStats = {
-  byPlatform: { platform: string; count: number; byApp: { app: string; count: number }[] }[];
+  byPlatform: {
+    platform: string;
+    count: number;
+    byApp: { app: string; count: number }[];
+  }[];
   stats: {
     totalUniqueDevices: number;
     totalHwidDevices: number;
@@ -133,7 +137,32 @@ export type RemnawaveInfraProvider = {
   faviconLink: string | null;
   loginUrl: string | null;
   billingHistory: { totalAmount: number; totalBills: number };
-  billingNodes: { name: string; details: { nodeUuid: string; countryCode: string } | null }[];
+  billingNodes: {
+    name: string;
+    details: { nodeUuid: string; countryCode: string } | null;
+  }[];
+};
+
+export type RemnawaveHwidDevice = {
+  hwid: string;
+  userId: number;
+  platform: string | null;
+  osVersion: string | null;
+  deviceModel: string | null;
+  userAgent: string | null;
+  requestIp: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type RemnawaveSubscriptionRequestRecord = {
+  id: number;
+  userId: number;
+  srrResponseType: string;
+  srrRuleName: string | null;
+  requestIp: string | null;
+  userAgent: string | null;
+  requestAt: string;
 };
 
 async function remnawaveFetch<T>(path: string): Promise<T> {
@@ -434,10 +463,30 @@ export function removeAllUsersFromRemnawaveExternalSquad(uuid: string) {
 
 export async function getRemnawaveDeviceStats() {
   try {
-    return await remnawaveFetch<RemnawaveDeviceStats>("/api/hwid/devices/stats");
+    return await remnawaveFetch<RemnawaveDeviceStats>(
+      "/api/hwid/devices/stats",
+    );
   } catch {
     return null;
   }
+}
+
+export async function getRemnawaveHwidDevices(size = 50) {
+  try {
+    return await remnawaveFetch<{
+      devices: RemnawaveHwidDevice[];
+      total: number;
+    }>(`/api/hwid/devices?start=0&size=${Math.min(Math.max(size, 1), 1000)}`);
+  } catch {
+    return { devices: [], total: 0 };
+  }
+}
+
+export function deleteRemnawaveHwidDevice(input: {
+  userId: number;
+  hwid: string;
+}) {
+  return remnawaveMutation("/api/hwid/devices/delete", "POST", input);
 }
 
 export async function getRemnawaveRequestStats() {
@@ -447,6 +496,19 @@ export async function getRemnawaveRequestStats() {
     );
   } catch {
     return null;
+  }
+}
+
+export async function getRemnawaveSubscriptionRequestHistory(size = 50) {
+  try {
+    return await remnawaveFetch<{
+      records: RemnawaveSubscriptionRequestRecord[];
+      total: number;
+    }>(
+      `/api/subscription-request-history?start=0&size=${Math.min(Math.max(size, 1), 1000)}`,
+    );
+  } catch {
+    return { records: [], total: 0 };
   }
 }
 
