@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Modal } from "@dub/ui";
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "@dub/ui";
 import { useState } from "react";
 import { useFormStatus } from "react-dom";
 
@@ -39,15 +39,11 @@ export function OperationSubmit({
           setShowModal={setShowConfirmModal}
           className="max-w-md"
         >
-          <div className="border-border-subtle border-b px-6 py-4">
-            <h3 className="text-content-emphasis text-lg font-medium">
-              Confirm action
-            </h3>
-          </div>
-          <div className="text-content-default px-6 py-5 text-sm leading-6">
+          <ModalHeader title="Confirm action" />
+          <ModalBody className="text-content-default text-sm leading-6">
             {confirmMessage}
-          </div>
-          <div className="border-border-subtle bg-bg-muted flex items-center justify-end gap-2 border-t px-6 py-4">
+          </ModalBody>
+          <ModalFooter>
             <Button
               variant="secondary"
               className="h-9 w-fit"
@@ -63,7 +59,7 @@ export function OperationSubmit({
                 form?.requestSubmit();
               }}
             />
-          </div>
+          </ModalFooter>
         </Modal>
       )}
     </>
