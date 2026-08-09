@@ -3,6 +3,7 @@ import {
   ArrowUpRight2,
   BookOpen,
   ChevronLeft,
+  ChevronUp,
   ClientOnly,
   Icon,
   Lock,
@@ -11,7 +12,6 @@ import {
   useScrollProgress,
 } from "@dub/ui";
 import { cn } from "@dub/utils";
-import { ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -495,7 +495,7 @@ function NavItem({ item }: { item: NavItemType | NavSubItemType }) {
             </span>
           )}
           {items && (
-            <ChevronDown className="size-3.5 text-neutral-500 transition-transform duration-75 group-data-[active=true]:rotate-180" />
+            <ChevronUp className="size-3.5 rotate-180 text-neutral-500 transition-transform duration-75 group-data-[active=true]:rotate-0" />
           )}
           {item.arrow && (
             <ArrowUpRight2 className="text-content-default size-3.5 transition-transform duration-75 group-hover:-translate-y-px group-hover:translate-x-px" />

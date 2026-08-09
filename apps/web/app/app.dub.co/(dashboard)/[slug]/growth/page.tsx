@@ -1,9 +1,8 @@
 import { getGrowthWorkspace } from "@/lib/growth/get-growth-workspace";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import { ButtonLink } from "@/ui/placeholders/button-link";
 import { VpnStats } from "@/ui/vpn/vpn-ui";
-import { CardList, CardListCard, EmptyState } from "@dub/ui";
+import { ButtonLink, CardList, CardListCard, EmptyState } from "@dub/ui";
 import { Megaphone } from "@dub/ui/icons";
 
 export default async function GrowthPage({

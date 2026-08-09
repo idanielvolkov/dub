@@ -8,6 +8,7 @@ export * from "./alert";
 export * from "./avatar";
 export * from "./badge";
 export * from "./button";
+export * from "./button-link";
 export * from "./card-list";
 export * from "./card-selector";
 export * from "./carousel";
