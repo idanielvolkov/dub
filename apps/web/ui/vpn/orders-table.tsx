@@ -11,6 +11,7 @@ import {
   Input,
   Label,
   Modal,
+  ModalHeader,
   StatusBadge,
   Table,
   useTable,
@@ -153,14 +154,10 @@ export function OrdersTable({
       />
 
       <Modal showModal={showCreateModal} setShowModal={setShowCreateModal}>
-        <div className="border-border-subtle border-b px-6 py-4">
-          <h3 className="text-content-emphasis text-lg font-medium">
-            Create order
-          </h3>
-          <p className="text-content-subtle mt-1 text-sm">
-            Record a VPN sale before payment or provisioning.
-          </p>
-        </div>
+        <ModalHeader
+          title="Create order"
+          description="Record a VPN sale before payment or provisioning."
+        />
         <form action={createVpnOrder} className="bg-bg-muted space-y-4 p-6">
           <input type="hidden" name="slug" value={slug} />
           <div className="grid gap-1.5">
@@ -219,7 +216,7 @@ export function OrdersTable({
       >
         {selectedOrder && (
           <>
-            <div className="border-border-subtle border-b px-6 py-4">
+            <ModalHeader>
               <div className="flex items-center gap-2">
                 <h3 className="text-content-emphasis text-lg font-medium">
                   {selectedOrder.customerName || selectedOrder.customerEmail}
@@ -238,7 +235,7 @@ export function OrdersTable({
               <p className="text-content-subtle mt-1 text-sm">
                 {selectedOrder.planName} · ${selectedOrder.amount}
               </p>
-            </div>
+            </ModalHeader>
             <div className="bg-bg-muted space-y-5 p-6">
               {canEdit && (
                 <form action={updateVpnOrder} className="space-y-4">

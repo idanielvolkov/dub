@@ -3,7 +3,7 @@
 import { VpnPlan } from "@/lib/remnawave/plans";
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
-import { Button, Checkbox, Input, Label, Modal } from "@dub/ui";
+import { Button, Checkbox, Input, Label, Modal, ModalHeader } from "@dub/ui";
 import { useState } from "react";
 import {
   createVpnPlan,
@@ -125,10 +125,7 @@ function FormModal({
 }) {
   return (
     <Modal showModal={open} setShowModal={setOpen} className="max-w-xl">
-      <div className="border-border-subtle border-b px-6 py-4">
-        <h3 className="text-content-emphasis text-lg font-medium">{title}</h3>
-        <p className="text-content-subtle mt-1 text-sm">{description}</p>
-      </div>
+      <ModalHeader title={title} description={description} />
       {children}
     </Modal>
   );

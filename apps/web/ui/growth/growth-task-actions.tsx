@@ -3,7 +3,7 @@
 import { GrowthTask } from "@/lib/growth/tasks";
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
-import { Button, Input, Label, Modal } from "@dub/ui";
+import { Button, Input, Label, Modal, ModalHeader } from "@dub/ui";
 import { useState } from "react";
 import {
   createGrowthTask,
@@ -110,12 +110,7 @@ export function GrowthTaskActions({
         setShowModal={setShowModal}
         className="max-w-xl"
       >
-        <div className="border-border-subtle border-b px-6 py-4">
-          <h3 className="text-content-emphasis text-lg font-medium">
-            Edit task
-          </h3>
-          <p className="text-content-subtle mt-1 text-sm">{task.title}</p>
-        </div>
+        <ModalHeader title="Edit task" description={task.title} />
         <div className="bg-bg-muted p-6">
           <form action={updateGrowthTask} className="grid gap-4 md:grid-cols-2">
             <input type="hidden" name="slug" value={slug} />
@@ -156,14 +151,10 @@ export function CreateGrowthTaskButton({ slug }: { slug: string }) {
         setShowModal={setShowModal}
         className="max-w-xl"
       >
-        <div className="border-border-subtle border-b px-6 py-4">
-          <h3 className="text-content-emphasis text-lg font-medium">
-            Create task
-          </h3>
-          <p className="text-content-subtle mt-1 text-sm">
-            Add work for the growth team.
-          </p>
-        </div>
+        <ModalHeader
+          title="Create task"
+          description="Add work for the growth team."
+        />
         <form
           action={createGrowthTask}
           className="bg-bg-muted grid gap-4 p-6 md:grid-cols-2"

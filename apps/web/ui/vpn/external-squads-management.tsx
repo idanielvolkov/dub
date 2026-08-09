@@ -2,21 +2,22 @@
 
 import { RemnawaveExternalSquad } from "@/lib/remnawave/client";
 import {
-  addAllExternalSquadUsers,
-  addExternalSquad,
-  removeAllExternalSquadUsers,
-  removeExternalSquad,
-  renameExternalSquad,
-} from "../../app/app.dub.co/(dashboard)/[slug]/operations/actions";
-import {
   Button,
   CardList,
   CardListCard,
   Input,
   Label,
   Modal,
+  ModalHeader,
 } from "@dub/ui";
 import { useState } from "react";
+import {
+  addAllExternalSquadUsers,
+  addExternalSquad,
+  removeAllExternalSquadUsers,
+  removeExternalSquad,
+  renameExternalSquad,
+} from "../../app/app.dub.co/(dashboard)/[slug]/operations/actions";
 import { OperationSubmit } from "./operation-submit";
 
 export function ExternalSquadsManagement({
@@ -58,7 +59,8 @@ export function ExternalSquadsManagement({
                 {squad.name}
               </p>
               <p className="text-content-subtle mt-1 text-xs">
-                {squad.info.membersCount} members · {squad.templates.length} template overrides
+                {squad.info.membersCount} members · {squad.templates.length}{" "}
+                template overrides
               </p>
             </div>
             <form
@@ -83,14 +85,18 @@ export function ExternalSquadsManagement({
               <form action={addAllExternalSquadUsers}>
                 <input type="hidden" name="slug" value={slug} />
                 <input type="hidden" name="uuid" value={squad.uuid} />
-                <OperationSubmit confirmMessage={`Add every Remnawave user to ${squad.name}?`}>
+                <OperationSubmit
+                  confirmMessage={`Add every Remnawave user to ${squad.name}?`}
+                >
                   Add all users
                 </OperationSubmit>
               </form>
               <form action={removeAllExternalSquadUsers}>
                 <input type="hidden" name="slug" value={slug} />
                 <input type="hidden" name="uuid" value={squad.uuid} />
-                <OperationSubmit confirmMessage={`Remove every user from ${squad.name}?`}>
+                <OperationSubmit
+                  confirmMessage={`Remove every user from ${squad.name}?`}
+                >
                   Remove all users
                 </OperationSubmit>
               </form>
@@ -110,14 +116,10 @@ export function ExternalSquadsManagement({
       </CardList>
 
       <Modal showModal={showCreate} setShowModal={setShowCreate}>
-        <div className="border-border-subtle border-b px-6 py-4">
-          <h3 className="text-content-emphasis text-lg font-medium">
-            Create external squad
-          </h3>
-          <p className="text-content-subtle mt-1 text-sm">
-            Create a group for subscription templates and client overrides.
-          </p>
-        </div>
+        <ModalHeader
+          title="Create external squad"
+          description="Create a group for subscription templates and client overrides."
+        />
         <form action={addExternalSquad} className="bg-bg-muted space-y-4 p-6">
           <input type="hidden" name="slug" value={slug} />
           <div className="grid gap-1.5">

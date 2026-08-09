@@ -9,6 +9,7 @@ import {
   Input,
   Label,
   Modal,
+  ModalHeader,
   StatusBadge,
   Table,
   useTable,
@@ -143,7 +144,7 @@ export function HostsTable({
       >
         {selectedHost && (
           <>
-            <div className="border-border-subtle border-b px-6 py-4">
+            <ModalHeader>
               <div className="flex items-center gap-2">
                 <h3 className="text-content-emphasis text-lg font-medium">
                   {selectedHost.remark}
@@ -158,7 +159,7 @@ export function HostsTable({
               <p className="text-content-subtle mt-1 font-mono text-xs">
                 {selectedHost.uuid}
               </p>
-            </div>
+            </ModalHeader>
             <div className="bg-bg-muted p-6">
               <form action={saveHost} className="grid gap-4 sm:grid-cols-2">
                 <input type="hidden" name="slug" value={slug} />

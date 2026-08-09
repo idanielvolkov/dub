@@ -2,7 +2,7 @@
 
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
-import { Button, Checkbox, Input, Label, Modal } from "@dub/ui";
+import { Button, Checkbox, Input, Label, Modal, ModalHeader } from "@dub/ui";
 import { useState } from "react";
 import { createPromotion } from "../../app/app.dub.co/(dashboard)/[slug]/growth/promotions/actions";
 
@@ -144,14 +144,10 @@ export function CreatePromotionButton({ slug }: { slug: string }) {
         setShowModal={setShowModal}
         className="max-w-2xl"
       >
-        <div className="border-border-subtle border-b px-6 py-4">
-          <h3 className="text-content-emphasis text-lg font-medium">
-            Create promo code
-          </h3>
-          <p className="text-content-subtle mt-1 text-sm">
-            Prepare an offer for checkout and customer acquisition.
-          </p>
-        </div>
+        <ModalHeader
+          title="Create promo code"
+          description="Prepare an offer for checkout and customer acquisition."
+        />
         <form
           action={createPromotion}
           className="bg-bg-muted grid gap-4 p-6 md:grid-cols-2"

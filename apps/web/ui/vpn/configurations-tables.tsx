@@ -9,6 +9,7 @@ import {
   Input,
   Label,
   Modal,
+  ModalHeader,
   StatusBadge,
   Table,
   Textarea,
@@ -205,14 +206,10 @@ export function ConfigurationsTables({
       >
         {selectedProfile && (
           <>
-            <div className="border-border-subtle border-b px-6 py-4">
-              <h3 className="text-content-emphasis text-lg font-medium">
-                Edit {selectedProfile.name}
-              </h3>
-              <p className="text-content-subtle mt-1 text-sm">
-                Validate and apply the complete Xray configuration.
-              </p>
-            </div>
+            <ModalHeader
+              title={`Edit ${selectedProfile.name}`}
+              description="Validate and apply the complete Xray configuration."
+            />
             <form action={saveProfile} className="bg-bg-muted space-y-4 p-6">
               <input type="hidden" name="slug" value={slug} />
               <input type="hidden" name="uuid" value={selectedProfile.uuid} />
@@ -252,15 +249,10 @@ export function ConfigurationsTables({
       >
         {selectedSquad && (
           <>
-            <div className="border-border-subtle border-b px-6 py-4">
-              <h3 className="text-content-emphasis text-lg font-medium">
-                Manage squad
-              </h3>
-              <p className="text-content-subtle mt-1 text-sm">
-                {selectedSquad.info?.membersCount || 0} members ·{" "}
-                {selectedSquad.inbounds.length} inbounds
-              </p>
-            </div>
+            <ModalHeader
+              title="Manage squad"
+              description={`${selectedSquad.info?.membersCount || 0} members · ${selectedSquad.inbounds.length} inbounds`}
+            />
             <div className="bg-bg-muted p-6">
               <form action={saveSquad} className="space-y-4">
                 <input type="hidden" name="slug" value={slug} />
@@ -307,14 +299,10 @@ export function ConfigurationsTables({
       </Modal>
 
       <Modal showModal={showCreateSquad} setShowModal={setShowCreateSquad}>
-        <div className="border-border-subtle border-b px-6 py-4">
-          <h3 className="text-content-emphasis text-lg font-medium">
-            Create squad
-          </h3>
-          <p className="text-content-subtle mt-1 text-sm">
-            Create an internal Remnawave access group.
-          </p>
-        </div>
+        <ModalHeader
+          title="Create squad"
+          description="Create an internal Remnawave access group."
+        />
         <form action={addSquad} className="bg-bg-muted space-y-4 p-6">
           <input type="hidden" name="slug" value={slug} />
           <input type="hidden" name="inbounds" value={inboundIds.join(",")} />

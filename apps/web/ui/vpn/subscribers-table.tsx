@@ -10,6 +10,7 @@ import {
   Input,
   Label,
   Modal,
+  ModalHeader,
   StatusBadge,
   Table,
   useTable,
@@ -148,14 +149,10 @@ export function SubscribersTable({
       />
 
       <Modal showModal={showCreateModal} setShowModal={setShowCreateModal}>
-        <div className="border-border-subtle border-b px-6 py-4">
-          <h3 className="text-content-emphasis text-lg font-medium">
-            Add subscriber
-          </h3>
-          <p className="text-content-subtle mt-1 text-sm">
-            Create VPN access directly in Remnawave.
-          </p>
-        </div>
+        <ModalHeader
+          title="Add subscriber"
+          description="Create VPN access directly in Remnawave."
+        />
         <form action={createSubscriber} className="bg-bg-muted space-y-4 p-6">
           <input type="hidden" name="slug" value={slug} />
           <div className="grid gap-1.5">
@@ -200,7 +197,7 @@ export function SubscribersTable({
       >
         {selectedUser && (
           <>
-            <div className="border-border-subtle border-b px-6 py-4">
+            <ModalHeader>
               <div className="flex items-center gap-2">
                 <h3 className="text-content-emphasis text-lg font-medium">
                   {selectedUser.username}
@@ -217,7 +214,7 @@ export function SubscribersTable({
               <p className="text-content-subtle mt-1 truncate text-xs">
                 {selectedUser.uuid}
               </p>
-            </div>
+            </ModalHeader>
             <div className="bg-bg-muted p-6">
               <form
                 action={saveSubscriber}
