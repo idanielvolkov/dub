@@ -1,5 +1,6 @@
+import { CardList } from "@dub/ui";
 import { cn } from "@dub/utils";
-import { CSSProperties, ReactNode } from "react";
+import { ReactNode } from "react";
 
 export function VpnStats({
   items,
@@ -15,17 +16,23 @@ export function VpnStats({
 }) {
   return (
     <div className={cn("@container/stats", className)}>
-      <div
+      <CardList
+        variant="loose"
         className={cn(
-          "@xs/stats:grid-cols-[repeat(var(--cols),1fr)] grid grid-cols-1 ring-4 ring-black/5",
-          "gap-px overflow-hidden rounded-xl border border-neutral-200 bg-neutral-200",
+          "grid grid-cols-1 gap-3",
+          items.length === 2 && "@xs/stats:grid-cols-2",
+          items.length === 3 && "@xs/stats:grid-cols-3",
+          items.length >= 4 && "@xs/stats:grid-cols-4",
         )}
-        style={{ "--cols": items.length } as CSSProperties}
       >
         {items.map(({ label, value, detail, indicator }) => (
-          <div key={label} className="relative flex flex-col bg-white p-3">
+          <CardList.Card
+            key={label}
+            hoverStateEnabled={false}
+            innerClassName="relative flex h-full flex-col p-3"
+          >
             <div className="flex items-center justify-between gap-2">
-              <span className="text-xs text-neutral-500">{label}</span>
+              <span className="text-content-subtle text-xs">{label}</span>
               {indicator}
             </div>
             <span className="text-content-emphasis text-base font-medium">
@@ -36,9 +43,9 @@ export function VpnStats({
                 {detail}
               </span>
             )}
-          </div>
+          </CardList.Card>
         ))}
-      </div>
+      </CardList>
     </div>
   );
 }
