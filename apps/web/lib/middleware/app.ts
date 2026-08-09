@@ -3,8 +3,6 @@ import {
   ONBOARDING_WINDOW_SECONDS,
   onboardingStepCache,
 } from "../api/workspaces/onboarding-step-cache";
-import { EmbedMiddleware } from "./embed";
-import { NewLinkMiddleware } from "./new-link";
 import { appRedirect } from "./utils/app-redirect";
 import { getDefaultWorkspace } from "./utils/get-default-workspace";
 import { getUserViaToken } from "./utils/get-user-via-token";
@@ -16,10 +14,6 @@ import { WorkspacesMiddleware } from "./workspaces";
 export async function AppMiddleware(req: NextRequest) {
   const { path, fullPath, searchParamsString } = parse(req);
 
-  if (path.startsWith("/embed")) {
-    return EmbedMiddleware(req);
-  }
-
   const user = await getUserViaToken(req);
 
   // if there's no user and the path is not a public page, redirect to /login
@@ -30,8 +24,6 @@ export async function AppMiddleware(req: NextRequest) {
     path !== "/register" &&
     path !== "/auth/saml" &&
     !path.startsWith("/auth/reset-password/") &&
-    !path.startsWith("/share/") &&
-    !path.startsWith("/deeplink/") &&
     !path.startsWith("/unsubscribe/")
   ) {
     return NextResponse.redirect(
@@ -43,11 +35,7 @@ export async function AppMiddleware(req: NextRequest) {
 
     // if there's a user
   } else if (user) {
-    // /new is a special path that creates a new link (or workspace if the user doesn't have one yet)
-    if (path === "/new") {
-      return NewLinkMiddleware(req, user);
-
-      /* Onboarding redirects
+    /* Onboarding redirects
 
         - User was created less than a day ago
         - User is not invited to a workspace (redirect straight to the workspace)
@@ -55,7 +43,7 @@ export async function AppMiddleware(req: NextRequest) {
         - User doesn't have a default workspace
         - User has not completed the onboarding flow
       */
-    } else if (
+    if (
       new Date(user.createdAt).getTime() >
         Date.now() - ONBOARDING_WINDOW_SECONDS * 1000 &&
       !["/onboarding", "/account"].some((p) => path.startsWith(p)) &&
@@ -63,24 +51,14 @@ export async function AppMiddleware(req: NextRequest) {
       !(await hasPendingInvites({ req, user })) &&
       (await onboardingStepCache.get({ userId: user.id })) !== "completed"
     ) {
-      let step = await onboardingStepCache.get({ userId: user.id });
+      const step = await onboardingStepCache.get({ userId: user.id });
       if (!step) {
         return NextResponse.redirect(new URL("/onboarding", req.url));
       } else if (step === "completed") {
         return WorkspacesMiddleware(req, user);
       }
 
-      const defaultWorkspace = await getDefaultWorkspace(user);
-
-      if (defaultWorkspace) {
-        // Skip workspace step if user already has a workspace
-        step = step === "workspace" ? "link" : step;
-        return NextResponse.redirect(
-          new URL(`/onboarding/${step}?workspace=${defaultWorkspace}`, req.url),
-        );
-      } else {
-        return NextResponse.redirect(new URL("/onboarding", req.url));
-      }
+      return NextResponse.redirect(new URL(`/onboarding/${step}`, req.url));
 
       // if the path is / or /login or /register, redirect to the default workspace
     } else if (
