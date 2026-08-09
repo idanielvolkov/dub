@@ -1,6 +1,7 @@
 "use server";
 
 import { getSession } from "@/lib/auth/utils";
+import { canAccessPlatformArea } from "@/lib/platform-access";
 import { prisma } from "@/lib/prisma";
 import { FinanceExpense, financeExpensesFromStore } from "@/lib/vpn/finance";
 import { recordWorkspaceActivity } from "@/lib/workspace/activity";
@@ -32,18 +33,17 @@ async function context(slug: string) {
       })
     : null;
   const membership = workspace?.users[0];
-  const preferences =
-    membership?.workspacePreferences &&
-    typeof membership.workspacePreferences === "object" &&
-    !Array.isArray(membership.workspacePreferences)
-      ? (membership.workspacePreferences as Record<string, unknown>)
-      : {};
-  const financeManager =
-    membership?.role === "owner" ||
-    membership?.role === "billing" ||
-    preferences.accessTemplate === "finance" ||
-    preferences.accessTemplate === "administrator";
-  if (!workspace || !session?.user.id || !financeManager)
+  if (
+    !workspace ||
+    !session?.user.id ||
+    !membership ||
+    !canAccessPlatformArea({
+      role: membership.role,
+      workspacePreferences: membership.workspacePreferences,
+      area: "finance",
+      minimum: "manage",
+    })
+  )
     throw new Error("Finance access required");
   return { workspace, userId: session.user.id };
 }

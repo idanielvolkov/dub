@@ -1,4 +1,5 @@
 import { getSession } from "@/lib/auth/utils";
+import { canAccessPlatformArea } from "@/lib/platform-access";
 import { prisma } from "@/lib/prisma";
 import { supportTicketsFromStore } from "@/lib/vpn/support";
 import { PageContent } from "@/ui/layout/page-content";
@@ -26,13 +27,22 @@ export default async function SupportPage({
     where: { slug, users: { some: { userId: session?.user.id } } },
     select: {
       store: true,
-      users: { where: { userId: session?.user.id }, select: { role: true } },
+      users: {
+        where: { userId: session?.user.id },
+        select: { role: true, workspacePreferences: true },
+      },
     },
   });
   const tickets = supportTicketsFromStore(workspace.store);
-  const canManage = ["owner", "member"].includes(
-    workspace.users[0]?.role || "viewer",
-  );
+  const membership = workspace.users[0];
+  const canManage = membership
+    ? canAccessPlatformArea({
+        role: membership.role,
+        workspacePreferences: membership.workspacePreferences,
+        area: "support",
+        minimum: "manage",
+      })
+    : false;
   const open = tickets.filter((ticket) => ticket.status === "open");
   const active = tickets.filter((ticket) => ticket.status === "in_progress");
   const resolved = tickets.filter((ticket) => ticket.status === "resolved");

@@ -1,6 +1,7 @@
 "use server";
 
 import { getSession } from "@/lib/auth/utils";
+import { canAccessPlatformArea } from "@/lib/platform-access";
 import { prisma } from "@/lib/prisma";
 import { SupportTicket, supportTicketsFromStore } from "@/lib/vpn/support";
 import { recordWorkspaceActivity } from "@/lib/workspace/activity";
@@ -16,17 +17,29 @@ async function context(slug: string) {
     ? await prisma.project.findFirst({
         where: {
           slug,
+          users: { some: { userId: session.user.id } },
+        },
+        select: {
+          id: true,
           users: {
-            some: {
-              userId: session.user.id,
-              role: { in: ["owner", "member"] },
-            },
+            where: { userId: session.user.id },
+            select: { role: true, workspacePreferences: true },
           },
         },
-        select: { id: true },
       })
     : null;
-  if (!workspace || !session?.user.id)
+  const membership = workspace?.users[0];
+  if (
+    !workspace ||
+    !session?.user.id ||
+    !membership ||
+    !canAccessPlatformArea({
+      role: membership.role,
+      workspacePreferences: membership.workspacePreferences,
+      area: "support",
+      minimum: "manage",
+    })
+  )
     throw new Error("Workspace editor access required");
   return { workspace, userId: session.user.id };
 }

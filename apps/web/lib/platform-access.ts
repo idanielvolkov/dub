@@ -1,6 +1,12 @@
 import type { WorkspaceRole } from "@prisma/client";
 
-export const PLATFORM_AREAS = ["workspace", "remnawave", "marketing"] as const;
+export const PLATFORM_AREAS = [
+  "workspace",
+  "support",
+  "finance",
+  "remnawave",
+  "marketing",
+] as const;
 
 export type PlatformArea = (typeof PLATFORM_AREAS)[number];
 export type PlatformAccessLevel = "none" | "view" | "manage";
@@ -10,31 +16,43 @@ export const PLATFORM_ACCESS_TEMPLATES = {
   custom: null,
   administrator: {
     workspace: "manage",
+    support: "manage",
+    finance: "manage",
     remnawave: "manage",
     marketing: "manage",
   },
   support: {
-    workspace: "manage",
+    workspace: "view",
+    support: "manage",
+    finance: "none",
     remnawave: "view",
     marketing: "none",
   },
   finance: {
-    workspace: "manage",
+    workspace: "view",
+    support: "none",
+    finance: "manage",
     remnawave: "none",
     marketing: "view",
   },
   marketer: {
     workspace: "view",
+    support: "none",
+    finance: "none",
     remnawave: "none",
     marketing: "manage",
   },
   technician: {
     workspace: "view",
+    support: "manage",
+    finance: "none",
     remnawave: "manage",
     marketing: "none",
   },
   analyst: {
     workspace: "view",
+    support: "view",
+    finance: "view",
     remnawave: "view",
     marketing: "view",
   },
@@ -49,10 +67,34 @@ const ACCESS_RANK: Record<PlatformAccessLevel, number> = {
 };
 
 const ROLE_ACCESS: Record<WorkspaceRole, PlatformAccess> = {
-  owner: { workspace: "manage", remnawave: "manage", marketing: "manage" },
-  member: { workspace: "manage", remnawave: "none", marketing: "manage" },
-  viewer: { workspace: "view", remnawave: "view", marketing: "view" },
-  billing: { workspace: "manage", remnawave: "none", marketing: "view" },
+  owner: {
+    workspace: "manage",
+    support: "manage",
+    finance: "manage",
+    remnawave: "manage",
+    marketing: "manage",
+  },
+  member: {
+    workspace: "manage",
+    support: "manage",
+    finance: "none",
+    remnawave: "none",
+    marketing: "manage",
+  },
+  viewer: {
+    workspace: "view",
+    support: "view",
+    finance: "view",
+    remnawave: "view",
+    marketing: "view",
+  },
+  billing: {
+    workspace: "view",
+    support: "none",
+    finance: "manage",
+    remnawave: "none",
+    marketing: "view",
+  },
 };
 
 const isAccessLevel = (value: unknown): value is PlatformAccessLevel =>

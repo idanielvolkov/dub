@@ -37,11 +37,15 @@ export async function requirePlatformAccess(
     const destination =
       access.workspace !== "none"
         ? `/${slug}/vpn`
-        : access.remnawave !== "none"
-          ? `/${slug}/operations`
-          : access.marketing !== "none"
-            ? `/${slug}/growth`
-            : "/account/settings";
+        : access.support !== "none"
+          ? `/${slug}/vpn/support`
+          : access.finance !== "none"
+            ? `/${slug}/vpn/finance`
+            : access.remnawave !== "none"
+              ? `/${slug}/operations`
+              : access.marketing !== "none"
+                ? `/${slug}/growth`
+                : "/account/settings";
     redirect(destination);
   }
 

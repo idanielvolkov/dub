@@ -1,4 +1,5 @@
 import { getSession } from "@/lib/auth/utils";
+import { canAccessPlatformArea } from "@/lib/platform-access";
 import { prisma } from "@/lib/prisma";
 import { financeExpensesFromStore } from "@/lib/vpn/finance";
 import { vpnOrdersFromStore } from "@/lib/vpn/orders";
@@ -33,17 +34,14 @@ export default async function FinancePage({
   const orders = vpnOrdersFromStore(workspace.store);
   const expenses = financeExpensesFromStore(workspace.store);
   const membership = workspace.users[0];
-  const preferences =
-    membership?.workspacePreferences &&
-    typeof membership.workspacePreferences === "object" &&
-    !Array.isArray(membership.workspacePreferences)
-      ? (membership.workspacePreferences as Record<string, unknown>)
-      : {};
-  const canManage =
-    membership?.role === "owner" ||
-    membership?.role === "billing" ||
-    preferences.accessTemplate === "finance" ||
-    preferences.accessTemplate === "administrator";
+  const canManage = membership
+    ? canAccessPlatformArea({
+        role: membership.role,
+        workspacePreferences: membership.workspacePreferences,
+        area: "finance",
+        minimum: "manage",
+      })
+    : false;
   const paid = orders.filter((order) => order.paymentStatus === "paid");
   const pending = orders.filter((order) => order.paymentStatus !== "paid");
   const revenue = paid.reduce((sum, order) => sum + order.amount, 0);

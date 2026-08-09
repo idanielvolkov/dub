@@ -39,6 +39,8 @@ type SidebarNavData = {
   slug: string;
   pathname: string;
   workspaceAccess: boolean;
+  supportAccess: boolean;
+  financeAccess: boolean;
   remnawaveAccess: boolean;
   marketingAccess: boolean;
 };
@@ -49,6 +51,8 @@ const NAV_GROUPS: SidebarNavGroups<SidebarNavData> = ({
   slug,
   pathname,
   workspaceAccess,
+  supportAccess,
+  financeAccess,
   remnawaveAccess,
   marketingAccess,
 }) => [
@@ -92,7 +96,7 @@ const NAV_GROUPS: SidebarNavGroups<SidebarNavData> = ({
 ];
 
 const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
-  vpn: ({ slug }) => ({
+  vpn: ({ slug, supportAccess, financeAccess }) => ({
     title: "Workspace",
     direction: "left",
     content: [
@@ -119,16 +123,24 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
       {
         name: "Operations",
         items: [
-          {
-            name: "Support",
-            icon: LifeRing,
-            href: `/${slug}/vpn/support`,
-          },
-          {
-            name: "Finance",
-            icon: MoneyBills2,
-            href: `/${slug}/vpn/finance`,
-          },
+          ...(supportAccess
+            ? [
+                {
+                  name: "Support",
+                  icon: LifeRing,
+                  href: `/${slug}/vpn/support` as `/${string}`,
+                },
+              ]
+            : []),
+          ...(financeAccess
+            ? [
+                {
+                  name: "Finance",
+                  icon: MoneyBills2,
+                  href: `/${slug}/vpn/finance` as `/${string}`,
+                },
+              ]
+            : []),
         ],
       },
       {
@@ -304,6 +316,16 @@ export function AppSidebarNav({
     workspacePreferences,
     area: "remnawave",
   });
+  const supportAccess = canAccessPlatformArea({
+    role,
+    workspacePreferences,
+    area: "support",
+  });
+  const financeAccess = canAccessPlatformArea({
+    role,
+    workspacePreferences,
+    area: "finance",
+  });
   const marketingAccess = canAccessPlatformArea({
     role,
     workspacePreferences,
@@ -327,6 +349,8 @@ export function AppSidebarNav({
         slug: slug || "",
         pathname,
         workspaceAccess,
+        supportAccess,
+        financeAccess,
         remnawaveAccess,
         marketingAccess,
       }}
