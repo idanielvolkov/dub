@@ -3,9 +3,13 @@
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import {
+  addAllUsersToRemnawaveExternalSquad,
+  createRemnawaveExternalSquad,
   createRemnawaveSquad,
   deleteRemnawaveHost,
   deleteRemnawaveSquad,
+  deleteRemnawaveExternalSquad,
+  removeAllUsersFromRemnawaveExternalSquad,
   restartRemnawaveNode,
   setRemnawaveNodeEnabled,
   updateRemnawaveConfigProfile,
@@ -13,6 +17,7 @@ import {
   updateRemnawaveNode,
   updateRemnawaveSquad,
   updateRemnawaveSubscriptionSettings,
+  updateRemnawaveExternalSquad,
 } from "@/lib/remnawave/client";
 import { revalidatePath } from "next/cache";
 
@@ -132,4 +137,47 @@ export async function saveSubscriptionSettings(formData: FormData) {
     isShowCustomRemarks: formData.get("isShowCustomRemarks") === "on",
   });
   revalidatePath(`/${slug}/operations/subscriptions`);
+}
+
+export async function addExternalSquad(formData: FormData) {
+  const slug = text(formData, "slug");
+  await authorize(slug);
+  const name = text(formData, "name").slice(0, 30);
+  if (name.length < 2 || !/^[A-Za-z0-9_\s-]+$/.test(name)) {
+    throw new Error("Invalid external squad name");
+  }
+  await createRemnawaveExternalSquad(name);
+  revalidatePath(`/${slug}/operations/insights`);
+}
+
+export async function renameExternalSquad(formData: FormData) {
+  const slug = text(formData, "slug");
+  await authorize(slug);
+  const name = text(formData, "name").slice(0, 30);
+  if (name.length < 2 || !/^[A-Za-z0-9_\s-]+$/.test(name)) {
+    throw new Error("Invalid external squad name");
+  }
+  await updateRemnawaveExternalSquad(text(formData, "uuid"), name);
+  revalidatePath(`/${slug}/operations/insights`);
+}
+
+export async function removeExternalSquad(formData: FormData) {
+  const slug = text(formData, "slug");
+  await authorize(slug);
+  await deleteRemnawaveExternalSquad(text(formData, "uuid"));
+  revalidatePath(`/${slug}/operations/insights`);
+}
+
+export async function addAllExternalSquadUsers(formData: FormData) {
+  const slug = text(formData, "slug");
+  await authorize(slug);
+  await addAllUsersToRemnawaveExternalSquad(text(formData, "uuid"));
+  revalidatePath(`/${slug}/operations/insights`);
+}
+
+export async function removeAllExternalSquadUsers(formData: FormData) {
+  const slug = text(formData, "slug");
+  await authorize(slug);
+  await removeAllUsersFromRemnawaveExternalSquad(text(formData, "uuid"));
+  revalidatePath(`/${slug}/operations/insights`);
 }

@@ -8,10 +8,16 @@ import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { DubCard, DubCardList } from "@/ui/vpn/server-card-list";
 import { VpnStats } from "@/ui/vpn/vpn-ui";
+import { ExternalSquadsManagement } from "@/ui/vpn/external-squads-management";
 import { Badge, EmptyState } from "@dub/ui";
 import { ChartActivity2 } from "@dub/ui/icons";
 
-export default async function OperationsInsightsPage() {
+export default async function OperationsInsightsPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
   const [devices, requests, externalSquads, infra] = await Promise.all([
     getRemnawaveDeviceStats(),
     getRemnawaveRequestStats(),
@@ -97,31 +103,10 @@ export default async function OperationsInsightsPage() {
         </section>
 
         <section>
-          <div className="mb-3">
-            <h2 className="text-content-emphasis text-sm font-semibold">
-              External squads
-            </h2>
-            <p className="text-content-subtle text-sm">
-              Groups overriding templates and subscription behavior
-            </p>
-          </div>
-          <DubCardList variant="compact">
-            {externalSquads.externalSquads.map((squad) => (
-              <DubCard key={squad.uuid} hoverStateEnabled={false}>
-                <div className="flex items-center justify-between gap-4">
-                  <div>
-                    <p className="text-content-emphasis text-sm font-medium">
-                      {squad.name}
-                    </p>
-                    <p className="text-content-subtle mt-1 text-xs">
-                      {squad.templates.length} template overrides
-                    </p>
-                  </div>
-                  <Badge variant="gray">{squad.info.membersCount} members</Badge>
-                </div>
-              </DubCard>
-            ))}
-          </DubCardList>
+          <ExternalSquadsManagement
+            slug={slug}
+            squads={externalSquads.externalSquads}
+          />
         </section>
 
         <section>
