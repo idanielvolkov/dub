@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { createRemnawaveUser } from "@/lib/remnawave/client";
 import { VpnPlan, vpnPlansFromStore } from "@/lib/remnawave/plans";
 import { VpnOrder, vpnOrdersFromStore } from "@/lib/vpn/orders";
+import { recordWorkspaceActivity } from "@/lib/workspace/activity";
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
@@ -34,7 +35,7 @@ async function workspaceAccess(slug: string, ownerOnly = false) {
         : "Business editor access required",
     );
   }
-  return workspace;
+  return { ...workspace, actorUserId: session!.user.id };
 }
 
 async function mutateOrders(
@@ -79,25 +80,33 @@ export async function createVpnOrder(formData: FormData) {
     text(formData, "planId"),
   );
   const now = new Date().toISOString();
-  await mutateOrders(workspace.id, (orders) => [
-    {
-      id: crypto.randomUUID(),
-      customerName: text(formData, "customerName").slice(0, 80),
-      customerEmail: customerEmail.slice(0, 160),
-      planId: plan.id,
-      planName: plan.name,
-      amount: plan.price,
-      currency: "USD",
-      paymentStatus: "pending",
-      fulfillmentStatus: "pending",
-      subscriberUsername: "",
-      note: text(formData, "note").slice(0, 300),
-      createdAt: now,
-      updatedAt: now,
-    },
-    ...orders,
-  ]);
+  const order: VpnOrder = {
+    id: crypto.randomUUID(),
+    customerName: text(formData, "customerName").slice(0, 80),
+    customerEmail: customerEmail.slice(0, 160),
+    planId: plan.id,
+    planName: plan.name,
+    amount: plan.price,
+    currency: "USD",
+    paymentStatus: "pending",
+    fulfillmentStatus: "pending",
+    subscriberUsername: "",
+    note: text(formData, "note").slice(0, 300),
+    createdAt: now,
+    updatedAt: now,
+  };
+  await mutateOrders(workspace.id, (orders) => [order, ...orders]);
+  await recordWorkspaceActivity({
+    workspaceId: workspace.id,
+    userId: workspace.actorUserId,
+    action: "created",
+    resourceType: "vpn_order",
+    resourceId: order.id,
+    description: `Created order for ${order.customerEmail}`,
+    changeSet: { planName: order.planName, amount: order.amount },
+  });
   revalidatePath(`/${slug}/vpn/orders`);
+  revalidatePath(`/${slug}/vpn/activity`);
 }
 
 export async function updateVpnOrder(formData: FormData) {
@@ -122,7 +131,17 @@ export async function updateVpnOrder(formData: FormData) {
         : order,
     ),
   );
+  await recordWorkspaceActivity({
+    workspaceId: workspace.id,
+    userId: workspace.actorUserId,
+    action: "updated",
+    resourceType: "vpn_order",
+    resourceId: id,
+    description: `Changed order payment status to ${paymentStatus}`,
+    changeSet: { paymentStatus },
+  });
   revalidatePath(`/${slug}/vpn/orders`);
+  revalidatePath(`/${slug}/vpn/activity`);
 }
 
 export async function fulfillVpnOrder(formData: FormData) {
@@ -169,6 +188,19 @@ export async function fulfillVpnOrder(formData: FormData) {
         : item,
     ),
   );
+  await recordWorkspaceActivity({
+    workspaceId: workspace.id,
+    userId: workspace.actorUserId,
+    action: "fulfilled",
+    resourceType: "vpn_order",
+    resourceId: id,
+    description: `Provisioned VPN access for ${order.customerEmail}`,
+    changeSet: {
+      subscriberUsername: username,
+      subscriberUuid: subscriber.response.uuid,
+    },
+  });
   revalidatePath(`/${slug}/vpn/orders`);
+  revalidatePath(`/${slug}/vpn/activity`);
   revalidatePath(`/${slug}/operations/users`);
 }
