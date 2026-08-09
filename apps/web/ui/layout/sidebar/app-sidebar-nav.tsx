@@ -20,8 +20,6 @@ import {
   Nodes4,
   QRCode,
   Receipt2,
-  Rocket,
-  SatelliteDish,
   ShieldCheck,
   ShieldKeyhole,
   ShieldUser,
@@ -52,7 +50,7 @@ const NAV_GROUPS: SidebarNavGroups<SidebarNavData> = ({
 }) => [
   {
     id: "vpn",
-    name: "VPN Business",
+    name: "Business",
     description:
       "Manage subscribers, VPN servers, traffic, plans, and service health.",
     icon: ShieldCheck,
@@ -63,7 +61,7 @@ const NAV_GROUPS: SidebarNavGroups<SidebarNavData> = ({
     ? [
         {
           id: "operations",
-          name: "Remnawave Operations",
+          name: "Remnawave",
           description:
             "Technical control of users, nodes, hosts, profiles, and subscriptions.",
           icon: CubeSettings,
@@ -85,7 +83,7 @@ const NAV_GROUPS: SidebarNavGroups<SidebarNavData> = ({
 
 const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
   vpn: ({ slug }) => ({
-    title: "VPN Business",
+    title: "Business",
     direction: "left",
     content: [
       {
@@ -126,14 +124,14 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
     ],
   }),
   operations: ({ slug }) => ({
-    title: "Remnawave Operations",
+    title: "Remnawave",
     direction: "left",
     content: [
       {
         items: [
           {
             name: "Overview",
-            icon: iconOr(SatelliteDish, Gauge6),
+            icon: Gauge6,
             href: `/${slug}/operations`,
             exact: true,
           },
@@ -194,7 +192,7 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
         items: [
           {
             name: "Overview",
-            icon: iconOr(Rocket, Gauge6),
+            icon: Gauge6,
             href: `/${slug}/growth`,
             exact: true,
           },
