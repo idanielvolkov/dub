@@ -22,9 +22,7 @@ import {
   Receipt2,
   ShieldCheck,
   ShieldKeyhole,
-  ShieldUser,
   Sliders,
-  SquareCheck,
   Users,
   UsersSettings,
 } from "@dub/ui/icons";
@@ -49,8 +47,7 @@ const NAV_GROUPS: SidebarNavGroups<SidebarNavData> = ({
   {
     id: "vpn",
     name: "Business",
-    description:
-      "Manage subscribers, VPN servers, traffic, plans, and service health.",
+    description: "Manage plans, orders, revenue, and customer sales.",
     icon: ShieldCheck,
     href: slug ? `/${slug}/vpn` : "/vpn",
     active: pathname.startsWith(`/${slug}/vpn`),
@@ -93,16 +90,6 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
             exact: true,
           },
           {
-            name: "Subscribers",
-            icon: iconOr(ShieldUser, Users),
-            href: `/${slug}/vpn/subscribers`,
-          },
-        ],
-      },
-      {
-        name: "Business",
-        items: [
-          {
             name: "Plans",
             icon: iconOr(Cards, Receipt2),
             href: `/${slug}/vpn/plans`,
@@ -111,11 +98,6 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
             name: "Orders",
             icon: iconOr(InvoiceDollar, Receipt2),
             href: `/${slug}/vpn/orders`,
-          },
-          {
-            name: "Traffic",
-            icon: iconOr(ChartActivity2, LinesY),
-            href: `/${slug}/vpn/traffic`,
           },
         ],
       },
@@ -132,6 +114,11 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
             icon: Gauge6,
             href: `/${slug}/operations`,
             exact: true,
+          },
+          {
+            name: "Users",
+            icon: Users,
+            href: `/${slug}/operations/users`,
           },
           {
             name: "Nodes",
@@ -158,15 +145,25 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
             icon: iconOr(QRCode, Receipt2),
             href: `/${slug}/operations/subscriptions`,
           },
+        ],
+      },
+      {
+        name: "Monitoring",
+        items: [
           {
-            name: "Insights & billing",
+            name: "Traffic",
             icon: iconOr(ChartActivity2, LinesY),
-            href: `/${slug}/operations/insights`,
+            href: `/${slug}/operations/traffic`,
           },
           {
             name: "Devices & requests",
             icon: iconOr(ShieldKeyhole, ShieldCheck),
             href: `/${slug}/operations/devices`,
+          },
+          {
+            name: "Insights & billing",
+            icon: iconOr(ChartActivity2, LinesY),
+            href: `/${slug}/operations/insights`,
           },
         ],
       },
@@ -193,11 +190,6 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
             name: "Leads",
             icon: iconOr(Crosshairs3, Users),
             href: `/${slug}/growth/leads`,
-          },
-          {
-            name: "Tasks",
-            icon: iconOr(SquareCheck, LinesY),
-            href: `/${slug}/growth/tasks`,
           },
           {
             name: "Team",

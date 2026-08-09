@@ -170,5 +170,5 @@ export async function fulfillVpnOrder(formData: FormData) {
     ),
   );
   revalidatePath(`/${slug}/vpn/orders`);
-  revalidatePath(`/${slug}/vpn/subscribers`);
+  revalidatePath(`/${slug}/operations/users`);
 }

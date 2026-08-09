@@ -159,5 +159,5 @@ export async function provisionPlan(formData: FormData) {
     trafficLimitStrategy: plan.reset,
     hwidDeviceLimit: plan.devices,
   });
-  redirect(`/${slug}/vpn/subscribers`);
+  redirect(`/${slug}/operations/users`);
 }

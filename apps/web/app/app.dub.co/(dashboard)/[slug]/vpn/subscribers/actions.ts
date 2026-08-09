@@ -73,7 +73,7 @@ export async function createSubscriber(formData: FormData) {
     hwidDeviceLimit: deviceLimit || undefined,
   });
 
-  revalidatePath(`/${slug}/vpn/subscribers`);
+  revalidatePath(`/${slug}/operations/users`);
 }
 
 async function authorize(slug: string) {
@@ -110,7 +110,7 @@ export async function saveSubscriber(formData: FormData) {
     email: text(formData, "email") || null,
     description: text(formData, "description") || null,
   });
-  revalidatePath(`/${slug}/vpn/subscribers`);
+  revalidatePath(`/${slug}/operations/users`);
   revalidatePath(`/${slug}/operations/users`);
 }
 
@@ -121,7 +121,7 @@ export async function changeSubscriberState(formData: FormData) {
     text(formData, "uuid"),
     text(formData, "enabled") === "true",
   );
-  revalidatePath(`/${slug}/vpn/subscribers`);
+  revalidatePath(`/${slug}/operations/users`);
   revalidatePath(`/${slug}/operations/users`);
 }
 
@@ -129,7 +129,7 @@ export async function resetSubscriberTraffic(formData: FormData) {
   const slug = text(formData, "slug");
   await authorize(slug);
   await resetRemnawaveUserTraffic(text(formData, "uuid"));
-  revalidatePath(`/${slug}/vpn/subscribers`);
+  revalidatePath(`/${slug}/operations/users`);
   revalidatePath(`/${slug}/operations/users`);
 }
 
@@ -137,8 +137,8 @@ export async function resetAllSubscriberTraffic(formData: FormData) {
   const slug = text(formData, "slug");
   await authorize(slug);
   await resetAllRemnawaveUserTraffic();
-  revalidatePath(`/${slug}/vpn/subscribers`);
-  revalidatePath(`/${slug}/vpn/traffic`);
+  revalidatePath(`/${slug}/operations/users`);
+  revalidatePath(`/${slug}/operations/traffic`);
 }
 
 export async function extendAllSubscribers(formData: FormData) {
@@ -149,14 +149,14 @@ export async function extendAllSubscribers(formData: FormData) {
     Math.max(1, Number(formData.get("extendDays")) || 0),
   );
   await extendAllRemnawaveUsers(extendDays);
-  revalidatePath(`/${slug}/vpn/subscribers`);
+  revalidatePath(`/${slug}/operations/users`);
 }
 
 export async function revokeSubscriber(formData: FormData) {
   const slug = text(formData, "slug");
   await authorize(slug);
   await revokeRemnawaveUserSubscription(text(formData, "uuid"));
-  revalidatePath(`/${slug}/vpn/subscribers`);
+  revalidatePath(`/${slug}/operations/users`);
   revalidatePath(`/${slug}/operations/users`);
 }
 
@@ -164,6 +164,6 @@ export async function removeSubscriber(formData: FormData) {
   const slug = text(formData, "slug");
   await authorize(slug);
   await deleteRemnawaveUser(text(formData, "uuid"));
-  revalidatePath(`/${slug}/vpn/subscribers`);
+  revalidatePath(`/${slug}/operations/users`);
   revalidatePath(`/${slug}/operations/users`);
 }

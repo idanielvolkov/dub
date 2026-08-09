@@ -12,9 +12,9 @@ import {
   deleteRemnawaveNode,
   deleteRemnawaveSquad,
   removeAllUsersFromRemnawaveExternalSquad,
+  resetRemnawaveNodeTraffic,
   restartAllRemnawaveNodes,
   restartRemnawaveNode,
-  resetRemnawaveNodeTraffic,
   setRemnawaveNodeEnabled,
   updateRemnawaveConfigProfile,
   updateRemnawaveExternalSquad,
@@ -49,8 +49,7 @@ export async function saveNode(formData: FormData) {
     uuid: text(formData, "uuid"),
     name: text(formData, "name").slice(0, 30),
     countryCode: text(formData, "countryCode").toUpperCase().slice(0, 2),
-    isTrafficTrackingActive:
-      formData.get("isTrafficTrackingActive") === "on",
+    isTrafficTrackingActive: formData.get("isTrafficTrackingActive") === "on",
     trafficLimitBytes: Math.round(
       Math.max(0, Number(formData.get("trafficLimitGb")) || 0) * 1024 ** 3,
     ),
@@ -75,7 +74,7 @@ export async function resetNodeTraffic(formData: FormData) {
   await authorize(slug);
   await resetRemnawaveNodeTraffic(text(formData, "uuid"));
   revalidatePath(`/${slug}/operations/nodes`);
-  revalidatePath(`/${slug}/vpn/traffic`);
+  revalidatePath(`/${slug}/operations/traffic`);
 }
 
 export async function removeNode(formData: FormData) {
