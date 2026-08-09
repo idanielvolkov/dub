@@ -20,7 +20,10 @@ async function authorize(slug: string) {
   const session = await getSession();
   const workspace = session?.user.id
     ? await prisma.project.findFirst({
-        where: { slug, users: { some: { userId: session.user.id } } },
+        where: {
+          slug,
+          users: { some: { userId: session.user.id, role: "owner" } },
+        },
         select: { id: true },
       })
     : null;

@@ -15,7 +15,12 @@ async function context(slug: string) {
   const session = await getSession();
   if (!session?.user.id) throw new Error("Unauthorized");
   const workspace = await prisma.project.findFirst({
-    where: { slug, users: { some: { userId: session.user.id } } },
+    where: {
+      slug,
+      users: {
+        some: { userId: session.user.id, role: { in: ["owner", "member"] } },
+      },
+    },
     select: {
       id: true,
       plan: true,

@@ -13,7 +13,15 @@ async function workspaceId(slug: string) {
   const session = await getSession();
   const workspace = session?.user.id
     ? await prisma.project.findFirst({
-        where: { slug, users: { some: { userId: session.user.id } } },
+        where: {
+          slug,
+          users: {
+            some: {
+              userId: session.user.id,
+              role: { in: ["owner", "member"] },
+            },
+          },
+        },
         select: { id: true },
       })
     : null;
