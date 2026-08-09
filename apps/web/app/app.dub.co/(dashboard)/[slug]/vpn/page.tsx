@@ -6,7 +6,7 @@ import {
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { VpnStats } from "@/ui/vpn/vpn-ui";
-import { CardList, EmptyState, ProgressBar, StatusBadge } from "@dub/ui";
+import { CardList, EmptyState } from "@dub/ui";
 import { ChartActivity2, Nodes4 } from "@dub/ui/icons";
 
 export default async function VpnOverviewPage() {
@@ -59,9 +59,9 @@ export default async function VpnOverviewPage() {
             detail: hint,
             indicator:
               online === undefined ? undefined : (
-                <StatusBadge variant={online ? "success" : "pending"}>
+                <VpnStatusBadge online={online}>
                   {online ? "Online" : "Connecting"}
-                </StatusBadge>
+                </VpnStatusBadge>
               ),
           }))}
         />
@@ -89,10 +89,12 @@ export default async function VpnOverviewPage() {
                         {trafficGb.toFixed(1)} GB
                       </span>
                     </div>
-                    <ProgressBar
-                      value={Math.min(trafficGb, 100)}
-                      className="mt-2 h-1.5"
-                    />
+                    <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-neutral-200">
+                      <div
+                        className="h-full rounded-full bg-blue-500"
+                        style={{ width: `${Math.min(trafficGb, 100)}%` }}
+                      />
+                    </div>
                   </CardList.Card>
                 );
               })}
@@ -122,11 +124,9 @@ export default async function VpnOverviewPage() {
                   <span className="text-content-emphasis font-medium">
                     Management panel
                   </span>
-                  <StatusBadge
-                    variant={health.connected ? "success" : "pending"}
-                  >
+                  <VpnStatusBadge online={health.connected}>
                     {health.connected ? "Ready" : "Connecting"}
-                  </StatusBadge>
+                  </VpnStatusBadge>
                 </div>
               </CardList.Card>
               {nodes.map((node) => (
@@ -135,11 +135,9 @@ export default async function VpnOverviewPage() {
                     <span className="text-content-emphasis font-medium">
                       {node.name}
                     </span>
-                    <StatusBadge
-                      variant={node.isConnected ? "success" : "pending"}
-                    >
+                    <VpnStatusBadge online={node.isConnected}>
                       {node.isConnected ? "Ready" : "Connecting"}
-                    </StatusBadge>
+                    </VpnStatusBadge>
                   </div>
                 </CardList.Card>
               ))}
@@ -153,5 +151,25 @@ export default async function VpnOverviewPage() {
         </div>
       </PageWidthWrapper>
     </PageContent>
+  );
+}
+
+function VpnStatusBadge({
+  online,
+  children,
+}: {
+  online: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <span
+      className={
+        online
+          ? "bg-bg-success text-content-success max-w-fit rounded-md px-2 py-1 text-xs font-medium"
+          : "bg-bg-attention text-content-attention max-w-fit rounded-md px-2 py-1 text-xs font-medium"
+      }
+    >
+      {children}
+    </span>
   );
 }
