@@ -15,7 +15,6 @@ export * from "./checkbox";
 export * from "./combobox";
 export * from "./date-picker";
 export * from "./dots-pattern";
-export * from "./dub-status-badge";
 export * from "./empty-state";
 export * from "./file-upload";
 export * from "./filter";
@@ -55,13 +54,7 @@ export * from "./hooks";
 export * from "./icons";
 
 // layout
-export * from "./background";
-export * from "./footer";
 export * from "./max-width-wrapper";
-export * from "./nav";
-
-// content
-export * from "./content";
 
 // misc
 export * from "./animated-size-container";
