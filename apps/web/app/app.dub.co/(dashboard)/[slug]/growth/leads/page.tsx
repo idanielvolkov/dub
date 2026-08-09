@@ -4,9 +4,15 @@ import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
-import { DubCard, DubCardList } from "@/ui/vpn/server-card-list";
 import { VpnStats } from "@/ui/vpn/vpn-ui";
-import { Badge, EmptyState, Input, Label } from "@dub/ui";
+import {
+  Badge,
+  CardList,
+  CardListCard,
+  EmptyState,
+  Input,
+  Label,
+} from "@dub/ui";
 import { Crosshairs3 } from "@dub/ui/icons";
 import { updateGrowthLead } from "./actions";
 
@@ -58,9 +64,9 @@ export default async function LeadsPage({
               {leads.length} contacts from campaigns and manual entry
             </p>
           </div>
-          <DubCardList variant="compact">
+          <CardList variant="compact">
             {leads.map((lead) => (
-              <DubCard
+              <CardListCard
                 key={lead.id}
                 innerClassName="space-y-4 p-5"
                 hoverStateEnabled={false}
@@ -127,9 +133,9 @@ export default async function LeadsPage({
                   </div>
                   <OperationSubmit>Save</OperationSubmit>
                 </form>
-              </DubCard>
+              </CardListCard>
             ))}
-          </DubCardList>
+          </CardList>
           {!leads.length && (
             <div className="py-12">
               <EmptyState

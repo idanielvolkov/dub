@@ -4,8 +4,14 @@ import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
-import { DubCard, DubCardList } from "@/ui/vpn/server-card-list";
-import { Badge, EmptyState, Input, Label } from "@dub/ui";
+import {
+  Badge,
+  CardList,
+  CardListCard,
+  EmptyState,
+  Input,
+  Label,
+} from "@dub/ui";
 import { Megaphone } from "@dub/ui/icons";
 import { archiveGrowthCampaign, updateGrowthCampaign } from "./actions";
 
@@ -39,9 +45,9 @@ export default async function CampaignsPage({
               {campaigns.length} active records
             </p>
           </div>
-          <DubCardList variant="compact">
+          <CardList variant="compact">
             {campaigns.map((campaign) => (
-              <DubCard
+              <CardListCard
                 key={campaign.id}
                 innerClassName="space-y-4 p-5"
                 hoverStateEnabled={false}
@@ -152,9 +158,9 @@ export default async function CampaignsPage({
                     Archive
                   </OperationSubmit>
                 </form>
-              </DubCard>
+              </CardListCard>
             ))}
-          </DubCardList>
+          </CardList>
           {!campaigns.length && (
             <div className="py-12">
               <EmptyState icon={Megaphone} title="No campaigns yet" />

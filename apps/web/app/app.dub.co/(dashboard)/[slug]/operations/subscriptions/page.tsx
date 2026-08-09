@@ -2,12 +2,18 @@ import {
   getRemnawaveSubscriptionSettings,
   getRemnawaveSubscriptionTemplates,
 } from "@/lib/remnawave/client";
-import { DubCard, DubCardList } from "@/ui/vpn/server-card-list";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import { VpnStats } from "@/ui/vpn/vpn-ui";
-import { Badge, Checkbox, EmptyState, Label } from "@dub/ui";
+import {
+  Badge,
+  CardList,
+  CardListCard,
+  Checkbox,
+  EmptyState,
+  Label,
+} from "@dub/ui";
 import { QRCode } from "@dub/ui/icons";
 import { saveSubscriptionSettings } from "../actions";
 
@@ -62,8 +68,8 @@ export default async function SubscriptionsPage({
                 Applied to every generated subscription
               </p>
             </div>
-            <DubCardList>
-              <DubCard innerClassName="p-5" hoverStateEnabled={false}>
+            <CardList>
+              <CardListCard innerClassName="p-5" hoverStateEnabled={false}>
                 <form
                   action={saveSubscriptionSettings}
                   className="flex flex-wrap items-center gap-5"
@@ -110,8 +116,8 @@ export default async function SubscriptionsPage({
                     <OperationSubmit>Save settings</OperationSubmit>
                   </div>
                 </form>
-              </DubCard>
-            </DubCardList>
+              </CardListCard>
+            </CardList>
           </section>
         )}
         <section>
@@ -123,9 +129,9 @@ export default async function SubscriptionsPage({
               Formats served to VPN clients
             </p>
           </div>
-          <DubCardList variant="compact">
+          <CardList variant="compact">
             {templates.templates.map((template) => (
-              <DubCard key={template.uuid} hoverStateEnabled={false}>
+              <CardListCard key={template.uuid} hoverStateEnabled={false}>
                 <div className="flex min-h-9 items-center justify-between gap-3">
                   <div>
                     <p className="text-content-emphasis text-sm font-medium">
@@ -137,9 +143,9 @@ export default async function SubscriptionsPage({
                   </div>
                   <Badge variant="gray">{template.templateType}</Badge>
                 </div>
-              </DubCard>
+              </CardListCard>
             ))}
-          </DubCardList>
+          </CardList>
           {!templates.templates.length && (
             <div className="py-12">
               <EmptyState
