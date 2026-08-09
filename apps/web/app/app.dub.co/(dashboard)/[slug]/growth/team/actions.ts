@@ -9,6 +9,7 @@ import {
   PlatformAccessTemplate,
 } from "@/lib/platform-access";
 import { prisma } from "@/lib/prisma";
+import { recordWorkspaceActivity } from "@/lib/workspace/activity";
 import { sendEmail } from "@dub/email";
 import { Prisma } from "@prisma/client";
 import { randomBytes } from "crypto";
@@ -73,12 +74,22 @@ export async function inviteGrowthMember(formData: FormData) {
     text: `${session.user.name || session.user.email} invited you to ${workspace.name} Marketing as ${role}. Open this secure link within 14 days: ${inviteUrl}`,
     replyTo: "noreply",
   });
+  await recordWorkspaceActivity({
+    workspaceId: workspace.id,
+    userId: session.user.id,
+    action: "invited",
+    resourceType: "workspace_member",
+    resourceId: email,
+    description: `Invited ${email} to the workspace`,
+    changeSet: { role },
+  });
   revalidatePath(`/${slug}/growth/team`);
+  revalidatePath(`/${slug}/vpn/activity`);
 }
 
 export async function changeGrowthMemberRole(formData: FormData) {
   const slug = text(formData, "slug");
-  const { workspace } = await ownerContext(slug);
+  const { workspace, session } = await ownerContext(slug);
   const role = text(formData, "role") === "viewer" ? "viewer" : "member";
   await prisma.projectUsers.update({
     where: {
@@ -90,12 +101,22 @@ export async function changeGrowthMemberRole(formData: FormData) {
     },
     data: { role },
   });
+  await recordWorkspaceActivity({
+    workspaceId: workspace.id,
+    userId: session.user.id,
+    action: "updated",
+    resourceType: "workspace_member",
+    resourceId: text(formData, "userId"),
+    description: `Changed a team member role to ${role}`,
+    changeSet: { role },
+  });
   revalidatePath(`/${slug}/growth/team`);
+  revalidatePath(`/${slug}/vpn/activity`);
 }
 
 export async function changeMemberAccess(formData: FormData) {
   const slug = text(formData, "slug");
-  const { workspace } = await ownerContext(slug);
+  const { workspace, session } = await ownerContext(slug);
   const userId = text(formData, "userId");
   const current = await prisma.projectUsers.findUniqueOrThrow({
     where: { userId_projectId: { userId, projectId: workspace.id } },
@@ -140,22 +161,46 @@ export async function changeMemberAccess(formData: FormData) {
       },
     },
   });
+  await recordWorkspaceActivity({
+    workspaceId: workspace.id,
+    userId: session.user.id,
+    action: "updated",
+    resourceType: "workspace_access",
+    resourceId: userId,
+    description: `Updated team access for ${text(formData, "jobTitle") || "a workspace member"}`,
+    changeSet: {
+      platformAccess,
+      accessTemplate,
+      jobTitle: text(formData, "jobTitle") || null,
+    },
+  });
   revalidatePath(`/${slug}/growth/team`);
+  revalidatePath(`/${slug}/vpn/activity`);
 }
 
 export async function removeGrowthMember(formData: FormData) {
   const slug = text(formData, "slug");
-  const { workspace } = await ownerContext(slug);
+  const { workspace, session } = await ownerContext(slug);
+  const userId = text(formData, "userId");
   await prisma.projectUsers.delete({
     where: {
       userId_projectId: {
-        userId: text(formData, "userId"),
+        userId,
         projectId: workspace.id,
       },
       role: { not: "owner" },
     },
   });
+  await recordWorkspaceActivity({
+    workspaceId: workspace.id,
+    userId: session.user.id,
+    action: "removed",
+    resourceType: "workspace_member",
+    resourceId: userId,
+    description: "Removed a team member from the workspace",
+  });
   revalidatePath(`/${slug}/growth/team`);
+  revalidatePath(`/${slug}/vpn/activity`);
 }
 
 export async function revokeGrowthInvite(formData: FormData) {
