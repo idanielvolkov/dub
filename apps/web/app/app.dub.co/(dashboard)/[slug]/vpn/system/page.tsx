@@ -2,8 +2,8 @@ import { getRemnawaveHealth, getRemnawaveNodes } from "@/lib/remnawave/client";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { ButtonLink } from "@/ui/placeholders/button-link";
-import { VpnMetricCard, VpnPanel, VpnPanelHeader } from "@/ui/vpn/vpn-ui";
-import { EmptyState, StatusBadge } from "@dub/ui";
+import { VpnMetricCard } from "@/ui/vpn/vpn-ui";
+import { CardList, EmptyState, StatusBadge } from "@dub/ui";
 import { WindowSettings } from "@dub/ui/icons";
 
 const formatMemory = (bytes: number) => `${Math.round(bytes / 1024 / 1024)} MB`;
@@ -50,37 +50,34 @@ export default async function SystemPage() {
           />
         </div>
 
-        <VpnPanel className="mt-4">
-          <VpnPanelHeader
-            title="Runtime processes"
-            description="Live resource data from the Remnawave panel"
-            controls={
-              <ButtonLink
-                href="https://panel.detz.fun"
-                target="_blank"
-                rel="noreferrer"
-                variant="secondary"
-                className="h-9 px-3 text-sm"
-              >
-                Open technical panel ↗
-              </ButtonLink>
-            }
-          />
-          {metrics.length ? (
+        <section className="mt-6">
+          <div className="mb-3 flex items-center justify-between gap-4">
             <div>
-              <div className="border-border-subtle text-content-emphasis hidden grid-cols-[1fr_repeat(4,120px)] border-b bg-neutral-50/60 px-5 py-3 text-xs font-medium sm:grid">
-                <span>Process</span>
-                <span>Memory</span>
-                <span>Heap</span>
-                <span>Event loop</span>
-                <span>Handles</span>
-              </div>
-              <div className="divide-border-subtle divide-y">
-                {metrics.map((metric) => (
-                  <div
-                    key={`${metric.instanceType}-${metric.uptime}`}
-                    className="grid gap-3 px-5 py-4 sm:grid-cols-[1fr_repeat(4,120px)] sm:items-center"
-                  >
+              <h2 className="text-content-emphasis text-sm font-semibold">
+                Runtime processes
+              </h2>
+              <p className="text-content-subtle text-sm">
+                Live resource data from the Remnawave panel
+              </p>
+            </div>
+            <ButtonLink
+              href="https://panel.detz.fun"
+              target="_blank"
+              rel="noreferrer"
+              variant="secondary"
+              className="h-9 px-3 text-sm"
+            >
+              Open technical panel ↗
+            </ButtonLink>
+          </div>
+          {metrics.length ? (
+            <CardList variant="compact">
+              {metrics.map((metric) => (
+                <CardList.Card
+                  key={`${metric.instanceType}-${metric.uptime}`}
+                  hoverStateEnabled={false}
+                >
+                  <div className="grid gap-3 sm:grid-cols-[1fr_repeat(4,120px)] sm:items-center">
                     <div>
                       <p className="text-content-emphasis text-sm font-medium capitalize">
                         {metric.instanceType}
@@ -115,9 +112,9 @@ export default async function SystemPage() {
                       {metric.activeHandles}
                     </div>
                   </div>
-                ))}
-              </div>
-            </div>
+                </CardList.Card>
+              ))}
+            </CardList>
           ) : (
             <div className="p-8">
               <EmptyState
@@ -127,7 +124,7 @@ export default async function SystemPage() {
               />
             </div>
           )}
-        </VpnPanel>
+        </section>
       </PageWidthWrapper>
     </PageContent>
   );

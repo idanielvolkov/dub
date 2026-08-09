@@ -5,8 +5,9 @@ import {
 } from "@/lib/remnawave/client";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import { VpnMetricCard, VpnPanel, VpnPanelHeader } from "@/ui/vpn/vpn-ui";
-import { StatusBadge } from "@dub/ui";
+import { VpnMetricCard } from "@/ui/vpn/vpn-ui";
+import { CardList, EmptyState, ProgressBar, StatusBadge } from "@dub/ui";
+import { ChartActivity2, Nodes4 } from "@dub/ui/icons";
 
 export default async function VpnOverviewPage() {
   const [health, nodes, users] = await Promise.all([
@@ -69,55 +70,90 @@ export default async function VpnOverviewPage() {
           ))}
         </div>
 
-        <div className="mt-4 grid gap-4 lg:grid-cols-[1.4fr_1fr]">
-          <VpnPanel className="min-h-72">
-            <VpnPanelHeader
-              title="Network activity"
-              description="Traffic and active connection history"
-            />
-            <div className="flex h-52 items-end gap-2 px-5 pb-5 pt-8">
-              {[26, 42, 34, 61, 48, 76, 58, 88, 69, 94, 73, 84].map(
-                (height, index) => (
-                  <div
-                    key={index}
-                    className="bg-bg-inverted/90 hover:bg-bg-inverted flex-1 rounded-t transition-colors"
-                    style={{ height: `${height}%` }}
-                  />
-                ),
-              )}
+        <div className="mt-6 grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+          <section>
+            <div className="mb-3">
+              <h2 className="text-content-emphasis text-sm font-semibold">
+                Network activity
+              </h2>
+              <p className="text-content-subtle text-sm">
+                Live traffic reported by each Remnawave node
+              </p>
             </div>
-          </VpnPanel>
-          <VpnPanel>
-            <VpnPanelHeader
-              title="Infrastructure"
-              description="Remnawave panel and isolated VPN nodes"
-            />
-            <div className="divide-border-subtle divide-y px-5">
-              {[
-                "Management panel",
-                "Node 01",
-                "Node 02",
-                "Node 03",
-                "Node 04",
-              ].map((name, index) => (
-                <div
-                  key={name}
-                  className="flex min-h-12 items-center justify-between gap-3 text-sm"
-                >
+            <CardList variant="compact">
+              {nodes.map((node) => {
+                const trafficGb = (node.trafficUsedBytes || 0) / 1024 ** 3;
+                return (
+                  <CardList.Card key={node.uuid} hoverStateEnabled={false}>
+                    <div className="flex items-center justify-between gap-3 text-sm">
+                      <span className="text-content-emphasis font-medium">
+                        {node.name}
+                      </span>
+                      <span className="text-content-subtle">
+                        {trafficGb.toFixed(1)} GB
+                      </span>
+                    </div>
+                    <ProgressBar
+                      value={Math.min(trafficGb, 100)}
+                      className="mt-2 h-1.5"
+                    />
+                  </CardList.Card>
+                );
+              })}
+            </CardList>
+            {!nodes.length && (
+              <div className="py-10">
+                <EmptyState
+                  icon={ChartActivity2}
+                  title="No network activity"
+                  description="Traffic appears after a node connects."
+                />
+              </div>
+            )}
+          </section>
+          <section>
+            <div className="mb-3">
+              <h2 className="text-content-emphasis text-sm font-semibold">
+                Infrastructure
+              </h2>
+              <p className="text-content-subtle text-sm">
+                Remnawave panel and VPN nodes
+              </p>
+            </div>
+            <CardList variant="compact">
+              <CardList.Card hoverStateEnabled={false}>
+                <div className="flex min-h-9 items-center justify-between gap-3 text-sm">
                   <span className="text-content-emphasis font-medium">
-                    {name}
+                    Management panel
                   </span>
                   <StatusBadge
-                    variant={
-                      index === 0 && !health.connected ? "pending" : "success"
-                    }
+                    variant={health.connected ? "success" : "pending"}
                   >
-                    {index === 0 && !health.connected ? "Connecting" : "Ready"}
+                    {health.connected ? "Ready" : "Connecting"}
                   </StatusBadge>
                 </div>
+              </CardList.Card>
+              {nodes.map((node) => (
+                <CardList.Card key={node.uuid} hoverStateEnabled={false}>
+                  <div className="flex min-h-9 items-center justify-between gap-3 text-sm">
+                    <span className="text-content-emphasis font-medium">
+                      {node.name}
+                    </span>
+                    <StatusBadge
+                      variant={node.isConnected ? "success" : "pending"}
+                    >
+                      {node.isConnected ? "Ready" : "Connecting"}
+                    </StatusBadge>
+                  </div>
+                </CardList.Card>
               ))}
-            </div>
-          </VpnPanel>
+            </CardList>
+            {!nodes.length && (
+              <div className="py-8">
+                <EmptyState icon={Nodes4} title="No VPN nodes" />
+              </div>
+            )}
+          </section>
         </div>
       </PageWidthWrapper>
     </PageContent>
