@@ -4,7 +4,7 @@ import { constructMetadata } from "@dub/utils";
 import type { Viewport } from "next";
 import { ReactNode } from "react";
 
-export const dynamic = "force-static";
+export const dynamic = "force-dynamic";
 export const metadata = constructMetadata();
 export const viewport: Viewport = {
   themeColor: "#e1e1e1",
