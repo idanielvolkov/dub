@@ -1,7 +1,9 @@
 import { getGrowthWorkspace } from "@/lib/growth/get-growth-workspace";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import { VpnMetricCard, VpnPanel, VpnPanelHeader } from "@/ui/vpn/vpn-ui";
+import { VpnMetricCard } from "@/ui/vpn/vpn-ui";
+import { CardList, EmptyState } from "@dub/ui";
+import { ChartLine } from "@dub/ui/icons";
 
 export default async function GrowthAnalyticsPage({
   params,
@@ -36,31 +38,43 @@ export default async function GrowthAnalyticsPage({
             detail={`${sales} sales`}
           />
         </div>
-        <VpnPanel>
-          <VpnPanelHeader
-            title="Campaign performance"
-            description="Clicks, leads, and sales by campaign"
-          />
-          <div className="divide-border-subtle divide-y">
+        <section>
+          <div className="mb-3">
+            <h2 className="text-content-emphasis text-sm font-semibold">
+              Campaign performance
+            </h2>
+            <p className="text-content-subtle text-sm">
+              Clicks, leads, and sales by campaign
+            </p>
+          </div>
+          <CardList variant="compact">
             {[...campaigns]
               .sort((a, b) => b.clicks - a.clicks)
               .map((campaign) => (
-                <div
-                  key={campaign.id}
-                  className="grid gap-3 px-5 py-4 sm:grid-cols-[1fr_repeat(3,100px)] sm:items-center"
-                >
-                  <span className="text-content-emphasis truncate text-sm font-medium">
-                    {campaign.title ||
-                      campaign.utm_campaign ||
-                      campaign.shortLink}
-                  </span>
-                  <span className="text-sm">{campaign.clicks} clicks</span>
-                  <span className="text-sm">{campaign.leads} leads</span>
-                  <span className="text-sm">{campaign.sales} sales</span>
-                </div>
+                <CardList.Card key={campaign.id} hoverStateEnabled={false}>
+                  <div className="grid gap-3 sm:grid-cols-[1fr_repeat(3,100px)] sm:items-center">
+                    <span className="text-content-emphasis truncate text-sm font-medium">
+                      {campaign.title ||
+                        campaign.utm_campaign ||
+                        campaign.shortLink}
+                    </span>
+                    <span className="text-sm">{campaign.clicks} clicks</span>
+                    <span className="text-sm">{campaign.leads} leads</span>
+                    <span className="text-sm">{campaign.sales} sales</span>
+                  </div>
+                </CardList.Card>
               ))}
-          </div>
-        </VpnPanel>
+          </CardList>
+          {!campaigns.length && (
+            <div className="py-12">
+              <EmptyState
+                icon={ChartLine}
+                title="No campaign analytics"
+                description="Performance data will appear after a campaign receives traffic."
+              />
+            </div>
+          )}
+        </section>
       </PageWidthWrapper>
     </PageContent>
   );
