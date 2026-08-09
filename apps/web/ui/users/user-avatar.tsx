@@ -1,7 +1,7 @@
 "use client";
 
+import { Avatar } from "@dub/ui";
 import { cn } from "@dub/utils";
-import { useEffect, useState } from "react";
 
 type User = {
   id?: string | null | undefined;
@@ -11,7 +11,7 @@ type User = {
   role?: "owner" | "member" | "viewer" | "billing" | string | null;
 };
 
-export async function getUserAvatarUrl(user?: User | null) {
+export function getUserAvatarUrl(user?: User | null) {
   if (user?.image) return user.image;
 
   if (!user?.id) return "/api/og/avatar";
@@ -27,39 +27,25 @@ export function UserAvatar({
   user?: User;
   className?: string;
 }) {
-  const [src, setSrc] = useState<string | null>(null);
+  const roleThemes: Record<string, { bg: string; fg: string }> = {
+    owner: { bg: "#f3e8ff", fg: "#a855f7" },
+    member: { bg: "#dbeafe", fg: "#3b82f6" },
+    viewer: { bg: "#dcfce7", fg: "#22c55e" },
+    billing: { bg: "#fef3c7", fg: "#f59e0b" },
+  };
 
-  useEffect(() => {
-    let cancelled = false;
-    getUserAvatarUrl(user).then((url) => {
-      if (!cancelled) setSrc(url);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [user?.id, user?.email, user?.image, user?.role]);
-
-  if (!user || !src) {
-    return (
-      <div
-        className={cn(
-          "h-10 w-10 animate-pulse rounded-full border border-neutral-300 bg-neutral-100",
-          className,
-        )}
-      />
-    );
-  }
+  const identifier =
+    user.name || user.email || user.id || "Detz account member";
 
   return (
-    <img
-      alt={`Avatar for ${user.name || user.email}`}
-      referrerPolicy="no-referrer"
-      src={src}
+    <Avatar
+      imageUrl={user.image}
+      identifier={identifier}
+      theme={user.role ? roleThemes[user.role] : undefined}
       className={cn(
         "h-10 w-10 rounded-full border border-neutral-300",
         className,
       )}
-      draggable={false}
     />
   );
 }

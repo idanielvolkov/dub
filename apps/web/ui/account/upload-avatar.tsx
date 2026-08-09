@@ -17,7 +17,7 @@ export default function UploadAvatar({
 
   useEffect(() => {
     if (session?.user) {
-      getUserAvatarUrl(session.user).then((url) => setImage(url));
+      setImage(getUserAvatarUrl(session.user));
     }
   }, [session]);
 
