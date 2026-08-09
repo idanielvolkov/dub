@@ -1,96 +1,15 @@
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { VpnPlan, vpnPlansFromStore } from "@/lib/remnawave/plans";
+import { vpnPlansFromStore } from "@/lib/remnawave/plans";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import { OperationSubmit } from "@/ui/vpn/operation-submit";
+import {
+  CreatePlanButton,
+  PlanCardActions,
+  RestorePlanButton,
+} from "@/ui/vpn/plan-actions";
 import { VpnPanel } from "@/ui/vpn/vpn-ui";
 import { Badge } from "@dub/ui";
-import {
-  createVpnPlan,
-  provisionPlan,
-  setVpnPlanArchived,
-  updateVpnPlan,
-} from "./actions";
-
-const inputClass =
-  "border-border-subtle bg-bg-default placeholder:text-content-subtle focus:border-border-emphasis h-10 w-full rounded-lg border px-3 text-sm outline-none focus:ring-4 focus:ring-neutral-100";
-
-function PlanFields({ plan }: { plan?: VpnPlan }) {
-  return (
-    <div className="grid gap-3 sm:grid-cols-2">
-      <input
-        className={inputClass}
-        name="name"
-        defaultValue={plan?.name}
-        placeholder="Plan name"
-        required
-      />
-      <input
-        className={inputClass}
-        name="price"
-        type="number"
-        min="0"
-        step="0.01"
-        defaultValue={plan?.price}
-        placeholder="Price, USD"
-        required
-      />
-      <input
-        className={inputClass}
-        name="durationDays"
-        type="number"
-        min="1"
-        defaultValue={plan?.durationDays ?? 30}
-        placeholder="Duration, days"
-        required
-      />
-      <input
-        className={inputClass}
-        name="trafficGb"
-        type="number"
-        min="1"
-        step="0.01"
-        defaultValue={plan?.trafficGb}
-        placeholder="Traffic, GB"
-        required
-      />
-      <input
-        className={inputClass}
-        name="devices"
-        type="number"
-        min="1"
-        defaultValue={plan?.devices}
-        placeholder="Device limit"
-        required
-      />
-      <select
-        className={inputClass}
-        name="reset"
-        defaultValue={plan?.reset ?? "MONTH"}
-      >
-        <option value="NO_RESET">No reset</option>
-        <option value="DAY">Daily reset</option>
-        <option value="WEEK">Weekly reset</option>
-        <option value="MONTH">Monthly reset</option>
-      </select>
-      <textarea
-        className={`${inputClass} h-20 py-2 sm:col-span-2`}
-        name="description"
-        defaultValue={plan?.description}
-        placeholder="Customer-facing description"
-      />
-      <label className="text-content-default flex items-center gap-2 text-sm sm:col-span-2">
-        <input
-          name="featured"
-          type="checkbox"
-          defaultChecked={plan?.featured}
-        />
-        Mark as most popular
-      </label>
-    </div>
-  );
-}
 
 export default async function PlansPage({
   params,
@@ -166,60 +85,15 @@ export default async function PlansPage({
                   </dd>
                 </div>
               </dl>
-              {isOwner && (
-                <>
-                  <form action={provisionPlan} className="mt-5 space-y-2">
-                    <input type="hidden" name="slug" value={slug} />
-                    <input type="hidden" name="planId" value={plan.id} />
-                    <input
-                      name="username"
-                      required
-                      minLength={3}
-                      placeholder="Subscriber name"
-                      className={inputClass}
-                    />
-                    <OperationSubmit>Provision {plan.name}</OperationSubmit>
-                  </form>
-                  <details className="border-border-subtle mt-4 border-t pt-4">
-                    <summary className="text-content-default cursor-pointer text-sm font-medium">
-                      Edit plan
-                    </summary>
-                    <form action={updateVpnPlan} className="mt-4 space-y-4">
-                      <input type="hidden" name="slug" value={slug} />
-                      <input type="hidden" name="id" value={plan.id} />
-                      <PlanFields plan={plan} />
-                      <OperationSubmit>Save changes</OperationSubmit>
-                    </form>
-                    <form action={setVpnPlanArchived} className="mt-2">
-                      <input type="hidden" name="slug" value={slug} />
-                      <input type="hidden" name="id" value={plan.id} />
-                      <input type="hidden" name="archived" value="true" />
-                      <OperationSubmit
-                        destructive
-                        confirmMessage="Archive this plan? Existing subscribers will not be affected."
-                      >
-                        Archive plan
-                      </OperationSubmit>
-                    </form>
-                  </details>
-                </>
-              )}
+              {isOwner && <PlanCardActions slug={slug} plan={plan} />}
             </VpnPanel>
           ))}
         </div>
 
         {isOwner && (
-          <VpnPanel className="p-5">
-            <h2 className="text-content-emphasis font-semibold">Create plan</h2>
-            <p className="text-content-subtle mt-1 text-sm">
-              New limits become available for manual provisioning immediately.
-            </p>
-            <form action={createVpnPlan} className="mt-5 space-y-4">
-              <input type="hidden" name="slug" value={slug} />
-              <PlanFields />
-              <OperationSubmit>Create plan</OperationSubmit>
-            </form>
-          </VpnPanel>
+          <div className="flex justify-end">
+            <CreatePlanButton slug={slug} />
+          </div>
         )}
 
         {isOwner && archivedPlans.length > 0 && (
@@ -239,12 +113,7 @@ export default async function PlansPage({
                     </p>
                     <p className="text-content-subtle text-xs">${plan.price}</p>
                   </div>
-                  <form action={setVpnPlanArchived}>
-                    <input type="hidden" name="slug" value={slug} />
-                    <input type="hidden" name="id" value={plan.id} />
-                    <input type="hidden" name="archived" value="false" />
-                    <OperationSubmit>Restore</OperationSubmit>
-                  </form>
+                  <RestorePlanButton slug={slug} planId={plan.id} />
                 </div>
               ))}
             </div>
