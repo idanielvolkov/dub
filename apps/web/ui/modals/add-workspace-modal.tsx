@@ -1,5 +1,5 @@
 import { Logo, Modal, useRouterStuff } from "@dub/ui";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Dispatch,
   SetStateAction,
@@ -18,9 +18,6 @@ function AddWorkspaceModalHelper({
   setShowAddWorkspaceModal: Dispatch<SetStateAction<boolean>>;
 }) {
   const router = useRouter();
-  const pathname = usePathname();
-
-  const oauthFlow = pathname.startsWith("/oauth/authorize");
 
   const searchParams = useSearchParams();
   const { queryParams } = useRouterStuff();
@@ -39,28 +36,17 @@ function AddWorkspaceModalHelper({
     >
       <div className="flex flex-col items-center justify-center space-y-3 border-b border-neutral-200 px-4 py-4 pt-8 sm:px-16">
         <Logo />
-        <h3 className="text-lg font-medium">Create a workspace</h3>
+        <h3 className="text-lg font-medium">Create a business workspace</h3>
         <p className="-translate-y-2 text-balance text-center text-xs text-neutral-500">
-          Set up a common space to manage your links with your team.{" "}
-          <a
-            href="https://dub.co/help/article/what-is-a-workspace"
-            target="_blank"
-            className="cursor-help font-medium underline decoration-dotted underline-offset-2 transition-colors hover:text-neutral-700"
-          >
-            Learn more.
-          </a>
+          Set up a shared space for VPN operations, growth, and your team.
         </p>
       </div>
 
       <CreateWorkspaceForm
         className="bg-neutral-50 px-4 py-8 sm:px-16"
         onSuccess={({ slug }) => {
-          if (oauthFlow) {
-            router.refresh();
-          } else {
-            router.push(`/${slug}`);
-            toast.success("Successfully created workspace!");
-          }
+          router.push(`/${slug}`);
+          toast.success("Successfully created workspace!");
           setShowAddWorkspaceModal(false);
         }}
       />
