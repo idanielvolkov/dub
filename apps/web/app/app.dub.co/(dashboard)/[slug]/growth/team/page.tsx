@@ -44,6 +44,22 @@ export default async function GrowthTeamPage({
     (item) => item.userId === session?.user.id,
   );
   const isOwner = current?.role === "owner";
+  const memberProfile = (preferences: unknown) => {
+    if (
+      !preferences ||
+      typeof preferences !== "object" ||
+      Array.isArray(preferences)
+    )
+      return { jobTitle: "", accessTemplate: "custom" };
+    const profile = preferences as Record<string, unknown>;
+    return {
+      jobTitle: typeof profile.jobTitle === "string" ? profile.jobTitle : "",
+      accessTemplate:
+        typeof profile.accessTemplate === "string"
+          ? profile.accessTemplate
+          : "custom",
+    };
+  };
   return (
     <PageContent
       title="Team"
@@ -120,14 +136,22 @@ export default async function GrowthTeamPage({
                     {member.user.email}
                   </p>
                 </div>
-                <Badge variant="gray">
-                  {member.role === "member" ? "Marketing" : member.role}
-                </Badge>
+                <div className="text-right">
+                  <Badge variant="gray">
+                    {memberProfile(member.workspacePreferences).jobTitle ||
+                      (member.role === "member" ? "Team member" : member.role)}
+                  </Badge>
+                  <p className="text-content-subtle mt-1 text-xs capitalize">
+                    {memberProfile(
+                      member.workspacePreferences,
+                    ).accessTemplate.replaceAll("_", " ")}
+                  </p>
+                </div>
                 {isOwner && member.role !== "owner" && (
                   <div className="flex w-full flex-col gap-3 border-t border-neutral-200 pt-4 sm:ml-11">
                     <form
                       action={changeMemberAccess}
-                      className="grid gap-2 sm:grid-cols-3 lg:grid-cols-[repeat(3,minmax(0,1fr))_auto]"
+                      className="grid gap-2 sm:grid-cols-2 lg:grid-cols-[repeat(3,minmax(0,1fr))_auto]"
                     >
                       <input type="hidden" name="slug" value={slug} />
                       <input
@@ -135,6 +159,41 @@ export default async function GrowthTeamPage({
                         name="userId"
                         value={member.userId}
                       />
+                      <label className="space-y-1">
+                        <span className="text-content-subtle text-xs font-medium">
+                          Job title
+                        </span>
+                        <Input
+                          name="jobTitle"
+                          defaultValue={
+                            memberProfile(member.workspacePreferences).jobTitle
+                          }
+                          placeholder="e.g. Support lead"
+                          className="h-9"
+                        />
+                      </label>
+                      <label className="space-y-1">
+                        <span className="text-content-subtle text-xs font-medium">
+                          Access template
+                        </span>
+                        <FormCombobox
+                          name="accessTemplate"
+                          defaultValue={
+                            memberProfile(member.workspacePreferences)
+                              .accessTemplate
+                          }
+                          className="h-9 w-full"
+                          options={[
+                            { value: "custom", label: "Custom" },
+                            { value: "administrator", label: "Administrator" },
+                            { value: "support", label: "Support" },
+                            { value: "finance", label: "Finance" },
+                            { value: "marketer", label: "Marketer" },
+                            { value: "technician", label: "Technician" },
+                            { value: "analyst", label: "Analyst" },
+                          ]}
+                        />
+                      </label>
                       {(
                         [
                           ["workspace", "Workspace"],

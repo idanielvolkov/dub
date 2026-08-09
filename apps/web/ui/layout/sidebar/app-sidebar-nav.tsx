@@ -3,6 +3,7 @@
 import { canAccessPlatformArea } from "@/lib/platform-access";
 import useWorkspace from "@/lib/swr/use-workspace";
 import {
+  BookOpen,
   Cards,
   ChartActivity2,
   ChartLine,
@@ -15,9 +16,11 @@ import {
   Globe,
   GlobePointer,
   InvoiceDollar,
+  LifeRing,
   LinesY,
   MarketingTarget,
   Megaphone,
+  MoneyBills2,
   Nodes4,
   QRCode,
   Receipt2,
@@ -110,6 +113,36 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
             name: "Orders",
             icon: iconOr(InvoiceDollar, Receipt2),
             href: `/${slug}/vpn/orders`,
+          },
+        ],
+      },
+      {
+        name: "Operations",
+        items: [
+          {
+            name: "Support",
+            icon: LifeRing,
+            href: `/${slug}/vpn/support`,
+          },
+          {
+            name: "Finance",
+            icon: MoneyBills2,
+            href: `/${slug}/vpn/finance`,
+          },
+        ],
+      },
+      {
+        name: "Organization",
+        items: [
+          {
+            name: "Team",
+            icon: iconOr(UsersSettings, Users),
+            href: `/${slug}/vpn/team`,
+          },
+          {
+            name: "Activity",
+            icon: BookOpen,
+            href: `/${slug}/vpn/activity`,
           },
         ],
       },

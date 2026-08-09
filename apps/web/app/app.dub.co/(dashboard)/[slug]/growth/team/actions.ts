@@ -2,7 +2,12 @@
 
 import { hashToken } from "@/lib/auth/hash-token";
 import { getSession } from "@/lib/auth/utils";
-import { PLATFORM_AREAS, PlatformAccessLevel } from "@/lib/platform-access";
+import {
+  PLATFORM_ACCESS_TEMPLATES,
+  PLATFORM_AREAS,
+  PlatformAccessLevel,
+  PlatformAccessTemplate,
+} from "@/lib/platform-access";
 import { prisma } from "@/lib/prisma";
 import { sendEmail } from "@dub/email";
 import { Prisma } from "@prisma/client";
@@ -103,12 +108,20 @@ export async function changeMemberAccess(formData: FormData) {
     "view",
     "manage",
   ]);
-  const platformAccess = Object.fromEntries(
-    PLATFORM_AREAS.map((area) => {
-      const value = text(formData, area) as PlatformAccessLevel;
-      return [area, allowedLevels.has(value) ? value : "none"];
-    }),
-  );
+  const requestedTemplate = text(formData, "accessTemplate");
+  const accessTemplate: PlatformAccessTemplate =
+    requestedTemplate in PLATFORM_ACCESS_TEMPLATES
+      ? (requestedTemplate as PlatformAccessTemplate)
+      : "custom";
+  const templateAccess = PLATFORM_ACCESS_TEMPLATES[accessTemplate];
+  const platformAccess =
+    templateAccess ||
+    Object.fromEntries(
+      PLATFORM_AREAS.map((area) => {
+        const value = text(formData, area) as PlatformAccessLevel;
+        return [area, allowedLevels.has(value) ? value : "none"];
+      }),
+    );
   const preferences =
     current.workspacePreferences &&
     typeof current.workspacePreferences === "object" &&
@@ -122,6 +135,8 @@ export async function changeMemberAccess(formData: FormData) {
       workspacePreferences: {
         ...(preferences as Record<string, Prisma.JsonValue>),
         platformAccess,
+        accessTemplate,
+        jobTitle: text(formData, "jobTitle") || null,
       },
     },
   });

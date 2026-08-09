@@ -6,6 +6,42 @@ export type PlatformArea = (typeof PLATFORM_AREAS)[number];
 export type PlatformAccessLevel = "none" | "view" | "manage";
 export type PlatformAccess = Record<PlatformArea, PlatformAccessLevel>;
 
+export const PLATFORM_ACCESS_TEMPLATES = {
+  custom: null,
+  administrator: {
+    workspace: "manage",
+    remnawave: "manage",
+    marketing: "manage",
+  },
+  support: {
+    workspace: "manage",
+    remnawave: "view",
+    marketing: "none",
+  },
+  finance: {
+    workspace: "manage",
+    remnawave: "none",
+    marketing: "view",
+  },
+  marketer: {
+    workspace: "view",
+    remnawave: "none",
+    marketing: "manage",
+  },
+  technician: {
+    workspace: "view",
+    remnawave: "manage",
+    marketing: "none",
+  },
+  analyst: {
+    workspace: "view",
+    remnawave: "view",
+    marketing: "view",
+  },
+} as const satisfies Record<string, PlatformAccess | null>;
+
+export type PlatformAccessTemplate = keyof typeof PLATFORM_ACCESS_TEMPLATES;
+
 const ACCESS_RANK: Record<PlatformAccessLevel, number> = {
   none: 0,
   view: 1,
