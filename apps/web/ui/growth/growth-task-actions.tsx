@@ -119,7 +119,7 @@ export function GrowthTaskActions({
         className="max-w-xl"
       >
         <ModalHeader title="Edit task" description={task.title} />
-        <div className="bg-bg-muted p-6">
+        <ModalBody className="bg-bg-muted">
           <form action={updateGrowthTask} className="grid gap-4 md:grid-cols-2">
             <input type="hidden" name="slug" value={slug} />
             <input type="hidden" name="id" value={task.id} />
@@ -138,7 +138,7 @@ export function GrowthTaskActions({
               Delete task
             </OperationSubmit>
           </form>
-        </div>
+        </ModalBody>
       </Modal>
     </>
   );
