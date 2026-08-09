@@ -1,0 +1,233 @@
+"use client";
+
+import { RemnawaveHost } from "@/lib/remnawave/client";
+import { OperationSubmit } from "@/ui/vpn/operation-submit";
+import {
+  Button,
+  Checkbox,
+  Input,
+  Modal,
+  StatusBadge,
+  Table,
+  useTable,
+} from "@dub/ui";
+import { ColumnDef } from "@tanstack/react-table";
+import { useMemo, useState } from "react";
+import {
+  removeHost,
+  saveHost,
+} from "../../app/app.dub.co/(dashboard)/[slug]/operations/actions";
+
+export function HostsTable({
+  slug,
+  hosts,
+}: {
+  slug: string;
+  hosts: RemnawaveHost[];
+}) {
+  const [selectedHost, setSelectedHost] = useState<RemnawaveHost | null>(null);
+  const columns = useMemo<ColumnDef<RemnawaveHost>[]>(
+    () => [
+      {
+        id: "host",
+        header: "Host",
+        cell: ({ row }) => (
+          <div>
+            <p className="text-content-emphasis font-medium">
+              {row.original.remark}
+            </p>
+            <p className="text-content-subtle max-w-48 truncate font-mono text-xs">
+              {row.original.uuid}
+            </p>
+          </div>
+        ),
+      },
+      {
+        id: "status",
+        header: "Status",
+        cell: ({ row }) => (
+          <StatusBadge
+            icon={null}
+            variant={row.original.isDisabled ? "neutral" : "success"}
+          >
+            {row.original.isDisabled ? "Disabled" : "Enabled"}
+          </StatusBadge>
+        ),
+      },
+      {
+        id: "address",
+        header: "Address",
+        cell: ({ row }) => (
+          <span className="font-mono text-xs">
+            {row.original.address}:{row.original.port || 443}
+          </span>
+        ),
+      },
+      {
+        id: "security",
+        header: "Security",
+        cell: ({ row }) => row.original.securityLayer || "Default",
+      },
+      {
+        id: "nodes",
+        header: "Nodes",
+        cell: ({ row }) =>
+          row.original.nodes.length
+            ? row.original.nodes.map((node) => node.name).join(", ")
+            : "All nodes",
+      },
+      {
+        id: "visibility",
+        header: "Visibility",
+        cell: ({ row }) => (
+          <StatusBadge
+            icon={null}
+            variant={row.original.isHidden ? "neutral" : "new"}
+          >
+            {row.original.isHidden ? "Hidden" : "Visible"}
+          </StatusBadge>
+        ),
+      },
+      {
+        id: "actions",
+        header: "Actions",
+        meta: { disableTruncate: true },
+        cell: ({ row }) => (
+          <Button
+            className="h-9 w-fit"
+            variant="secondary"
+            text="Manage"
+            onClick={() => setSelectedHost(row.original)}
+          />
+        ),
+      },
+    ],
+    [],
+  );
+  const table = useTable({ data: hosts, columns });
+
+  return (
+    <>
+      <div className="mb-3 flex items-center justify-between gap-4">
+        <div>
+          <h2 className="text-content-emphasis text-sm font-semibold">
+            Subscription hosts
+          </h2>
+          <p className="text-content-subtle text-sm">
+            {hosts.length} configured hosts
+          </p>
+        </div>
+        <StatusBadge variant="success">Live data</StatusBadge>
+      </div>
+      <Table
+        {...table}
+        resourceName={(plural) => (plural ? "hosts" : "host")}
+        emptyState={
+          <div className="flex flex-col items-center gap-2 text-center">
+            <p className="text-content-emphasis text-sm font-medium">
+              No hosts found
+            </p>
+            <p className="text-content-subtle text-xs">
+              Configure a subscription host in Remnawave to see it here.
+            </p>
+          </div>
+        }
+      />
+
+      <Modal
+        showModal={Boolean(selectedHost)}
+        setShowModal={(open) => !open && setSelectedHost(null)}
+        className="max-w-xl"
+      >
+        {selectedHost && (
+          <>
+            <div className="border-border-subtle border-b p-6">
+              <div className="flex items-center gap-2">
+                <h3 className="text-content-emphasis text-lg font-medium">
+                  {selectedHost.remark}
+                </h3>
+                <StatusBadge
+                  icon={null}
+                  variant={selectedHost.isDisabled ? "neutral" : "success"}
+                >
+                  {selectedHost.isDisabled ? "Disabled" : "Enabled"}
+                </StatusBadge>
+              </div>
+              <p className="text-content-subtle mt-1 font-mono text-xs">
+                {selectedHost.uuid}
+              </p>
+            </div>
+            <div className="bg-bg-muted p-6">
+              <form action={saveHost} className="grid gap-4 sm:grid-cols-2">
+                <input type="hidden" name="slug" value={slug} />
+                <input type="hidden" name="uuid" value={selectedHost.uuid} />
+                <label className="text-content-default grid gap-1.5 text-sm font-medium sm:col-span-2">
+                  Remark
+                  <Input
+                    name="remark"
+                    defaultValue={selectedHost.remark}
+                    required
+                  />
+                </label>
+                <label className="text-content-default grid gap-1.5 text-sm font-medium">
+                  Address
+                  <Input
+                    name="address"
+                    defaultValue={selectedHost.address}
+                    required
+                  />
+                </label>
+                <label className="text-content-default grid gap-1.5 text-sm font-medium">
+                  Port
+                  <Input
+                    name="port"
+                    type="number"
+                    min={1}
+                    max={65535}
+                    defaultValue={selectedHost.port || 443}
+                  />
+                </label>
+                <div className="border-border-subtle space-y-3 rounded-xl border bg-white p-4 sm:col-span-2">
+                  <label className="text-content-default flex items-center gap-3 text-sm">
+                    <Checkbox
+                      className="size-4 rounded"
+                      name="isDisabled"
+                      defaultChecked={selectedHost.isDisabled}
+                    />
+                    Disable this host
+                  </label>
+                  <label className="text-content-default flex items-center gap-3 text-sm">
+                    <Checkbox
+                      className="size-4 rounded"
+                      name="isHidden"
+                      defaultChecked={selectedHost.isHidden}
+                    />
+                    Hide this host from subscriptions
+                  </label>
+                </div>
+                <div className="flex justify-end sm:col-span-2">
+                  <OperationSubmit>Save changes</OperationSubmit>
+                </div>
+              </form>
+              <div className="border-border-subtle mt-5 flex items-center justify-between gap-4 border-t pt-5">
+                <p className="text-content-subtle text-xs">
+                  Deleting a host cannot be undone.
+                </p>
+                <form action={removeHost}>
+                  <input type="hidden" name="slug" value={slug} />
+                  <input type="hidden" name="uuid" value={selectedHost.uuid} />
+                  <OperationSubmit
+                    destructive
+                    confirmMessage={`Delete ${selectedHost.remark}? This cannot be undone.`}
+                  >
+                    Delete host
+                  </OperationSubmit>
+                </form>
+              </div>
+            </div>
+          </>
+        )}
+      </Modal>
+    </>
+  );
+}
