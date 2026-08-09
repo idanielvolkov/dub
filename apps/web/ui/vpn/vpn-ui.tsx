@@ -1,4 +1,4 @@
-import { cn } from "@dub/utils";
+import { CardList, ProgressBar } from "@dub/ui";
 import { ReactNode } from "react";
 
 export function VpnMetricCard({
@@ -13,16 +13,18 @@ export function VpnMetricCard({
   indicator?: ReactNode;
 }) {
   return (
-    <div className="border-border-subtle bg-bg-default rounded-xl border p-5">
-      <div className="flex items-center justify-between gap-3">
-        <p className="text-content-default text-sm font-medium">{label}</p>
-        {indicator}
-      </div>
-      <p className="text-content-emphasis mt-2 text-2xl font-semibold tracking-tight">
-        {value}
-      </p>
-      <p className="text-content-subtle mt-1 text-xs">{detail}</p>
-    </div>
+    <CardList>
+      <CardList.Card innerClassName="p-5" hoverStateEnabled={false}>
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-content-default text-sm font-medium">{label}</p>
+          {indicator}
+        </div>
+        <p className="text-content-emphasis mt-2 text-2xl font-semibold tracking-tight">
+          {value}
+        </p>
+        <p className="text-content-subtle mt-1 text-xs">{detail}</p>
+      </CardList.Card>
+    </CardList>
   );
 }
 
@@ -34,14 +36,15 @@ export function VpnPanel({
   className?: string;
 }) {
   return (
-    <div
-      className={cn(
-        "border-border-subtle bg-bg-default overflow-hidden rounded-xl border",
-        className,
-      )}
-    >
-      {children}
-    </div>
+    <CardList className={className}>
+      <CardList.Card
+        outerClassName="overflow-hidden"
+        innerClassName="p-0"
+        hoverStateEnabled={false}
+      >
+        {children}
+      </CardList.Card>
+    </CardList>
   );
 }
 
@@ -68,12 +71,5 @@ export function VpnPanelHeader({
 }
 
 export function VpnProgress({ value }: { value: number }) {
-  return (
-    <div className="bg-bg-muted h-1.5 overflow-hidden rounded-full">
-      <div
-        className="bg-bg-inverted h-full rounded-full transition-[width] duration-500"
-        style={{ width: `${Math.min(100, Math.max(0, value))}%` }}
-      />
-    </div>
-  );
+  return <ProgressBar value={Math.min(100, Math.max(0, value))} />;
 }

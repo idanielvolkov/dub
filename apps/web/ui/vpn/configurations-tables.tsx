@@ -2,7 +2,16 @@
 
 import { RemnawaveConfigProfile, RemnawaveSquad } from "@/lib/remnawave/client";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
-import { Button, Input, Modal, StatusBadge, Table, useTable } from "@dub/ui";
+import {
+  Button,
+  EmptyState,
+  Input,
+  Modal,
+  StatusBadge,
+  Table,
+  useTable,
+} from "@dub/ui";
+import { Sliders, UsersSettings } from "@dub/ui/icons";
 import { ColumnDef } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 import {
@@ -147,14 +156,11 @@ export function ConfigurationsTables({
           {...profileTable}
           resourceName={(plural) => (plural ? "profiles" : "profile")}
           emptyState={
-            <div className="text-center">
-              <p className="text-content-emphasis text-sm font-medium">
-                No profiles found
-              </p>
-              <p className="text-content-subtle mt-1 text-xs">
-                Create an Xray profile in Remnawave first.
-              </p>
-            </div>
+            <EmptyState
+              icon={Sliders}
+              title="No profiles found"
+              description="Create an Xray profile in Remnawave first."
+            />
           }
         />
       </section>
@@ -179,14 +185,11 @@ export function ConfigurationsTables({
           {...squadTable}
           resourceName={(plural) => (plural ? "squads" : "squad")}
           emptyState={
-            <div className="text-center">
-              <p className="text-content-emphasis text-sm font-medium">
-                No squads found
-              </p>
-              <p className="text-content-subtle mt-1 text-xs">
-                Create a squad to group access permissions.
-              </p>
-            </div>
+            <EmptyState
+              icon={UsersSettings}
+              title="No squads found"
+              description="Create a squad to group access permissions."
+            />
           }
         />
       </section>

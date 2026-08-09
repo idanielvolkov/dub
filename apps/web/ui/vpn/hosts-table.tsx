@@ -5,12 +5,14 @@ import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import {
   Button,
   Checkbox,
+  EmptyState,
   Input,
   Modal,
   StatusBadge,
   Table,
   useTable,
 } from "@dub/ui";
+import { GlobePointer } from "@dub/ui/icons";
 import { ColumnDef } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 import {
@@ -123,14 +125,11 @@ export function HostsTable({
         {...table}
         resourceName={(plural) => (plural ? "hosts" : "host")}
         emptyState={
-          <div className="flex flex-col items-center gap-2 text-center">
-            <p className="text-content-emphasis text-sm font-medium">
-              No hosts found
-            </p>
-            <p className="text-content-subtle text-xs">
-              Configure a subscription host in Remnawave to see it here.
-            </p>
-          </div>
+          <EmptyState
+            icon={GlobePointer}
+            title="No hosts found"
+            description="Configure a subscription host in Remnawave to see it here."
+          />
         }
       />
 

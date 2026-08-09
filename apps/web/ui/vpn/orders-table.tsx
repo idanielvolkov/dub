@@ -3,7 +3,16 @@
 import { VpnPlan } from "@/lib/remnawave/plans";
 import { VpnOrder } from "@/lib/vpn/orders";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
-import { Button, Input, Modal, StatusBadge, Table, useTable } from "@dub/ui";
+import {
+  Button,
+  EmptyState,
+  Input,
+  Modal,
+  StatusBadge,
+  Table,
+  useTable,
+} from "@dub/ui";
+import { InvoiceDollar } from "@dub/ui/icons";
 import { ColumnDef } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 import {
@@ -167,14 +176,11 @@ export function OrdersTable({
         {...table}
         resourceName={(plural) => (plural ? "orders" : "order")}
         emptyState={
-          <div className="flex flex-col items-center gap-2 text-center">
-            <p className="text-content-emphasis text-sm font-medium">
-              No orders yet
-            </p>
-            <p className="text-content-subtle text-xs">
-              Create an order to start tracking VPN sales.
-            </p>
-          </div>
+          <EmptyState
+            icon={InvoiceDollar}
+            title="No orders yet"
+            description="Create an order to start tracking VPN sales."
+          />
         }
       />
 
