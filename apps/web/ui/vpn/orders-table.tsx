@@ -184,7 +184,7 @@ export function OrdersTable({
       />
 
       <Modal showModal={showCreateModal} setShowModal={setShowCreateModal}>
-        <div className="border-border-subtle border-b p-6">
+        <div className="border-border-subtle border-b px-6 py-4">
           <h3 className="text-content-emphasis text-lg font-medium">
             Create order
           </h3>

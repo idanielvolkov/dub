@@ -149,7 +149,7 @@ export function SubscribersTable({
       />
 
       <Modal showModal={showCreateModal} setShowModal={setShowCreateModal}>
-        <div className="border-border-subtle border-b p-6">
+        <div className="border-border-subtle border-b px-6 py-4">
           <h3 className="text-content-emphasis text-lg font-medium">
             Add subscriber
           </h3>
@@ -195,7 +195,7 @@ export function SubscribersTable({
       >
         {selectedUser && (
           <>
-            <div className="border-border-subtle border-b p-6">
+            <div className="border-border-subtle border-b px-6 py-4">
               <div className="flex items-center gap-2">
                 <h3 className="text-content-emphasis text-lg font-medium">
                   {selectedUser.username}

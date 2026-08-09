@@ -105,7 +105,7 @@ function FormModal({
 }) {
   return (
     <Modal showModal={open} setShowModal={setOpen} className="max-w-xl">
-      <div className="border-border-subtle border-b p-6">
+      <div className="border-border-subtle border-b px-6 py-4">
         <h3 className="text-content-emphasis text-lg font-medium">{title}</h3>
         <p className="text-content-subtle mt-1 text-sm">{description}</p>
       </div>
@@ -175,10 +175,10 @@ export function PlanCardActions({
         <form action={provisionPlan} className="bg-bg-muted space-y-4 p-6">
           <input type="hidden" name="slug" value={slug} />
           <input type="hidden" name="planId" value={plan.id} />
-          <label className="text-content-default grid gap-1.5 text-sm font-medium">
-            Subscriber name
+          <div className="grid gap-1.5">
+            <Label>Subscriber name</Label>
             <Input name="username" minLength={3} required />
-          </label>
+          </div>
           <OperationSubmit>Provision access</OperationSubmit>
         </form>
       </FormModal>

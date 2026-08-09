@@ -6,6 +6,7 @@ import {
   Button,
   EmptyState,
   Input,
+  Label,
   Modal,
   StatusBadge,
   Table,
@@ -14,15 +15,13 @@ import {
 import { Sliders, UsersSettings } from "@dub/ui/icons";
 import { ColumnDef } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
+import TextareaAutosize from "react-textarea-autosize";
 import {
   addSquad,
   removeSquad,
   saveProfile,
   saveSquad,
 } from "../../app/app.dub.co/(dashboard)/[slug]/operations/actions";
-
-const textareaClass =
-  "border-border-default bg-bg-default text-content-default placeholder:text-content-subtle focus:border-border-emphasis min-h-80 w-full rounded-xl border p-3 font-mono text-xs outline-none focus:ring-4 focus:ring-neutral-100";
 
 export function ConfigurationsTables({
   slug,
@@ -201,7 +200,7 @@ export function ConfigurationsTables({
       >
         {selectedProfile && (
           <>
-            <div className="border-border-subtle border-b p-6">
+            <div className="border-border-subtle border-b px-6 py-4">
               <h3 className="text-content-emphasis text-lg font-medium">
                 Edit {selectedProfile.name}
               </h3>
@@ -212,23 +211,24 @@ export function ConfigurationsTables({
             <form action={saveProfile} className="bg-bg-muted space-y-4 p-6">
               <input type="hidden" name="slug" value={slug} />
               <input type="hidden" name="uuid" value={selectedProfile.uuid} />
-              <label className="text-content-default grid gap-1.5 text-sm font-medium">
-                Profile name
+              <div className="grid gap-1.5">
+                <Label>Profile name</Label>
                 <Input
                   name="name"
                   defaultValue={selectedProfile.name}
                   required
                 />
-              </label>
-              <label className="text-content-default grid gap-1.5 text-sm font-medium">
-                Xray JSON
-                <textarea
-                  className={textareaClass}
+              </div>
+              <div className="grid gap-1.5">
+                <Label>Xray JSON</Label>
+                <TextareaAutosize
+                  className="border-border-default bg-bg-default text-content-default placeholder:text-content-subtle focus:border-border-emphasis min-h-80 w-full resize-y rounded-xl border p-3 font-mono text-xs outline-none focus:ring-4 focus:ring-neutral-100"
                   name="config"
                   defaultValue={JSON.stringify(selectedProfile.config, null, 2)}
+                  minRows={18}
                   spellCheck={false}
                 />
-              </label>
+              </div>
               <div className="flex justify-end">
                 <OperationSubmit confirmMessage="Apply this Xray configuration to the profile?">
                   Validate & save
@@ -245,7 +245,7 @@ export function ConfigurationsTables({
       >
         {selectedSquad && (
           <>
-            <div className="border-border-subtle border-b p-6">
+            <div className="border-border-subtle border-b px-6 py-4">
               <h3 className="text-content-emphasis text-lg font-medium">
                 Manage squad
               </h3>
@@ -266,14 +266,14 @@ export function ConfigurationsTables({
                     .filter(Boolean)
                     .join(",")}
                 />
-                <label className="text-content-default grid gap-1.5 text-sm font-medium">
-                  Squad name
+                <div className="grid gap-1.5">
+                  <Label>Squad name</Label>
                   <Input
                     name="name"
                     defaultValue={selectedSquad.name}
                     required
                   />
-                </label>
+                </div>
                 <div className="flex justify-end">
                   <OperationSubmit>Save changes</OperationSubmit>
                 </div>
@@ -299,7 +299,7 @@ export function ConfigurationsTables({
       </Modal>
 
       <Modal showModal={showCreateSquad} setShowModal={setShowCreateSquad}>
-        <div className="border-border-subtle border-b p-6">
+        <div className="border-border-subtle border-b px-6 py-4">
           <h3 className="text-content-emphasis text-lg font-medium">
             Create squad
           </h3>
@@ -310,8 +310,8 @@ export function ConfigurationsTables({
         <form action={addSquad} className="bg-bg-muted space-y-4 p-6">
           <input type="hidden" name="slug" value={slug} />
           <input type="hidden" name="inbounds" value={inboundIds.join(",")} />
-          <label className="text-content-default grid gap-1.5 text-sm font-medium">
-            Squad name
+          <div className="grid gap-1.5">
+            <Label>Squad name</Label>
             <Input
               name="name"
               placeholder="Marketing-VPN"
@@ -320,7 +320,7 @@ export function ConfigurationsTables({
               pattern="[A-Za-z0-9_-]+"
               required
             />
-          </label>
+          </div>
           <div className="flex justify-end gap-2">
             <Button
               className="w-fit"

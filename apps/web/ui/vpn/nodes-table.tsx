@@ -148,7 +148,7 @@ export function NodesTable({
       >
         {selectedNode && (
           <>
-            <div className="border-border-subtle border-b p-6">
+            <div className="border-border-subtle border-b px-6 py-4">
               <div className="flex items-center gap-2">
                 <h3 className="text-content-emphasis text-lg font-medium">
                   {selectedNode.name}
