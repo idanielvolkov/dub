@@ -6,18 +6,19 @@ import {
   addAllUsersToRemnawaveExternalSquad,
   createRemnawaveExternalSquad,
   createRemnawaveSquad,
-  deleteRemnawaveHost,
-  deleteRemnawaveSquad,
   deleteRemnawaveExternalSquad,
+  deleteRemnawaveHost,
+  deleteRemnawaveHwidDevice,
+  deleteRemnawaveSquad,
   removeAllUsersFromRemnawaveExternalSquad,
   restartRemnawaveNode,
   setRemnawaveNodeEnabled,
   updateRemnawaveConfigProfile,
+  updateRemnawaveExternalSquad,
   updateRemnawaveHost,
   updateRemnawaveNode,
   updateRemnawaveSquad,
   updateRemnawaveSubscriptionSettings,
-  updateRemnawaveExternalSquad,
 } from "@/lib/remnawave/client";
 import { revalidatePath } from "next/cache";
 
@@ -179,5 +180,18 @@ export async function removeAllExternalSquadUsers(formData: FormData) {
   const slug = text(formData, "slug");
   await authorize(slug);
   await removeAllUsersFromRemnawaveExternalSquad(text(formData, "uuid"));
+  revalidatePath(`/${slug}/operations/insights`);
+}
+
+export async function removeHwidDevice(formData: FormData) {
+  const slug = text(formData, "slug");
+  await authorize(slug);
+  const userId = Number(formData.get("userId"));
+  const hwid = text(formData, "hwid");
+  if (!Number.isSafeInteger(userId) || userId < 1 || !hwid) {
+    throw new Error("Invalid device identity");
+  }
+  await deleteRemnawaveHwidDevice({ userId, hwid });
+  revalidatePath(`/${slug}/operations/devices`);
   revalidatePath(`/${slug}/operations/insights`);
 }

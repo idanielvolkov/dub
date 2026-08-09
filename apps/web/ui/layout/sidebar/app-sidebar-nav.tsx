@@ -177,6 +177,11 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
             icon: iconOr(ChartActivity2, LinesY),
             href: `/${slug}/operations/insights`,
           },
+          {
+            name: "Devices & requests",
+            icon: iconOr(ShieldKeyhole, ShieldCheck),
+            href: `/${slug}/operations/devices`,
+          },
         ],
       },
     ],
