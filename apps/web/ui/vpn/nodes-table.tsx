@@ -20,6 +20,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 import {
   changeNodeState,
+  restartAllNodes,
   restartNode,
   saveNode,
 } from "../../app/app.dub.co/(dashboard)/[slug]/operations/actions";
@@ -133,7 +134,15 @@ export function NodesTable({
             {nodes.length} nodes connected to Remnawave
           </p>
         </div>
-        <StatusBadge variant="success">Live data</StatusBadge>
+        <div className="flex items-center gap-2">
+          <StatusBadge variant="success">Live data</StatusBadge>
+          <form action={restartAllNodes}>
+            <input type="hidden" name="slug" value={slug} />
+            <OperationSubmit confirmMessage="Restart every connected Remnawave node? Active VPN sessions may reconnect briefly.">
+              Restart all
+            </OperationSubmit>
+          </form>
+        </div>
       </div>
       <Table
         {...table}

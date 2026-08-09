@@ -234,6 +234,10 @@ export function restartRemnawaveNode(uuid: string) {
   return remnawaveMutation(`/api/nodes/${uuid}/actions/restart`, "POST");
 }
 
+export function restartAllRemnawaveNodes() {
+  return remnawaveMutation("/api/nodes/actions/restart-all", "POST");
+}
+
 export function updateRemnawaveHost(input: {
   uuid: string;
   remark?: string;
@@ -306,6 +310,18 @@ export function setRemnawaveUserEnabled(uuid: string, enabled: boolean) {
 
 export function resetRemnawaveUserTraffic(uuid: string) {
   return remnawaveMutation(`/api/users/${uuid}/actions/reset-traffic`, "POST");
+}
+
+export function resetAllRemnawaveUserTraffic() {
+  return remnawaveMutation("/api/users/bulk/all/reset-traffic", "POST");
+}
+
+export function extendAllRemnawaveUsers(extendDays: number) {
+  return remnawaveMutation(
+    "/api/users/bulk/all/extend-expiration-date",
+    "POST",
+    { extendDays },
+  );
 }
 
 export function revokeRemnawaveUserSubscription(uuid: string) {

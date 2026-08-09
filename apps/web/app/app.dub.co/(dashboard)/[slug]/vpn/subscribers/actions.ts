@@ -5,6 +5,8 @@ import { prisma } from "@/lib/prisma";
 import {
   createRemnawaveUser,
   deleteRemnawaveUser,
+  extendAllRemnawaveUsers,
+  resetAllRemnawaveUserTraffic,
   resetRemnawaveUserTraffic,
   revokeRemnawaveUserSubscription,
   setRemnawaveUserEnabled,
@@ -102,6 +104,25 @@ export async function resetSubscriberTraffic(formData: FormData) {
   await resetRemnawaveUserTraffic(text(formData, "uuid"));
   revalidatePath(`/${slug}/vpn/subscribers`);
   revalidatePath(`/${slug}/operations/users`);
+}
+
+export async function resetAllSubscriberTraffic(formData: FormData) {
+  const slug = text(formData, "slug");
+  await authorize(slug);
+  await resetAllRemnawaveUserTraffic();
+  revalidatePath(`/${slug}/vpn/subscribers`);
+  revalidatePath(`/${slug}/vpn/traffic`);
+}
+
+export async function extendAllSubscribers(formData: FormData) {
+  const slug = text(formData, "slug");
+  await authorize(slug);
+  const extendDays = Math.min(
+    9999,
+    Math.max(1, Number(formData.get("extendDays")) || 0),
+  );
+  await extendAllRemnawaveUsers(extendDays);
+  revalidatePath(`/${slug}/vpn/subscribers`);
 }
 
 export async function revokeSubscriber(formData: FormData) {
