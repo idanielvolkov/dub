@@ -1,8 +1,10 @@
 import { getGrowthWorkspace } from "@/lib/growth/get-growth-workspace";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import { VpnMetricCard, VpnPanel, VpnPanelHeader } from "@/ui/vpn/vpn-ui";
-import Link from "next/link";
+import { ButtonLink } from "@/ui/placeholders/button-link";
+import { VpnMetricCard } from "@/ui/vpn/vpn-ui";
+import { CardList, EmptyState } from "@dub/ui";
+import { Megaphone } from "@dub/ui/icons";
 
 export default async function GrowthPage({
   params,
@@ -20,12 +22,13 @@ export default async function GrowthPage({
         title: "A dedicated workspace for your marketing and growth team.",
       }}
       controls={
-        <Link
+        <ButtonLink
           href={`/${slug}/growth/campaigns`}
-          className="bg-bg-inverted text-content-inverted rounded-lg px-3 py-2 text-sm font-medium"
+          variant="primary"
+          className="h-9 px-3 text-sm"
         >
           View campaigns
-        </Link>
+        </ButtonLink>
       }
     >
       <PageWidthWrapper className="pb-10">
@@ -51,39 +54,46 @@ export default async function GrowthPage({
             detail={`${totals._sum.sales || 0} attributed sales`}
           />
         </div>
-        <VpnPanel className="mt-4">
-          <VpnPanelHeader
-            title="Recent campaigns"
-            description="Latest activity across marketing channels"
-          />
-          <div className="divide-border-subtle divide-y">
-            {campaigns.slice(0, 6).map((campaign) => (
-              <div
-                key={campaign.id}
-                className="grid gap-3 px-5 py-4 sm:grid-cols-[1fr_repeat(3,100px)] sm:items-center"
-              >
-                <div className="min-w-0">
-                  <p className="text-content-emphasis truncate text-sm font-medium">
-                    {campaign.title ||
-                      campaign.utm_campaign ||
-                      campaign.shortLink}
-                  </p>
-                  <p className="text-content-subtle mt-0.5 truncate text-xs">
-                    {campaign.shortLink}
-                  </p>
-                </div>
-                <span className="text-sm">{campaign.clicks} clicks</span>
-                <span className="text-sm">{campaign.leads} leads</span>
-                <span className="text-sm">{campaign.sales} sales</span>
-              </div>
-            ))}
-            {!campaigns.length && (
-              <div className="text-content-subtle p-10 text-center text-sm">
-                Campaign data will appear here.
-              </div>
-            )}
+        <section className="mt-6">
+          <div className="mb-3">
+            <h2 className="text-content-emphasis text-sm font-semibold">
+              Recent campaigns
+            </h2>
+            <p className="text-content-subtle text-sm">
+              Latest activity across marketing channels
+            </p>
           </div>
-        </VpnPanel>
+          <CardList variant="compact">
+            {campaigns.slice(0, 6).map((campaign) => (
+              <CardList.Card key={campaign.id} hoverStateEnabled={false}>
+                <div className="grid gap-3 sm:grid-cols-[1fr_repeat(3,100px)] sm:items-center">
+                  <div className="min-w-0">
+                    <p className="text-content-emphasis truncate text-sm font-medium">
+                      {campaign.title ||
+                        campaign.utm_campaign ||
+                        campaign.shortLink}
+                    </p>
+                    <p className="text-content-subtle mt-0.5 truncate text-xs">
+                      {campaign.shortLink}
+                    </p>
+                  </div>
+                  <span className="text-sm">{campaign.clicks} clicks</span>
+                  <span className="text-sm">{campaign.leads} leads</span>
+                  <span className="text-sm">{campaign.sales} sales</span>
+                </div>
+              </CardList.Card>
+            ))}
+          </CardList>
+          {!campaigns.length && (
+            <div className="py-12">
+              <EmptyState
+                icon={Megaphone}
+                title="No campaign data"
+                description="Campaign activity will appear here."
+              />
+            </div>
+          )}
+        </section>
       </PageWidthWrapper>
     </PageContent>
   );

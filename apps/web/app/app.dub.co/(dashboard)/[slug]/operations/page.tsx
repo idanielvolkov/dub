@@ -10,8 +10,8 @@ import {
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { ButtonLink } from "@/ui/placeholders/button-link";
-import { VpnMetricCard, VpnPanel, VpnPanelHeader } from "@/ui/vpn/vpn-ui";
-import { StatusBadge } from "@dub/ui";
+import { VpnMetricCard } from "@/ui/vpn/vpn-ui";
+import { CardList, StatusBadge } from "@dub/ui";
 import Link from "next/link";
 
 export default async function OperationsPage({
@@ -89,26 +89,31 @@ export default async function OperationsPage({
           />
         </div>
 
-        <VpnPanel className="mt-4">
-          <VpnPanelHeader
-            title="Control plane"
-            description="Every section reads directly from your Remnawave installation"
-          />
-          <div className="divide-border-subtle divide-y">
-            {resources.map(([name, count, href]) => (
-              <Link
-                key={name}
-                href={href}
-                className="hover:bg-bg-muted flex min-h-14 items-center justify-between px-5 text-sm transition-colors"
-              >
-                <span className="text-content-emphasis font-medium">
-                  {name}
-                </span>
-                <span className="text-content-subtle">{count} →</span>
-              </Link>
-            ))}
+        <section className="mt-6">
+          <div className="mb-3">
+            <h2 className="text-content-emphasis text-sm font-semibold">
+              Control plane
+            </h2>
+            <p className="text-content-subtle text-sm">
+              Every section reads directly from your Remnawave installation
+            </p>
           </div>
-        </VpnPanel>
+          <CardList variant="compact">
+            {resources.map(([name, count, href]) => (
+              <CardList.Card key={name}>
+                <Link
+                  href={href}
+                  className="flex min-h-9 items-center justify-between text-sm"
+                >
+                  <span className="text-content-emphasis font-medium">
+                    {name}
+                  </span>
+                  <span className="text-content-subtle">{count} →</span>
+                </Link>
+              </CardList.Card>
+            ))}
+          </CardList>
+        </section>
       </PageWidthWrapper>
     </PageContent>
   );
