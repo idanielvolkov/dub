@@ -258,6 +258,8 @@ export function deleteRemnawaveUser(uuid: string) {
 export async function createRemnawaveUser(input: {
   username: string;
   expireAt: string;
+  email?: string;
+  description?: string;
   trafficLimitBytes?: number;
   trafficLimitStrategy?: "NO_RESET" | "DAY" | "WEEK" | "MONTH";
   hwidDeviceLimit?: number;
