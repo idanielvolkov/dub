@@ -4,6 +4,7 @@ import { RemnawaveNode } from "@/lib/remnawave/client";
 import { TableRowMenu } from "@/ui/shared/table-row-menu";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import {
+  Checkbox,
   EmptyState,
   Input,
   Label,
@@ -20,8 +21,10 @@ import { ColumnDef } from "@tanstack/react-table";
 import { useMemo, useState } from "react";
 import {
   changeNodeState,
+  removeNode,
   restartAllNodes,
   restartNode,
+  resetNodeTraffic,
   saveNode,
 } from "../../app/app.dub.co/(dashboard)/[slug]/operations/actions";
 
@@ -182,7 +185,7 @@ export function NodesTable({
             <ModalBody className="bg-bg-muted">
               <form
                 action={saveNode}
-                className="grid gap-4 sm:grid-cols-[1fr_120px]"
+                className="grid gap-4 sm:grid-cols-2"
               >
                 <input type="hidden" name="slug" value={slug} />
                 <input type="hidden" name="uuid" value={selectedNode.uuid} />
@@ -192,9 +195,68 @@ export function NodesTable({
                     id="node-name"
                     name="name"
                     defaultValue={selectedNode.name}
+                    maxLength={30}
                     required
                   />
                 </div>
+                <div className="grid gap-1.5">
+                  <Label htmlFor="node-traffic-limit">Traffic limit, GB</Label>
+                  <Input
+                    id="node-traffic-limit"
+                    name="trafficLimitGb"
+                    type="number"
+                    min={0}
+                    defaultValue={Math.round(
+                      selectedNode.trafficLimitBytes / 1024 ** 3,
+                    )}
+                  />
+                </div>
+                <div className="grid gap-1.5">
+                  <Label htmlFor="node-notify-percent">Notify at, %</Label>
+                  <Input
+                    id="node-notify-percent"
+                    name="notifyPercent"
+                    type="number"
+                    min={0}
+                    max={100}
+                    defaultValue={selectedNode.notifyPercent}
+                  />
+                </div>
+                <div className="grid gap-1.5">
+                  <Label htmlFor="node-reset-day">Reset day</Label>
+                  <Input
+                    id="node-reset-day"
+                    name="trafficResetDay"
+                    type="number"
+                    min={1}
+                    max={31}
+                    defaultValue={selectedNode.trafficResetDay || 1}
+                  />
+                </div>
+                <div className="grid gap-1.5">
+                  <Label htmlFor="node-multiplier">Traffic multiplier</Label>
+                  <Input
+                    id="node-multiplier"
+                    name="consumptionMultiplier"
+                    type="number"
+                    min={0}
+                    max={100}
+                    step={0.1}
+                    defaultValue={selectedNode.consumptionMultiplier}
+                  />
+                </div>
+                <Label
+                  htmlFor="node-track-traffic"
+                  className="flex cursor-pointer items-center gap-2 font-normal sm:col-span-2"
+                >
+                  <Checkbox
+                    id="node-track-traffic"
+                    name="isTrafficTrackingActive"
+                    className="size-4"
+                    defaultChecked={selectedNode.isTrafficTrackingActive}
+                  />
+                  Track traffic for this node
+                </Label>
                 <div className="grid gap-1.5">
                   <Label htmlFor="node-country">Country</Label>
                   <Input
@@ -249,6 +311,25 @@ export function NodesTable({
                   confirmMessage={`Restart ${selectedNode.name}?`}
                 >
                   Restart node
+                </OperationSubmit>
+              </form>
+              <form action={resetNodeTraffic}>
+                <input type="hidden" name="slug" value={slug} />
+                <input type="hidden" name="uuid" value={selectedNode.uuid} />
+                <OperationSubmit
+                  confirmMessage={`Reset traffic for ${selectedNode.name}?`}
+                >
+                  Reset traffic
+                </OperationSubmit>
+              </form>
+              <form action={removeNode} className="ml-auto">
+                <input type="hidden" name="slug" value={slug} />
+                <input type="hidden" name="uuid" value={selectedNode.uuid} />
+                <OperationSubmit
+                  destructive
+                  confirmMessage={`Delete ${selectedNode.name}? The node must be detached from active configuration first.`}
+                >
+                  Delete node
                 </OperationSubmit>
               </form>
             </ModalFooter>
