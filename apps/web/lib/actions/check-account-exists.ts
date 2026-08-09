@@ -5,7 +5,6 @@ import { prisma } from "@/lib/prisma";
 import { assertRateLimit } from "@/lib/upstash/assert-rate-limit";
 import { RATELIMIT_POLICIES } from "@/lib/upstash/ratelimit-policies";
 import * as z from "zod/v4";
-import { isSamlEnforcedForEmailDomain } from "../api/workspaces/is-saml-enforced-for-email-domain";
 import { emailSchema } from "../zod/schemas/auth";
 import { throwIfAuthenticated } from "./auth/throw-if-authenticated";
 import { actionClient } from "./safe-action";
@@ -26,22 +25,17 @@ export const checkAccountExistsAction = actionClient
       identifier: await getIP(),
     });
 
-    const [user, isSamlEnforced] = await Promise.all([
-      prisma.user.findUnique({
-        where: {
-          email,
-        },
-        select: {
-          passwordHash: true,
-        },
-      }),
-
-      isSamlEnforcedForEmailDomain(email),
-    ]);
+    const user = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+      select: {
+        passwordHash: true,
+      },
+    });
 
     return {
       accountExists: !!user,
       hasPassword: !!user?.passwordHash,
-      requireSAML: isSamlEnforced,
     };
   });

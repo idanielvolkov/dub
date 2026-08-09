@@ -29,14 +29,7 @@ module.exports = withPlausibleProxy({
     "shiki",
     "@dub/email",
     "@dub/utils",
-    "@boxyhq/saml-jackson",
   ],
-  outputFileTracingIncludes: {
-    "/api/auth/saml/token": [
-      "./node_modules/jose/**/*",
-      "./node_modules/openid-client/**/*",
-    ],
-  },
   experimental: {
     // Keep large self-hosted builds within Vercel Hobby's memory limit.
     cpus: 1,

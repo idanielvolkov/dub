@@ -6,7 +6,6 @@ import { deleteWorkspace } from "@/lib/api/workspaces/delete-workspace";
 import { prefixWorkspaceId } from "@/lib/api/workspaces/workspace-id";
 import { withWorkspace } from "@/lib/auth";
 import { getFeatureFlags } from "@/lib/edge-config";
-import { jackson } from "@/lib/jackson";
 import { prisma } from "@/lib/prisma";
 import { mergeSiteVisitTrackingSettings } from "@/lib/sitemaps/site-visit-tracking";
 import { storage } from "@/lib/storage";
@@ -37,7 +36,6 @@ const updateWorkspaceSchema = createWorkspaceSchema
         z.null(),
       ])
       .optional(),
-    enforceSAML: z.boolean().nullish(),
     siteVisitTrackingSettings: siteVisitTrackingSettingsPatchSchema
       .nullable()
       .optional(),
@@ -92,7 +90,6 @@ export const PATCH = withWorkspace(
       conversionEnabled,
       allowedHostnames,
       publishableKey,
-      enforceSAML,
       siteVisitTrackingSettings,
     } = await updateWorkspaceSchema.parseAsync(await parseRequestBody(req));
 
@@ -113,29 +110,6 @@ export const PATCH = withWorkspace(
           body: logo,
         })
       : null;
-
-    if (enforceSAML) {
-      if (workspace.plan !== "enterprise") {
-        throw new DubApiError({
-          code: "forbidden",
-          message: "SAML SSO is only available on enterprise plans.",
-        });
-      }
-
-      const { apiController } = await jackson();
-
-      const connections = await apiController.getConnections({
-        tenant: workspace.id,
-        product: "Dub",
-      });
-
-      if (connections.length === 0) {
-        throw new DubApiError({
-          code: "forbidden",
-          message: "SAML SSO is not configured for this workspace.",
-        });
-      }
-    }
 
     const flags = await getFeatureFlags({
       workspaceId: workspace.id,
@@ -193,9 +167,6 @@ export const PATCH = withWorkspace(
             allowedHostnames: validHostnames,
           }),
           ...(publishableKey !== undefined && { publishableKey }),
-          ...(enforceSAML !== undefined && {
-            ssoEnforcedAt: enforceSAML ? new Date() : null,
-          }),
           ...(mergedSiteVisitTrackingSettings !== undefined && {
             siteVisitTrackingSettings:
               mergedSiteVisitTrackingSettings === null

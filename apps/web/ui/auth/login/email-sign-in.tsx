@@ -48,15 +48,7 @@ export const EmailSignIn = ({ next }: { next?: string }) => {
               return;
             }
 
-            const { accountExists, hasPassword, requireSAML } = result.data;
-
-            if (requireSAML) {
-              setClickedMethod(undefined);
-              toast.error(
-                "Your organization requires authentication through your company's identity provider.",
-              );
-              return;
-            }
+            const { accountExists, hasPassword } = result.data;
 
             if (accountExists && hasPassword) {
               setShowPasswordField(true);

@@ -1,5 +1,4 @@
 import { isBlacklistedEmail } from "@/lib/edge-config";
-import { jackson } from "@/lib/jackson";
 import { prisma } from "@/lib/prisma";
 import { isStored, storage } from "@/lib/storage";
 import { UserProps } from "@/lib/types";
@@ -20,7 +19,6 @@ import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import { createId } from "../api/create-id";
 import { isProduction } from "../api/environment";
-import { isSamlEnforcedForEmailDomain } from "../api/workspaces/is-saml-enforced-for-email-domain";
 import { qstash } from "../cron";
 import { completeProgramApplications } from "../partners/complete-program-applications";
 import {
@@ -124,134 +122,6 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
       allowDangerousEmailAccountLinking: true,
     }),
-    {
-      id: "saml",
-      name: "BoxyHQ",
-      type: "oauth",
-      version: "2.0",
-      checks: ["pkce", "state"],
-      authorization: {
-        url: `${process.env.NEXTAUTH_URL}/api/auth/saml/authorize`,
-        params: {
-          scope: "",
-          response_type: "code",
-          provider: "saml",
-        },
-      },
-      token: {
-        url: `${process.env.NEXTAUTH_URL}/api/auth/saml/token`,
-        params: { grant_type: "authorization_code" },
-      },
-      userinfo: `${process.env.NEXTAUTH_URL}/api/auth/saml/userinfo`,
-      profile: async (profile) => {
-        let existingUser = await prisma.user.findUnique({
-          where: { email: profile.email },
-        });
-
-        // user is authorized but doesn't have a Dub account, create one for them
-        if (!existingUser) {
-          existingUser = await prisma.user.create({
-            data: {
-              id: createId({ prefix: "user_" }),
-              email: profile.email,
-              name: `${profile.firstName || ""} ${
-                profile.lastName || ""
-              }`.trim(),
-              notificationPreferences: {
-                create: {},
-              },
-            },
-          });
-        }
-
-        const { id, name, email, image } = existingUser;
-
-        return {
-          id,
-          name,
-          email,
-          image,
-        };
-      },
-      options: {
-        clientId: "dummy",
-        clientSecret: process.env.NEXTAUTH_SECRET as string,
-      },
-      allowDangerousEmailAccountLinking: true,
-    },
-    CredentialsProvider({
-      id: "saml-idp",
-      name: "IdP Login",
-      credentials: {
-        code: {},
-      },
-      async authorize(credentials) {
-        if (!credentials) {
-          return null;
-        }
-
-        const { code } = credentials;
-
-        if (!code) {
-          return null;
-        }
-
-        const { oauthController } = await jackson();
-
-        // Fetch access token
-        const { access_token } = await oauthController.token({
-          code,
-          grant_type: "authorization_code",
-          redirect_uri: process.env.NEXTAUTH_URL as string,
-          client_id: "dummy",
-          client_secret: process.env.NEXTAUTH_SECRET as string,
-        });
-
-        if (!access_token) {
-          return null;
-        }
-
-        // Fetch user info
-        const userInfo = await oauthController.userInfo(access_token);
-
-        if (!userInfo) {
-          return null;
-        }
-
-        let existingUser = await prisma.user.findUnique({
-          where: { email: userInfo.email },
-        });
-
-        // user is authorized but doesn't have a Dub account, create one for them
-        if (!existingUser) {
-          existingUser = await prisma.user.create({
-            data: {
-              id: createId({ prefix: "user_" }),
-              email: userInfo.email,
-              name: `${userInfo.firstName || ""} ${
-                userInfo.lastName || ""
-              }`.trim(),
-              notificationPreferences: {
-                create: {},
-              },
-            },
-          });
-        }
-
-        const { id, name, email, image } = existingUser;
-
-        return {
-          id,
-          email,
-          name,
-          email_verified: true,
-          image,
-          // adding profile here so we can access it in signIn callback
-          profile: userInfo,
-        };
-      },
-    }),
-
     // Sign in with email and password
     CredentialsProvider({
       id: "credentials",
@@ -276,13 +146,6 @@ export const authOptions: NextAuthOptions = {
           policy: RATELIMIT_POLICIES.login,
           identifier: email.trim().toLowerCase(),
         });
-
-        // SSO enforcement check
-        const ssoEnforced = await isSamlEnforcedForEmailDomain(email);
-
-        if (ssoEnforced) {
-          throw new Error("require-saml-sso");
-        }
 
         const user = await prisma.user.findUnique({
           where: { email },
@@ -405,20 +268,6 @@ export const authOptions: NextAuthOptions = {
       const isAdminImpersonation =
         account?.provider === "email" && consumeAdminImpersonation(user.email);
 
-      // If the user is not using SAML, we need to check if SAML is enforced for the email domain
-      if (
-        !isAdminImpersonation &&
-        account?.provider !== "saml" &&
-        account?.provider !== "saml-idp" &&
-        account?.provider !== "credentials" // for credentials, we do the check in the CredentialsProvider
-      ) {
-        const ssoEnforced = await isSamlEnforcedForEmailDomain(user.email);
-
-        if (ssoEnforced) {
-          throw new Error("require-saml-sso");
-        }
-      }
-
       if (account?.provider === "google" || account?.provider === "github") {
         const userExists = await prisma.user.findUnique({
           where: { email: user.email },
@@ -452,79 +301,6 @@ export const authOptions: NextAuthOptions = {
               ...(newAvatar && { image: newAvatar }),
             },
           });
-        }
-      } else if (
-        account?.provider === "saml" ||
-        account?.provider === "saml-idp"
-      ) {
-        let samlProfile;
-
-        if (account?.provider === "saml-idp") {
-          // @ts-ignore
-          samlProfile = user.profile;
-          if (!samlProfile) {
-            return true;
-          }
-        } else {
-          samlProfile = profile;
-        }
-
-        if (!samlProfile?.requested?.tenant) {
-          return false;
-        }
-
-        const workspace = await prisma.project.findUnique({
-          where: {
-            id: samlProfile.requested.tenant,
-          },
-          select: {
-            id: true,
-            ssoEmailDomain: true,
-          },
-        });
-
-        if (workspace) {
-          const { ssoEmailDomain } = workspace;
-          const emailDomain = user.email.split("@")[1];
-
-          // ssoEmailDomain should be required for all SAML enabled workspace
-          // this should not happen
-          if (!ssoEmailDomain) {
-            return false;
-          }
-
-          if (
-            emailDomain.toLocaleLowerCase() !==
-            ssoEmailDomain.toLocaleLowerCase()
-          ) {
-            return false;
-          }
-
-          await Promise.allSettled([
-            // add user to workspace
-            prisma.projectUsers.upsert({
-              where: {
-                userId_projectId: {
-                  userId: user.id,
-                  projectId: workspace.id,
-                },
-              },
-              update: {},
-              create: {
-                projectId: workspace.id,
-                userId: user.id,
-              },
-            }),
-            // delete any pending invites for this user
-            prisma.projectInvite.delete({
-              where: {
-                email_projectId: {
-                  email: user.email,
-                  projectId: workspace.id,
-                },
-              },
-            }),
-          ]);
         }
       }
       return true;
