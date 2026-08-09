@@ -1,4 +1,4 @@
-import { CardList } from "@dub/ui";
+import { CardList, CardListCard } from "@dub/ui";
 
 /**
  * Compatibility exports for the VPN and business pages. Both components are
@@ -6,4 +6,4 @@ import { CardList } from "@dub/ui";
  * migrated screen share Dub's interaction and layout behavior.
  */
 export const DubCardList = CardList;
-export const DubCard = CardList.Card;
+export const DubCard = CardListCard;

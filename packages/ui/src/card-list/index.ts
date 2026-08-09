@@ -8,4 +8,4 @@ const CardList = Object.assign(CardListComponent, {
   Context: CardListContext,
 });
 
-export { CardList };
+export { CardList, CardListCard };
