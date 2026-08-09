@@ -1,13 +1,12 @@
 "use client";
 
-import useWorkspaceUsers from "@/lib/swr/use-workspace-users";
 import useWorkspaces from "@/lib/swr/use-workspaces";
 import { PlanProps, WorkspaceProps } from "@/lib/types";
 import { ModalContext } from "@/ui/modals/modal-provider";
 import { getUserAvatarUrl } from "@/ui/users/user-avatar";
 import { BlurImage, Popover, useScrollProgress } from "@dub/ui";
 import { Check2, Gear, Plus } from "@dub/ui/icons";
-import { cn, isLegacyBusinessPlan, pluralize } from "@dub/utils";
+import { cn, isLegacyBusinessPlan } from "@dub/utils";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -130,9 +129,6 @@ function WorkspaceList({
   const scrollRef = useRef<HTMLDivElement>(null);
   const { scrollProgress, updateScrollProgress } = useScrollProgress(scrollRef);
 
-  const { users } = useWorkspaceUsers();
-  const membersCount = users?.filter((user) => !user.isMachine).length ?? 0;
-
   const href = (slug: string) => `/${slug}/vpn`;
 
   return (
@@ -165,9 +161,6 @@ function WorkspaceList({
                   )}
                 >
                   {selected.plan}
-                  {membersCount > 0
-                    ? ` · ${membersCount} ${pluralize("member", membersCount)}`
-                    : ""}
                 </div>
               )}
             </div>

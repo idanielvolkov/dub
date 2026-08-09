@@ -1,6 +1,6 @@
 "use server";
 
-import { getSession } from "@/lib/auth";
+import { getSession } from "@/lib/auth/utils";
 import { GrowthTask, tasksFromStore } from "@/lib/growth/tasks";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";

@@ -3,7 +3,7 @@ import { sendEmail } from "@dub/email";
 import ConfirmEmailChange from "@dub/email/templates/confirm-email-change";
 import { waitUntil } from "@vercel/functions";
 import { randomBytes } from "crypto";
-import { hashToken } from ".";
+import { hashToken } from "./hash-token";
 import { DubApiError } from "../api/errors";
 import { redis } from "../upstash";
 import { assertRateLimit } from "../upstash/assert-rate-limit";

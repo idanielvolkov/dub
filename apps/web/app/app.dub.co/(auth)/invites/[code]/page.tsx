@@ -1,5 +1,5 @@
 import { onboardingStepCache } from "@/lib/api/workspaces/onboarding-step-cache";
-import { getSession } from "@/lib/auth";
+import { getSession } from "@/lib/auth/utils";
 import { prisma } from "@/lib/prisma";
 import EmptyState from "@/ui/shared/empty-state";
 import { LoadingSpinner } from "@dub/ui";

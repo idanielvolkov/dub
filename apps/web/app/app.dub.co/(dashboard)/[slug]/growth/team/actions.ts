@@ -1,6 +1,7 @@
 "use server";
 
-import { getSession, hashToken } from "@/lib/auth";
+import { hashToken } from "@/lib/auth/hash-token";
+import { getSession } from "@/lib/auth/utils";
 import { prisma } from "@/lib/prisma";
 import { sendEmail } from "@dub/email";
 import { randomBytes } from "crypto";

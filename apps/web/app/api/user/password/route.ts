@@ -1,6 +1,6 @@
 import { DubApiError } from "@/lib/api/errors";
 import { parseRequestBody } from "@/lib/api/utils";
-import { withSession } from "@/lib/auth";
+import { withSession } from "@/lib/auth/session";
 import { hashPassword, validatePassword } from "@/lib/auth/password";
 import { prisma } from "@/lib/prisma";
 import { updatePasswordSchema } from "@/lib/zod/schemas/auth";

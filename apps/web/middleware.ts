@@ -1,22 +1,7 @@
-import { logger } from "@/lib/axiom/server";
-import { transformMiddlewareRequest } from "@axiomhq/nextjs";
-import {
-  ADMIN_HOSTNAMES,
-  API_HOSTNAMES,
-  APP_HOSTNAMES,
-  DEFAULT_REDIRECTS,
-  isValidUrl,
-} from "@dub/utils";
-import { PARTNERS_HOSTNAMES } from "@dub/utils/src/constants";
-import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
-import { AdminMiddleware } from "./lib/middleware/admin";
-import { ApiMiddleware } from "./lib/middleware/api";
+import { APP_HOSTNAMES } from "@dub/utils";
+import { NextRequest, NextResponse } from "next/server";
 import { AppMiddleware } from "./lib/middleware/app";
-import { CreateLinkMiddleware } from "./lib/middleware/create-link";
-import { LinkMiddleware } from "./lib/middleware/link";
-import { PartnersMiddleware } from "./lib/middleware/partners";
 import { parse } from "./lib/middleware/utils/parse";
-import { supportedWellKnownFiles } from "./lib/well-known";
 
 export const config = {
   runtime: "nodejs",
@@ -32,59 +17,12 @@ export const config = {
   ],
 };
 
-export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
-  const { domain, path, key, fullKey } = parse(req);
+export default async function middleware(req: NextRequest) {
+  const { domain } = parse(req);
 
-  // Axiom logging
-  logger.info(...transformMiddlewareRequest(req));
-  ev.waitUntil(logger.flush());
-
-  // for App
   if (APP_HOSTNAMES.has(domain)) {
     return AppMiddleware(req);
   }
 
-  // for API
-  if (API_HOSTNAMES.has(domain)) {
-    return ApiMiddleware(req);
-  }
-
-  // for public stats pages (e.g. d.to/stats/try -> rewrite to [/domain]/[key]/stats)
-  if (path.startsWith("/stats/")) {
-    return NextResponse.rewrite(
-      new URL(
-        `/${domain}/${encodeURIComponent(path.replace("/stats/", ""))}/stats`,
-        req.url,
-      ),
-    );
-  }
-
-  // for .well-known routes
-  if (path.startsWith("/.well-known/")) {
-    const file = path.split("/.well-known/").pop();
-    if (file && supportedWellKnownFiles.includes(file)) {
-      return NextResponse.rewrite(
-        new URL(`/wellknown/${domain}/${file}`, req.url),
-      );
-    }
-  }
-
-  // default redirects for dub.sh
-  if (domain === "dub.sh" && DEFAULT_REDIRECTS[key]) {
-    return NextResponse.redirect(DEFAULT_REDIRECTS[key]);
-  }
-
-  if (ADMIN_HOSTNAMES.has(domain)) {
-    return AdminMiddleware(req);
-  }
-
-  if (PARTNERS_HOSTNAMES.has(domain)) {
-    return PartnersMiddleware(req);
-  }
-
-  if (isValidUrl(fullKey)) {
-    return CreateLinkMiddleware(req);
-  }
-
-  return LinkMiddleware(req, ev);
+  return NextResponse.next();
 }

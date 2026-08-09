@@ -12,7 +12,6 @@ import {
   createContext,
   useEffect,
 } from "react";
-import { useUpgradedModal } from "./upgraded-modal";
 
 export const ModalContext = createContext<{
   setShowAddWorkspaceModal: Dispatch<SetStateAction<boolean>>;
@@ -54,14 +53,6 @@ function ModalProviderClient({ children }: { children: ReactNode }) {
   const searchParams = useSearchParams();
   const { AddWorkspaceModal, setShowAddWorkspaceModal } =
     useAddWorkspaceModal();
-  const { setShowUpgradedModal, UpgradedModal } = useUpgradedModal();
-
-  useEffect(() => {
-    if (searchParams.has("upgraded")) {
-      setShowUpgradedModal(true);
-    }
-  }, [searchParams]);
-
   // Handle workspace creation from the global navigation.
   useEffect(() => {
     if (searchParams.has("newWorkspace")) {
@@ -110,7 +101,6 @@ function ModalProviderClient({ children }: { children: ReactNode }) {
       }}
     >
       <AddWorkspaceModal />
-      <UpgradedModal />
       {children}
     </ModalContext.Provider>
   );

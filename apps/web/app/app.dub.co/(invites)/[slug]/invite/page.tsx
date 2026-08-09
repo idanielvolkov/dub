@@ -1,4 +1,4 @@
-import { getSession } from "@/lib/auth";
+import { getSession } from "@/lib/auth/utils";
 import { prisma } from "@/lib/prisma";
 import { UserAvatar } from "@/ui/users/user-avatar";
 import {

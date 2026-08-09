@@ -1,5 +1,5 @@
 import { DubApiError } from "@/lib/api/errors";
-import { withSession } from "@/lib/auth";
+import { withSession } from "@/lib/auth/session";
 import { PASSWORD_RESET_TOKEN_EXPIRY } from "@/lib/auth/constants";
 import { prisma } from "@/lib/prisma";
 import { sendEmail } from "@dub/email";

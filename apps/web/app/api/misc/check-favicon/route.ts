@@ -1,4 +1,4 @@
-import { withSession } from "@/lib/auth";
+import { withSession } from "@/lib/auth/session";
 import { GOOGLE_FAVICON_URL } from "@dub/utils";
 import { NextResponse } from "next/server";
 
