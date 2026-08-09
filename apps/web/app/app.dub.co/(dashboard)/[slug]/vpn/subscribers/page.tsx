@@ -1,9 +1,20 @@
 import { getRemnawaveUsers } from "@/lib/remnawave/client";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
+import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import { VpnPanel, VpnPanelHeader } from "@/ui/vpn/vpn-ui";
 import { Button, StatusBadge } from "@dub/ui";
-import { createSubscriber } from "./actions";
+import {
+  changeSubscriberState,
+  createSubscriber,
+  removeSubscriber,
+  resetSubscriberTraffic,
+  revokeSubscriber,
+  saveSubscriber,
+} from "./actions";
+
+const inputClass =
+  "h-9 rounded-lg border border-neutral-200 bg-white px-3 text-sm outline-none transition focus:border-neutral-400";
 
 export default async function SubscribersPage({
   params,
@@ -50,43 +61,153 @@ export default async function SubscribersPage({
             controls={<StatusBadge variant="success">Live data</StatusBadge>}
           />
           {users.length ? (
-            <div>
-              <div className="border-border-subtle text-content-emphasis hidden grid-cols-[1fr_140px_160px] border-b bg-neutral-50/60 px-5 py-3 text-xs font-medium sm:grid">
-                <span>Subscriber</span>
-                <span>Status</span>
-                <span className="text-right">Expires</span>
-              </div>
+            <div className="divide-border-subtle divide-y">
               <div className="divide-border-subtle divide-y">
                 {users.map((user) => (
-                  <div
-                    key={user.uuid}
-                    className="hover:bg-bg-muted grid grid-cols-[1fr_auto] items-center gap-4 px-5 py-4 transition-colors sm:grid-cols-[1fr_140px_160px]"
-                  >
-                    <div>
-                      <p className="text-content-emphasis text-sm font-medium">
-                        {user.username}
-                      </p>
-                      <p className="text-content-subtle mt-0.5 truncate font-mono text-xs">
-                        {user.uuid}
-                      </p>
+                  <div key={user.uuid} className="space-y-4 px-5 py-5">
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <p className="text-content-emphasis text-sm font-medium">
+                            {user.username}
+                          </p>
+                          <StatusBadge
+                            variant={
+                              user.status === "ACTIVE" ? "success" : "neutral"
+                            }
+                          >
+                            {user.status.toLowerCase()}
+                          </StatusBadge>
+                        </div>
+                        <p className="text-content-subtle mt-1 truncate font-mono text-xs">
+                          {user.uuid}
+                        </p>
+                      </div>
+                      <a
+                        href={user.subscriptionUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-sm font-medium text-neutral-700 underline underline-offset-4"
+                      >
+                        Open subscription
+                      </a>
                     </div>
-                    <StatusBadge
-                      className="hidden sm:flex"
-                      variant={
-                        user.status.toLowerCase() === "active"
-                          ? "success"
-                          : "neutral"
-                      }
+                    <form
+                      action={saveSubscriber}
+                      className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4"
                     >
-                      {user.status.toLowerCase()}
-                    </StatusBadge>
-                    <span className="text-content-subtle text-right text-xs">
-                      {new Date(user.expireAt).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </span>
+                      <input type="hidden" name="slug" value={slug} />
+                      <input type="hidden" name="uuid" value={user.uuid} />
+                      <label className="grid gap-1 text-xs text-neutral-500">
+                        Expires
+                        <input
+                          className={inputClass}
+                          type="date"
+                          name="expireAt"
+                          defaultValue={user.expireAt.slice(0, 10)}
+                          required
+                        />
+                      </label>
+                      <label className="grid gap-1 text-xs text-neutral-500">
+                        Traffic, GB
+                        <input
+                          className={inputClass}
+                          type="number"
+                          name="trafficGb"
+                          min={0}
+                          step="1"
+                          defaultValue={Math.round(
+                            user.trafficLimitBytes / 1024 ** 3,
+                          )}
+                        />
+                      </label>
+                      <label className="grid gap-1 text-xs text-neutral-500">
+                        Reset cycle
+                        <select
+                          className={inputClass}
+                          name="trafficLimitStrategy"
+                          defaultValue={user.trafficLimitStrategy}
+                        >
+                          <option value="NO_RESET">Never</option>
+                          <option value="DAY">Daily</option>
+                          <option value="WEEK">Weekly</option>
+                          <option value="MONTH">Monthly</option>
+                        </select>
+                      </label>
+                      <label className="grid gap-1 text-xs text-neutral-500">
+                        Device limit
+                        <input
+                          className={inputClass}
+                          type="number"
+                          name="deviceLimit"
+                          min={0}
+                          defaultValue={user.hwidDeviceLimit || 0}
+                        />
+                      </label>
+                      <label className="grid gap-1 text-xs text-neutral-500 sm:col-span-2">
+                        Email
+                        <input
+                          className={inputClass}
+                          type="email"
+                          name="email"
+                          defaultValue={user.email || ""}
+                          placeholder="customer@example.com"
+                        />
+                      </label>
+                      <label className="grid gap-1 text-xs text-neutral-500 sm:col-span-2">
+                        Internal note
+                        <input
+                          className={inputClass}
+                          name="description"
+                          defaultValue={user.description || ""}
+                        />
+                      </label>
+                      <div className="lg:col-span-4">
+                        <OperationSubmit>Save subscriber</OperationSubmit>
+                      </div>
+                    </form>
+                    <div className="flex flex-wrap gap-2 border-t border-neutral-100 pt-4">
+                      <form action={changeSubscriberState}>
+                        <input type="hidden" name="slug" value={slug} />
+                        <input type="hidden" name="uuid" value={user.uuid} />
+                        <input
+                          type="hidden"
+                          name="enabled"
+                          value={String(user.status !== "ACTIVE")}
+                        />
+                        <OperationSubmit>
+                          {user.status === "ACTIVE" ? "Disable" : "Enable"}
+                        </OperationSubmit>
+                      </form>
+                      <form action={resetSubscriberTraffic}>
+                        <input type="hidden" name="slug" value={slug} />
+                        <input type="hidden" name="uuid" value={user.uuid} />
+                        <OperationSubmit
+                          confirmMessage={`Reset traffic for ${user.username}?`}
+                        >
+                          Reset traffic
+                        </OperationSubmit>
+                      </form>
+                      <form action={revokeSubscriber}>
+                        <input type="hidden" name="slug" value={slug} />
+                        <input type="hidden" name="uuid" value={user.uuid} />
+                        <OperationSubmit
+                          confirmMessage={`Generate a new subscription link for ${user.username}?`}
+                        >
+                          Revoke link
+                        </OperationSubmit>
+                      </form>
+                      <form action={removeSubscriber} className="ml-auto">
+                        <input type="hidden" name="slug" value={slug} />
+                        <input type="hidden" name="uuid" value={user.uuid} />
+                        <OperationSubmit
+                          destructive
+                          confirmMessage={`Delete ${user.username}? VPN access will stop immediately.`}
+                        >
+                          Delete
+                        </OperationSubmit>
+                      </form>
+                    </div>
                   </div>
                 ))}
               </div>

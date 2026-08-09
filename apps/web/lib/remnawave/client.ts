@@ -35,6 +35,8 @@ export type RemnawaveUser = {
   hwidDeviceLimit: number | null;
   subscriptionUrl: string;
   onlineAt: string | null;
+  email?: string | null;
+  description?: string | null;
 };
 
 export type RemnawaveNode = {
@@ -220,6 +222,37 @@ export function updateRemnawaveSubscriptionSettings(input: {
   isShowCustomRemarks?: boolean;
 }) {
   return remnawaveMutation("/api/subscription-settings", "PATCH", input);
+}
+
+export function updateRemnawaveUser(input: {
+  uuid: string;
+  expireAt?: string;
+  trafficLimitBytes?: number;
+  trafficLimitStrategy?: "NO_RESET" | "DAY" | "WEEK" | "MONTH";
+  hwidDeviceLimit?: number | null;
+  email?: string | null;
+  description?: string | null;
+}) {
+  return remnawaveMutation("/api/users", "PATCH", input);
+}
+
+export function setRemnawaveUserEnabled(uuid: string, enabled: boolean) {
+  return remnawaveMutation(
+    `/api/users/${uuid}/actions/${enabled ? "enable" : "disable"}`,
+    "POST",
+  );
+}
+
+export function resetRemnawaveUserTraffic(uuid: string) {
+  return remnawaveMutation(`/api/users/${uuid}/actions/reset-traffic`, "POST");
+}
+
+export function revokeRemnawaveUserSubscription(uuid: string) {
+  return remnawaveMutation(`/api/users/${uuid}/actions/revoke`, "POST");
+}
+
+export function deleteRemnawaveUser(uuid: string) {
+  return remnawaveMutation(`/api/users/${uuid}`, "DELETE");
 }
 
 export async function createRemnawaveUser(input: {
