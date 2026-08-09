@@ -388,15 +388,15 @@ export async function createRemnawaveUser(input: {
   return (await response.json()) as RemnawaveEnvelope<RemnawaveUser>;
 }
 
-export async function getRemnawaveUsersState(): Promise<
-  RemnawaveReadState<{ total: number; users: RemnawaveUser[] }>
-> {
+export async function getRemnawaveUsersState(
+  size = 1000,
+): Promise<RemnawaveReadState<{ total: number; users: RemnawaveUser[] }>> {
   try {
     return {
       data: await remnawaveFetch<{
         total: number;
         users: RemnawaveUser[];
-      }>("/api/users"),
+      }>(`/api/users?start=0&size=${Math.min(Math.max(size, 1), 1000)}`),
       error: null,
     };
   } catch (error) {
