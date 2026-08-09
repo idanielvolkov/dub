@@ -1,18 +1,26 @@
-import { getRemnawaveNodes } from "@/lib/remnawave/client";
+import { getRemnawaveNodesState } from "@/lib/remnawave/client";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { NodesTable } from "@/ui/vpn/nodes-table";
+import { RemnawaveUnavailable } from "@/ui/vpn/remnawave-unavailable";
 
 export default async function NodesPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const [{ slug }, nodes] = await Promise.all([params, getRemnawaveNodes()]);
+  const [{ slug }, nodesState] = await Promise.all([
+    params,
+    getRemnawaveNodesState(),
+  ]);
   return (
     <PageContent title="Nodes" titleInfo={{ title: "Live Remnawave nodes." }}>
       <PageWidthWrapper className="pb-10">
-        <NodesTable slug={slug} nodes={nodes} />
+        {nodesState.error ? (
+          <RemnawaveUnavailable detail={nodesState.error} />
+        ) : (
+          <NodesTable slug={slug} nodes={nodesState.data} />
+        )}
       </PageWidthWrapper>
     </PageContent>
   );
