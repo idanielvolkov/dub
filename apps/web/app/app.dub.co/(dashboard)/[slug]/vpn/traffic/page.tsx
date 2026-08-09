@@ -7,7 +7,8 @@ import {
   VpnPanelHeader,
   VpnProgress,
 } from "@/ui/vpn/vpn-ui";
-import { StatusBadge } from "@dub/ui";
+import { EmptyState, StatusBadge } from "@dub/ui";
+import { ChartActivity2 } from "@dub/ui/icons";
 
 const formatBytes = (bytes: number) => {
   if (!bytes) return "0 B";
@@ -111,8 +112,12 @@ export default async function TrafficPage() {
                 })}
               </div>
             ) : (
-              <div className="p-8 text-center text-sm text-neutral-500">
-                Traffic appears after subscribers start using the VPN.
+              <div className="p-8">
+                <EmptyState
+                  icon={ChartActivity2}
+                  title="No traffic yet"
+                  description="Usage appears after subscribers start using the VPN."
+                />
               </div>
             )}
           </VpnPanel>
@@ -142,6 +147,15 @@ export default async function TrafficPage() {
                 </div>
               ))}
             </div>
+            {!nodes.length && (
+              <div className="p-8">
+                <EmptyState
+                  icon={ChartActivity2}
+                  title="No server traffic"
+                  description="Connect a Remnawave node to display its load."
+                />
+              </div>
+            )}
           </VpnPanel>
         </div>
       </PageWidthWrapper>
