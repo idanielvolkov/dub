@@ -7,6 +7,7 @@ import {
   Button,
   EmptyState,
   Input,
+  Label,
   Modal,
   StatusBadge,
   Table,
@@ -159,12 +160,17 @@ export function SubscribersTable({
         </div>
         <form action={createSubscriber} className="bg-bg-muted space-y-4 p-6">
           <input type="hidden" name="slug" value={slug} />
-          <label className="text-content-default grid gap-1.5 text-sm font-medium">
-            Subscriber name
-            <Input name="username" minLength={3} required />
-          </label>
-          <label className="text-content-default grid gap-1.5 text-sm font-medium">
-            Duration
+          <div className="grid gap-1.5">
+            <Label htmlFor="subscriber-username">Subscriber name</Label>
+            <Input
+              id="subscriber-username"
+              name="username"
+              minLength={3}
+              required
+            />
+          </div>
+          <div className="grid gap-1.5">
+            <Label>Duration</Label>
             <FormCombobox
               name="durationDays"
               defaultValue="30"
@@ -175,7 +181,7 @@ export function SubscribersTable({
                 { value: "365", label: "1 year" },
               ]}
             />
-          </label>
+          </div>
           <div className="flex justify-end gap-2 pt-2">
             <Button
               className="w-fit"
@@ -220,18 +226,20 @@ export function SubscribersTable({
               >
                 <input type="hidden" name="slug" value={slug} />
                 <input type="hidden" name="uuid" value={selectedUser.uuid} />
-                <label className="text-content-default grid gap-1.5 text-sm font-medium">
-                  Expires
+                <div className="grid gap-1.5">
+                  <Label htmlFor="subscriber-expire-at">Expires</Label>
                   <Input
+                    id="subscriber-expire-at"
                     type="date"
                     name="expireAt"
                     defaultValue={selectedUser.expireAt.slice(0, 10)}
                     required
                   />
-                </label>
-                <label className="text-content-default grid gap-1.5 text-sm font-medium">
-                  Traffic, GB
+                </div>
+                <div className="grid gap-1.5">
+                  <Label htmlFor="subscriber-traffic">Traffic, GB</Label>
                   <Input
+                    id="subscriber-traffic"
                     type="number"
                     name="trafficGb"
                     min={0}
@@ -239,9 +247,9 @@ export function SubscribersTable({
                       selectedUser.trafficLimitBytes / 1024 ** 3,
                     )}
                   />
-                </label>
-                <label className="text-content-default grid gap-1.5 text-sm font-medium">
-                  Reset cycle
+                </div>
+                <div className="grid gap-1.5">
+                  <Label>Reset cycle</Label>
                   <FormCombobox
                     name="trafficLimitStrategy"
                     defaultValue={selectedUser.trafficLimitStrategy}
@@ -252,31 +260,34 @@ export function SubscribersTable({
                       { value: "MONTH", label: "Monthly" },
                     ]}
                   />
-                </label>
-                <label className="text-content-default grid gap-1.5 text-sm font-medium">
-                  Device limit
+                </div>
+                <div className="grid gap-1.5">
+                  <Label htmlFor="subscriber-device-limit">Device limit</Label>
                   <Input
+                    id="subscriber-device-limit"
                     type="number"
                     name="deviceLimit"
                     min={0}
                     defaultValue={selectedUser.hwidDeviceLimit || 0}
                   />
-                </label>
-                <label className="text-content-default grid gap-1.5 text-sm font-medium sm:col-span-2">
-                  Email
+                </div>
+                <div className="grid gap-1.5 sm:col-span-2">
+                  <Label htmlFor="subscriber-email">Email</Label>
                   <Input
+                    id="subscriber-email"
                     type="email"
                     name="email"
                     defaultValue={selectedUser.email || ""}
                   />
-                </label>
-                <label className="text-content-default grid gap-1.5 text-sm font-medium sm:col-span-2">
-                  Internal note
+                </div>
+                <div className="grid gap-1.5 sm:col-span-2">
+                  <Label htmlFor="subscriber-description">Internal note</Label>
                   <Input
+                    id="subscriber-description"
                     name="description"
                     defaultValue={selectedUser.description || ""}
                   />
-                </label>
+                </div>
                 <div className="flex justify-end sm:col-span-2">
                   <OperationSubmit>Save changes</OperationSubmit>
                 </div>
