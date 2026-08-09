@@ -10,6 +10,8 @@ import {
   Input,
   Label,
   Modal,
+  ModalBody,
+  ModalFooter,
   ModalHeader,
   StatusBadge,
   Table,
@@ -153,41 +155,43 @@ export function SubscribersTable({
           title="Add subscriber"
           description="Create VPN access directly in Remnawave."
         />
-        <form action={createSubscriber} className="bg-bg-muted space-y-4 p-6">
-          <input type="hidden" name="slug" value={slug} />
-          <div className="grid gap-1.5">
-            <Label htmlFor="subscriber-username">Subscriber name</Label>
-            <Input
-              id="subscriber-username"
-              name="username"
-              minLength={3}
-              required
-            />
-          </div>
-          <div className="grid gap-1.5">
-            <Label htmlFor="subscriber-duration">Duration</Label>
-            <FormCombobox
-              id="subscriber-duration"
-              name="durationDays"
-              defaultValue="30"
-              options={[
-                { value: "7", label: "7 days" },
-                { value: "30", label: "30 days" },
-                { value: "90", label: "90 days" },
-                { value: "365", label: "1 year" },
-              ]}
-            />
-          </div>
-          <div className="flex justify-end gap-2 pt-2">
-            <Button
-              className="w-fit"
-              variant="secondary"
-              text="Cancel"
-              onClick={() => setShowCreateModal(false)}
-            />
-            <OperationSubmit>Add subscriber</OperationSubmit>
-          </div>
-        </form>
+        <ModalBody asChild className="bg-bg-muted">
+          <form action={createSubscriber} className="space-y-4">
+            <input type="hidden" name="slug" value={slug} />
+            <div className="grid gap-1.5">
+              <Label htmlFor="subscriber-username">Subscriber name</Label>
+              <Input
+                id="subscriber-username"
+                name="username"
+                minLength={3}
+                required
+              />
+            </div>
+            <div className="grid gap-1.5">
+              <Label htmlFor="subscriber-duration">Duration</Label>
+              <FormCombobox
+                id="subscriber-duration"
+                name="durationDays"
+                defaultValue="30"
+                options={[
+                  { value: "7", label: "7 days" },
+                  { value: "30", label: "30 days" },
+                  { value: "90", label: "90 days" },
+                  { value: "365", label: "1 year" },
+                ]}
+              />
+            </div>
+            <ModalFooter className="-mx-6 -mb-5">
+              <Button
+                className="w-fit"
+                variant="secondary"
+                text="Cancel"
+                onClick={() => setShowCreateModal(false)}
+              />
+              <OperationSubmit>Add subscriber</OperationSubmit>
+            </ModalFooter>
+          </form>
+        </ModalBody>
       </Modal>
 
       <Modal

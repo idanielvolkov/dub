@@ -8,6 +8,8 @@ import {
   Input,
   Label,
   Modal,
+  ModalBody,
+  ModalFooter,
   ModalHeader,
 } from "@dub/ui";
 import { useState } from "react";
@@ -120,30 +122,32 @@ export function ExternalSquadsManagement({
           title="Create external squad"
           description="Create a group for subscription templates and client overrides."
         />
-        <form action={addExternalSquad} className="bg-bg-muted space-y-4 p-6">
-          <input type="hidden" name="slug" value={slug} />
-          <div className="grid gap-1.5">
-            <Label htmlFor="external-squad-name">Squad name</Label>
-            <Input
-              id="external-squad-name"
-              name="name"
-              placeholder="Premium clients"
-              minLength={2}
-              maxLength={30}
-              pattern="[A-Za-z0-9_ -]+"
-              required
-            />
-          </div>
-          <div className="flex justify-end gap-2">
-            <Button
-              className="h-9 w-fit"
-              variant="secondary"
-              text="Cancel"
-              onClick={() => setShowCreate(false)}
-            />
-            <OperationSubmit>Create squad</OperationSubmit>
-          </div>
-        </form>
+        <ModalBody asChild className="bg-bg-muted">
+          <form action={addExternalSquad} className="space-y-4">
+            <input type="hidden" name="slug" value={slug} />
+            <div className="grid gap-1.5">
+              <Label htmlFor="external-squad-name">Squad name</Label>
+              <Input
+                id="external-squad-name"
+                name="name"
+                placeholder="Premium clients"
+                minLength={2}
+                maxLength={30}
+                pattern="[A-Za-z0-9_ -]+"
+                required
+              />
+            </div>
+            <ModalFooter className="-mx-6 -mb-5">
+              <Button
+                className="h-9 w-fit"
+                variant="secondary"
+                text="Cancel"
+                onClick={() => setShowCreate(false)}
+              />
+              <OperationSubmit>Create squad</OperationSubmit>
+            </ModalFooter>
+          </form>
+        </ModalBody>
       </Modal>
     </>
   );

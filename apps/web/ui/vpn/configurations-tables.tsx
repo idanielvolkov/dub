@@ -9,6 +9,8 @@ import {
   Input,
   Label,
   Modal,
+  ModalBody,
+  ModalFooter,
   ModalHeader,
   StatusBadge,
   Table,
@@ -303,31 +305,33 @@ export function ConfigurationsTables({
           title="Create squad"
           description="Create an internal Remnawave access group."
         />
-        <form action={addSquad} className="bg-bg-muted space-y-4 p-6">
-          <input type="hidden" name="slug" value={slug} />
-          <input type="hidden" name="inbounds" value={inboundIds.join(",")} />
-          <div className="grid gap-1.5">
-            <Label htmlFor="new-squad-name">Squad name</Label>
-            <Input
-              id="new-squad-name"
-              name="name"
-              placeholder="Marketing-VPN"
-              minLength={2}
-              maxLength={20}
-              pattern="[A-Za-z0-9_-]+"
-              required
-            />
-          </div>
-          <div className="flex justify-end gap-2">
-            <Button
-              className="w-fit"
-              variant="secondary"
-              text="Cancel"
-              onClick={() => setShowCreateSquad(false)}
-            />
-            <OperationSubmit>Create squad</OperationSubmit>
-          </div>
-        </form>
+        <ModalBody asChild className="bg-bg-muted">
+          <form action={addSquad} className="space-y-4">
+            <input type="hidden" name="slug" value={slug} />
+            <input type="hidden" name="inbounds" value={inboundIds.join(",")} />
+            <div className="grid gap-1.5">
+              <Label htmlFor="new-squad-name">Squad name</Label>
+              <Input
+                id="new-squad-name"
+                name="name"
+                placeholder="Marketing-VPN"
+                minLength={2}
+                maxLength={20}
+                pattern="[A-Za-z0-9_-]+"
+                required
+              />
+            </div>
+            <ModalFooter className="-mx-6 -mb-5">
+              <Button
+                className="w-fit"
+                variant="secondary"
+                text="Cancel"
+                onClick={() => setShowCreateSquad(false)}
+              />
+              <OperationSubmit>Create squad</OperationSubmit>
+            </ModalFooter>
+          </form>
+        </ModalBody>
       </Modal>
     </>
   );
