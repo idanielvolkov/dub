@@ -1,8 +1,17 @@
 import { getGrowthWorkspace } from "@/lib/growth/get-growth-workspace";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
+import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import { VpnPanel, VpnPanelHeader } from "@/ui/vpn/vpn-ui";
 import { Badge } from "@dub/ui";
+import {
+  archiveGrowthCampaign,
+  createGrowthCampaign,
+  updateGrowthCampaign,
+} from "./actions";
+
+const inputClass =
+  "h-9 rounded-lg border border-neutral-200 bg-white px-3 text-sm outline-none transition focus:border-neutral-400";
 
 export default async function CampaignsPage({
   params,
@@ -10,40 +19,234 @@ export default async function CampaignsPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const { campaigns } = await getGrowthWorkspace(slug);
+  const { campaigns, workspace } = await getGrowthWorkspace(slug);
+  const domain = workspace.domains[0]?.slug;
   return (
     <PageContent
       title="Campaigns"
-      titleInfo={{ title: "Acquisition campaigns and channel links." }}
+      titleInfo={{
+        title: "Acquisition campaigns, ownership and live attribution.",
+      }}
     >
       <PageWidthWrapper className="pb-10">
+        <VpnPanel className="mb-4">
+          <VpnPanelHeader
+            title="Create campaign"
+            description="A trackable campaign link with UTM attribution"
+          />
+          {domain ? (
+            <form
+              action={createGrowthCampaign}
+              className="grid gap-3 p-5 md:grid-cols-2 lg:grid-cols-4"
+            >
+              <input type="hidden" name="slug" value={slug} />
+              <label className="grid gap-1 text-xs text-neutral-500 md:col-span-2">
+                Campaign name
+                <input
+                  className={inputClass}
+                  name="title"
+                  placeholder="Summer VPN launch"
+                  required
+                />
+              </label>
+              <label className="grid gap-1 text-xs text-neutral-500 md:col-span-2">
+                Destination URL
+                <input
+                  className={inputClass}
+                  type="url"
+                  name="url"
+                  placeholder="https://detz.fun/pricing"
+                  required
+                />
+              </label>
+              <label className="grid gap-1 text-xs text-neutral-500">
+                Short domain
+                <select
+                  className={inputClass}
+                  name="domain"
+                  defaultValue={domain}
+                >
+                  {workspace.domains.map((item) => (
+                    <option key={item.slug}>{item.slug}</option>
+                  ))}
+                </select>
+              </label>
+              <label className="grid gap-1 text-xs text-neutral-500">
+                Short path
+                <input
+                  className={inputClass}
+                  name="key"
+                  placeholder="summer"
+                  pattern="[A-Za-z0-9/_-]+"
+                  required
+                />
+              </label>
+              <label className="grid gap-1 text-xs text-neutral-500">
+                UTM campaign
+                <input
+                  className={inputClass}
+                  name="campaign"
+                  placeholder="summer-2026"
+                />
+              </label>
+              <label className="grid gap-1 text-xs text-neutral-500">
+                Owner
+                <input
+                  className={inputClass}
+                  name="owner"
+                  placeholder="Marketing team"
+                />
+              </label>
+              <label className="grid gap-1 text-xs text-neutral-500">
+                Source
+                <input
+                  className={inputClass}
+                  name="source"
+                  placeholder="telegram"
+                />
+              </label>
+              <label className="grid gap-1 text-xs text-neutral-500">
+                Medium
+                <input
+                  className={inputClass}
+                  name="medium"
+                  placeholder="social"
+                />
+              </label>
+              <label className="grid gap-1 text-xs text-neutral-500">
+                Budget
+                <input
+                  className={inputClass}
+                  type="number"
+                  name="budget"
+                  min={0}
+                  step="1"
+                  placeholder="0"
+                />
+              </label>
+              <label className="grid gap-1 text-xs text-neutral-500">
+                Status
+                <select
+                  className={inputClass}
+                  name="status"
+                  defaultValue="draft"
+                >
+                  <option value="draft">Draft</option>
+                  <option value="active">Active</option>
+                  <option value="paused">Paused</option>
+                  <option value="completed">Completed</option>
+                </select>
+              </label>
+              <div className="lg:col-span-4">
+                <OperationSubmit>Create campaign</OperationSubmit>
+              </div>
+            </form>
+          ) : (
+            <p className="p-5 text-sm text-neutral-500">
+              Add and verify a short domain before creating campaigns.
+            </p>
+          )}
+        </VpnPanel>
         <VpnPanel>
           <VpnPanelHeader
             title="All campaigns"
-            description={`${campaigns.length} active campaigns`}
+            description={`${campaigns.length} active records`}
           />
           <div className="divide-border-subtle divide-y">
             {campaigns.map((campaign) => (
-              <div
-                key={campaign.id}
-                className="grid gap-3 px-5 py-4 lg:grid-cols-[1fr_120px_90px_90px_90px] lg:items-center"
-              >
-                <div className="min-w-0">
-                  <p className="text-content-emphasis truncate text-sm font-medium">
-                    {campaign.title ||
-                      campaign.utm_campaign ||
-                      "Untitled campaign"}
-                  </p>
-                  <p className="text-content-subtle mt-0.5 truncate text-xs">
-                    {campaign.shortLink} → {campaign.url}
-                  </p>
+              <div key={campaign.id} className="space-y-4 p-5">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div>
+                    <a
+                      href={`https://${campaign.shortLink}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-content-emphasis text-sm font-medium underline underline-offset-4"
+                    >
+                      {campaign.shortLink}
+                    </a>
+                    <p className="text-content-subtle mt-1 truncate text-xs">
+                      {campaign.url}
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <Badge variant="gray">{campaign.meta.status}</Badge>
+                    <Badge variant="gray">{campaign.clicks} clicks</Badge>
+                    <Badge variant="gray">{campaign.leads} leads</Badge>
+                    <Badge variant="gray">{campaign.sales} sales</Badge>
+                  </div>
                 </div>
-                <Badge variant="gray">
-                  {campaign.utm_campaign || "Direct"}
-                </Badge>
-                <span className="text-sm">{campaign.clicks} clicks</span>
-                <span className="text-sm">{campaign.leads} leads</span>
-                <span className="text-sm">{campaign.sales} sales</span>
+                <form
+                  action={updateGrowthCampaign}
+                  className="grid gap-3 md:grid-cols-2 lg:grid-cols-4"
+                >
+                  <input type="hidden" name="slug" value={slug} />
+                  <input type="hidden" name="id" value={campaign.id} />
+                  <label className="grid gap-1 text-xs text-neutral-500 lg:col-span-2">
+                    Name
+                    <input
+                      className={inputClass}
+                      name="title"
+                      defaultValue={campaign.title || ""}
+                      required
+                    />
+                  </label>
+                  <label className="grid gap-1 text-xs text-neutral-500">
+                    UTM campaign
+                    <input
+                      className={inputClass}
+                      name="campaign"
+                      defaultValue={campaign.utm_campaign || ""}
+                    />
+                  </label>
+                  <label className="grid gap-1 text-xs text-neutral-500">
+                    Owner
+                    <input
+                      className={inputClass}
+                      name="owner"
+                      defaultValue={campaign.meta.owner}
+                    />
+                  </label>
+                  <label className="grid gap-1 text-xs text-neutral-500">
+                    Budget
+                    <input
+                      className={inputClass}
+                      type="number"
+                      name="budget"
+                      min={0}
+                      defaultValue={campaign.meta.budget}
+                    />
+                  </label>
+                  <label className="grid gap-1 text-xs text-neutral-500">
+                    Status
+                    <select
+                      className={inputClass}
+                      name="status"
+                      defaultValue={campaign.meta.status}
+                    >
+                      <option value="draft">Draft</option>
+                      <option value="active">Active</option>
+                      <option value="paused">Paused</option>
+                      <option value="completed">Completed</option>
+                    </select>
+                  </label>
+                  <div className="flex items-end lg:col-span-2">
+                    <OperationSubmit>Save campaign</OperationSubmit>
+                  </div>
+                </form>
+                <form
+                  action={archiveGrowthCampaign}
+                  className="flex justify-end"
+                >
+                  <input type="hidden" name="slug" value={slug} />
+                  <input type="hidden" name="id" value={campaign.id} />
+                  <OperationSubmit
+                    destructive
+                    confirmMessage="Archive this campaign? The short link will be removed from the workspace list."
+                  >
+                    Archive
+                  </OperationSubmit>
+                </form>
               </div>
             ))}
             {!campaigns.length && (
