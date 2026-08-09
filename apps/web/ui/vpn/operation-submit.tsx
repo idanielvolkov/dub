@@ -22,6 +22,8 @@ export function OperationSubmit({
       <Button
         type="submit"
         variant={destructive ? "danger" : "primary"}
+        className="h-9 w-fit"
+        text={children}
         loading={pending}
         disabled={pending}
         onClick={(event) => {
@@ -30,9 +32,7 @@ export function OperationSubmit({
           setForm(event.currentTarget.form);
           setShowConfirmModal(true);
         }}
-      >
-        {children}
-      </Button>
+      />
       {confirmMessage && (
         <Modal
           showModal={showConfirmModal}
