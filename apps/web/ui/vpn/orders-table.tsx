@@ -32,13 +32,13 @@ export function OrdersTable({
   orders,
   plans,
   canEdit,
-  isOwner,
+  canProvision,
 }: {
   slug: string;
   orders: VpnOrder[];
   plans: VpnPlan[];
   canEdit: boolean;
-  isOwner: boolean;
+  canProvision: boolean;
 }) {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<VpnOrder | null>(null);
@@ -272,30 +272,31 @@ export function OrdersTable({
                   </div>
                 </form>
               )}
-              {isOwner && selectedOrder.fulfillmentStatus === "pending" && (
-                <form
-                  action={fulfillVpnOrder}
-                  className="border-border-subtle space-y-4 border-t pt-5"
-                >
-                  <input type="hidden" name="slug" value={slug} />
-                  <input type="hidden" name="id" value={selectedOrder.id} />
-                  <div className="grid gap-1.5">
-                    <Label htmlFor="order-subscriber-name">Username</Label>
-                    <Input
-                      id="order-subscriber-name"
-                      name="subscriberUsername"
-                      placeholder="customer-name"
-                      minLength={3}
-                      required
-                    />
-                  </div>
-                  <div className="flex justify-end">
-                    <OperationSubmit confirmMessage="Create this user in Remnawave using the purchased plan limits?">
-                      Provision access
-                    </OperationSubmit>
-                  </div>
-                </form>
-              )}
+              {canProvision &&
+                selectedOrder.fulfillmentStatus === "pending" && (
+                  <form
+                    action={fulfillVpnOrder}
+                    className="border-border-subtle space-y-4 border-t pt-5"
+                  >
+                    <input type="hidden" name="slug" value={slug} />
+                    <input type="hidden" name="id" value={selectedOrder.id} />
+                    <div className="grid gap-1.5">
+                      <Label htmlFor="order-subscriber-name">Username</Label>
+                      <Input
+                        id="order-subscriber-name"
+                        name="subscriberUsername"
+                        placeholder="customer-name"
+                        minLength={3}
+                        required
+                      />
+                    </div>
+                    <div className="flex justify-end">
+                      <OperationSubmit confirmMessage="Create this user in Remnawave using the purchased plan limits?">
+                        Provision access
+                      </OperationSubmit>
+                    </div>
+                  </form>
+                )}
               {selectedOrder.fulfillmentStatus === "fulfilled" && (
                 <div className="border-border-subtle border-t pt-5">
                   <p className="text-content-subtle text-xs">User</p>

@@ -178,53 +178,61 @@ export function CreatePlanButton({ slug }: { slug: string }) {
 export function PlanCardActions({
   slug,
   plan,
+  canProvision,
 }: {
   slug: string;
   plan: VpnPlan;
+  canProvision: boolean;
 }) {
   const [editOpen, setEditOpen] = useState(false);
   const [provisionOpen, setProvisionOpen] = useState(false);
   return (
     <>
-      <div className="grid grid-cols-2 gap-2">
-        <Button text="Provision" onClick={() => setProvisionOpen(true)} />
+      <div className={`grid gap-2 ${canProvision ? "grid-cols-2" : ""}`}>
+        {canProvision && (
+          <Button text="Provision" onClick={() => setProvisionOpen(true)} />
+        )}
         <Button
           variant="secondary"
           text="Edit"
           onClick={() => setEditOpen(true)}
         />
       </div>
-      <FormModal
-        open={provisionOpen}
-        setOpen={setProvisionOpen}
-        title={`Provision ${plan.name}`}
-        description="Create a Remnawave user with this plan's limits."
-      >
-        <ModalBody asChild className="bg-bg-muted">
-          <form action={provisionPlan} className="space-y-4">
-            <input type="hidden" name="slug" value={slug} />
-            <input type="hidden" name="planId" value={plan.id} />
-            <div className="grid gap-1.5">
-              <Label htmlFor={`provision-${plan.id}-username`}>Username</Label>
-              <Input
-                id={`provision-${plan.id}-username`}
-                name="username"
-                minLength={3}
-                required
-              />
-            </div>
-            <ModalFooter className="-mx-6 -mb-5">
-              <Button
-                className="w-fit"
-                variant="secondary"
-                text="Cancel"
-                onClick={() => setProvisionOpen(false)}
-              />
-              <OperationSubmit>Provision access</OperationSubmit>
-            </ModalFooter>
-          </form>
-        </ModalBody>
-      </FormModal>
+      {canProvision && (
+        <FormModal
+          open={provisionOpen}
+          setOpen={setProvisionOpen}
+          title={`Provision ${plan.name}`}
+          description="Create a Remnawave user with this plan's limits."
+        >
+          <ModalBody asChild className="bg-bg-muted">
+            <form action={provisionPlan} className="space-y-4">
+              <input type="hidden" name="slug" value={slug} />
+              <input type="hidden" name="planId" value={plan.id} />
+              <div className="grid gap-1.5">
+                <Label htmlFor={`provision-${plan.id}-username`}>
+                  Username
+                </Label>
+                <Input
+                  id={`provision-${plan.id}-username`}
+                  name="username"
+                  minLength={3}
+                  required
+                />
+              </div>
+              <ModalFooter className="-mx-6 -mb-5">
+                <Button
+                  className="w-fit"
+                  variant="secondary"
+                  text="Cancel"
+                  onClick={() => setProvisionOpen(false)}
+                />
+                <OperationSubmit>Provision access</OperationSubmit>
+              </ModalFooter>
+            </form>
+          </ModalBody>
+        </FormModal>
+      )}
       <FormModal
         open={editOpen}
         setOpen={setEditOpen}

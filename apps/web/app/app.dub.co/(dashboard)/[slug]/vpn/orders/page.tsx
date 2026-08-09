@@ -1,4 +1,5 @@
 import { getSession } from "@/lib/auth/utils";
+import { canAccessPlatformArea } from "@/lib/platform-access";
 import { prisma } from "@/lib/prisma";
 import { vpnPlansFromStore } from "@/lib/remnawave/plans";
 import { vpnOrdersFromStore } from "@/lib/vpn/orders";
@@ -21,13 +22,29 @@ export default async function OrdersPage({
           store: true,
           users: {
             where: { userId: session.user.id },
-            select: { role: true },
+            select: { role: true, workspacePreferences: true },
             take: 1,
           },
         },
       })
     : null;
-  const role = workspace?.users[0]?.role;
+  const membership = workspace?.users[0];
+  const canEdit = membership
+    ? canAccessPlatformArea({
+        role: membership.role,
+        workspacePreferences: membership.workspacePreferences,
+        area: "workspace",
+        minimum: "manage",
+      })
+    : false;
+  const canProvision = membership
+    ? canAccessPlatformArea({
+        role: membership.role,
+        workspacePreferences: membership.workspacePreferences,
+        area: "remnawave",
+        minimum: "manage",
+      })
+    : false;
   const orders = vpnOrdersFromStore(workspace?.store);
   const plans = vpnPlansFromStore(workspace?.store).filter(
     (plan) => !plan.archived,
@@ -67,8 +84,8 @@ export default async function OrdersPage({
           slug={slug}
           orders={orders}
           plans={plans}
-          canEdit={role === "owner" || role === "member"}
-          isOwner={role === "owner"}
+          canEdit={canEdit}
+          canProvision={canEdit && canProvision}
         />
       </PageWidthWrapper>
     </PageContent>

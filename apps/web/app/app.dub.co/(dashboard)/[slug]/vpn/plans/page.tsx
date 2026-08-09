@@ -1,4 +1,5 @@
 import { getSession } from "@/lib/auth/utils";
+import { canAccessPlatformArea } from "@/lib/platform-access";
 import { prisma } from "@/lib/prisma";
 import { vpnPlansFromStore } from "@/lib/remnawave/plans";
 import { PageContent } from "@/ui/layout/page-content";
@@ -25,13 +26,29 @@ export default async function PlansPage({
           store: true,
           users: {
             where: { userId: session.user.id },
-            select: { role: true },
+            select: { role: true, workspacePreferences: true },
             take: 1,
           },
         },
       })
     : null;
-  const isOwner = workspace?.users[0]?.role === "owner";
+  const membership = workspace?.users[0];
+  const canManage = membership
+    ? canAccessPlatformArea({
+        role: membership.role,
+        workspacePreferences: membership.workspacePreferences,
+        area: "workspace",
+        minimum: "manage",
+      })
+    : false;
+  const canProvision = membership
+    ? canAccessPlatformArea({
+        role: membership.role,
+        workspacePreferences: membership.workspacePreferences,
+        area: "remnawave",
+        minimum: "manage",
+      })
+    : false;
   const plans = vpnPlansFromStore(workspace?.store);
   const activePlans = plans.filter((plan) => !plan.archived);
   const archivedPlans = plans.filter((plan) => plan.archived);
@@ -91,9 +108,13 @@ export default async function PlansPage({
                     </dd>
                   </div>
                 </dl>
-                {isOwner && (
+                {canManage && (
                   <div className="mt-auto pt-5">
-                    <PlanCardActions slug={slug} plan={plan} />
+                    <PlanCardActions
+                      slug={slug}
+                      plan={plan}
+                      canProvision={canProvision}
+                    />
                   </div>
                 )}
               </CardListCard>
@@ -109,13 +130,13 @@ export default async function PlansPage({
           />
         )}
 
-        {isOwner && (
+        {canManage && (
           <div className="flex justify-end">
             <CreatePlanButton slug={slug} />
           </div>
         )}
 
-        {isOwner && archivedPlans.length > 0 && (
+        {canManage && archivedPlans.length > 0 && (
           <CardList>
             <CardListCard innerClassName="p-5" hoverStateEnabled={false}>
               <h2 className="text-content-emphasis font-semibold">
