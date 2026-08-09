@@ -104,6 +104,38 @@ export type RemnawaveSubscriptionSettings = {
   updatedAt: string;
 };
 
+export type RemnawaveExternalSquad = {
+  uuid: string;
+  name: string;
+  viewPosition: number;
+  info: { membersCount: number };
+  templates: { templateUuid: string; templateType: string }[];
+  subpageConfigUuid: string | null;
+};
+
+export type RemnawaveDeviceStats = {
+  byPlatform: { platform: string; count: number; byApp: { app: string; count: number }[] }[];
+  stats: {
+    totalUniqueDevices: number;
+    totalHwidDevices: number;
+    averageHwidDevicesPerUser: number;
+  };
+};
+
+export type RemnawaveRequestStats = {
+  byParsedApp: { app: string; count: number }[];
+  hourlyRequestStats: { dateTime: string; requestCount: number }[];
+};
+
+export type RemnawaveInfraProvider = {
+  uuid: string;
+  name: string;
+  faviconLink: string | null;
+  loginUrl: string | null;
+  billingHistory: { totalAmount: number; totalBills: number };
+  billingNodes: { name: string; details: { nodeUuid: string; countryCode: string } | null }[];
+};
+
 async function remnawaveFetch<T>(path: string): Promise<T> {
   if (!process.env.REMNAWAVE_API_TOKEN) {
     throw new Error("REMNAWAVE_API_TOKEN is not configured");
@@ -360,6 +392,46 @@ export async function getRemnawaveSubscriptionSettings() {
     );
   } catch {
     return null;
+  }
+}
+
+export async function getRemnawaveExternalSquads() {
+  try {
+    return await remnawaveFetch<{
+      total: number;
+      externalSquads: RemnawaveExternalSquad[];
+    }>("/api/external-squads");
+  } catch {
+    return { total: 0, externalSquads: [] };
+  }
+}
+
+export async function getRemnawaveDeviceStats() {
+  try {
+    return await remnawaveFetch<RemnawaveDeviceStats>("/api/hwid/devices/stats");
+  } catch {
+    return null;
+  }
+}
+
+export async function getRemnawaveRequestStats() {
+  try {
+    return await remnawaveFetch<RemnawaveRequestStats>(
+      "/api/subscription-request-history/stats",
+    );
+  } catch {
+    return null;
+  }
+}
+
+export async function getRemnawaveInfraProviders() {
+  try {
+    return await remnawaveFetch<{
+      total: number;
+      providers: RemnawaveInfraProvider[];
+    }>("/api/infra-billing/providers");
+  } catch {
+    return { total: 0, providers: [] };
   }
 }
 
