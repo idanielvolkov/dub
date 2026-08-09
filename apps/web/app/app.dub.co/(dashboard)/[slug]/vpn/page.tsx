@@ -5,7 +5,7 @@ import {
 } from "@/lib/remnawave/client";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import { VpnMetricCard } from "@/ui/vpn/vpn-ui";
+import { VpnStats } from "@/ui/vpn/vpn-ui";
 import { CardList, EmptyState, ProgressBar, StatusBadge } from "@dub/ui";
 import { ChartActivity2, Nodes4 } from "@dub/ui/icons";
 
@@ -52,23 +52,19 @@ export default async function VpnOverviewPage() {
       titleInfo={{ title: "Live subscriber and infrastructure overview." }}
     >
       <PageWidthWrapper className="pb-10">
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {cards.map(({ label, value, hint, online }) => (
-            <VpnMetricCard
-              key={label}
-              label={label}
-              value={value}
-              detail={hint}
-              indicator={
-                online === undefined ? undefined : (
-                  <StatusBadge variant={online ? "success" : "pending"}>
-                    {online ? "Online" : "Connecting"}
-                  </StatusBadge>
-                )
-              }
-            />
-          ))}
-        </div>
+        <VpnStats
+          items={cards.map(({ label, value, hint, online }) => ({
+            label,
+            value,
+            detail: hint,
+            indicator:
+              online === undefined ? undefined : (
+                <StatusBadge variant={online ? "success" : "pending"}>
+                  {online ? "Online" : "Connecting"}
+                </StatusBadge>
+              ),
+          }))}
+        />
 
         <div className="mt-6 grid gap-6 lg:grid-cols-[1.4fr_1fr]">
           <section>

@@ -10,7 +10,7 @@ import {
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { ButtonLink } from "@/ui/placeholders/button-link";
-import { VpnMetricCard } from "@/ui/vpn/vpn-ui";
+import { VpnStats } from "@/ui/vpn/vpn-ui";
 import { CardList, StatusBadge } from "@dub/ui";
 import Link from "next/link";
 
@@ -66,28 +66,30 @@ export default async function OperationsPage({
       }
     >
       <PageWidthWrapper className="pb-10">
-        <div className="grid gap-4 md:grid-cols-3">
-          <VpnMetricCard
-            label="API status"
-            value={health.connected ? "Operational" : "Unavailable"}
-            detail={health.status}
-            indicator={
-              <StatusBadge variant={health.connected ? "success" : "warning"}>
-                {health.connected ? "Connected" : "Attention"}
-              </StatusBadge>
-            }
-          />
-          <VpnMetricCard
-            label="Connected nodes"
-            value={`${nodes.filter((node) => node.isConnected).length}/${nodes.length}`}
-            detail="Live node connections"
-          />
-          <VpnMetricCard
-            label="Managed objects"
-            value={users.total + nodes.length + hosts.length}
-            detail="Users, nodes, and hosts"
-          />
-        </div>
+        <VpnStats
+          items={[
+            {
+              label: "API status",
+              value: health.connected ? "Operational" : "Unavailable",
+              detail: health.status,
+              indicator: (
+                <StatusBadge variant={health.connected ? "success" : "warning"}>
+                  {health.connected ? "Connected" : "Attention"}
+                </StatusBadge>
+              ),
+            },
+            {
+              label: "Connected nodes",
+              value: `${nodes.filter((node) => node.isConnected).length}/${nodes.length}`,
+              detail: "Live node connections",
+            },
+            {
+              label: "Managed objects",
+              value: users.total + nodes.length + hosts.length,
+              detail: "Users, nodes, and hosts",
+            },
+          ]}
+        />
 
         <section className="mt-6">
           <div className="mb-3">

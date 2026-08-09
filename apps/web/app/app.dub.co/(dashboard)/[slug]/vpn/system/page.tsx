@@ -2,7 +2,7 @@ import { getRemnawaveHealth, getRemnawaveNodes } from "@/lib/remnawave/client";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { ButtonLink } from "@/ui/placeholders/button-link";
-import { VpnMetricCard } from "@/ui/vpn/vpn-ui";
+import { VpnStats } from "@/ui/vpn/vpn-ui";
 import { CardList, EmptyState, StatusBadge } from "@dub/ui";
 import { WindowSettings } from "@dub/ui/icons";
 
@@ -27,28 +27,30 @@ export default async function SystemPage() {
       titleInfo={{ title: "Remnawave health and runtime telemetry." }}
     >
       <PageWidthWrapper className="pb-10">
-        <div className="grid gap-4 md:grid-cols-3">
-          <VpnMetricCard
-            label="Remnawave API"
-            value={health.connected ? "Operational" : "Unavailable"}
-            detail={health.error || health.status}
-            indicator={
-              <StatusBadge variant={health.connected ? "success" : "warning"}>
-                {health.connected ? "Online" : "Attention"}
-              </StatusBadge>
-            }
-          />
-          <VpnMetricCard
-            label="VPN nodes"
-            value={`${connected}/${nodes.length}`}
-            detail="Connected to the management panel"
-          />
-          <VpnMetricCard
-            label="Panel processes"
-            value={metrics.length}
-            detail="API, scheduler, and processor runtime"
-          />
-        </div>
+        <VpnStats
+          items={[
+            {
+              label: "Remnawave API",
+              value: health.connected ? "Operational" : "Unavailable",
+              detail: health.error || health.status,
+              indicator: (
+                <StatusBadge variant={health.connected ? "success" : "warning"}>
+                  {health.connected ? "Online" : "Attention"}
+                </StatusBadge>
+              ),
+            },
+            {
+              label: "VPN nodes",
+              value: `${connected}/${nodes.length}`,
+              detail: "Connected to the management panel",
+            },
+            {
+              label: "Panel processes",
+              value: metrics.length,
+              detail: "API, scheduler, and processor runtime",
+            },
+          ]}
+        />
 
         <section className="mt-6">
           <div className="mb-3 flex items-center justify-between gap-4">

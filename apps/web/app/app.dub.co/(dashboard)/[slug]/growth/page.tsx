@@ -2,7 +2,7 @@ import { getGrowthWorkspace } from "@/lib/growth/get-growth-workspace";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { ButtonLink } from "@/ui/placeholders/button-link";
-import { VpnMetricCard } from "@/ui/vpn/vpn-ui";
+import { VpnStats } from "@/ui/vpn/vpn-ui";
 import { CardList, EmptyState } from "@dub/ui";
 import { Megaphone } from "@dub/ui/icons";
 
@@ -32,28 +32,30 @@ export default async function GrowthPage({
       }
     >
       <PageWidthWrapper className="pb-10">
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <VpnMetricCard
-            label="Campaigns"
-            value={totals._count.id}
-            detail="Active acquisition links"
-          />
-          <VpnMetricCard
-            label="Clicks"
-            value={totals._sum.clicks || 0}
-            detail="Campaign visits"
-          />
-          <VpnMetricCard
-            label="Leads"
-            value={totals._sum.leads || 0}
-            detail="Attributed prospects"
-          />
-          <VpnMetricCard
-            label="Revenue"
-            value={`$${revenue.toLocaleString()}`}
-            detail={`${totals._sum.sales || 0} attributed sales`}
-          />
-        </div>
+        <VpnStats
+          items={[
+            {
+              label: "Campaigns",
+              value: totals._count.id,
+              detail: "Active acquisition links",
+            },
+            {
+              label: "Clicks",
+              value: totals._sum.clicks || 0,
+              detail: "Campaign visits",
+            },
+            {
+              label: "Leads",
+              value: totals._sum.leads || 0,
+              detail: "Attributed prospects",
+            },
+            {
+              label: "Revenue",
+              value: `$${revenue.toLocaleString()}`,
+              detail: `${totals._sum.sales || 0} attributed sales`,
+            },
+          ]}
+        />
         <section className="mt-6">
           <div className="mb-3">
             <h2 className="text-content-emphasis text-sm font-semibold">

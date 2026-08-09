@@ -1,7 +1,7 @@
 import { getGrowthWorkspace } from "@/lib/growth/get-growth-workspace";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import { VpnMetricCard } from "@/ui/vpn/vpn-ui";
+import { VpnStats } from "@/ui/vpn/vpn-ui";
 import { CardList, EmptyState } from "@dub/ui";
 import { ChartLine } from "@dub/ui/icons";
 
@@ -21,23 +21,26 @@ export default async function GrowthAnalyticsPage({
       titleInfo={{ title: "Marketing funnel and campaign performance." }}
     >
       <PageWidthWrapper className="pb-10">
-        <div className="mb-4 grid gap-4 md:grid-cols-3">
-          <VpnMetricCard
-            label="Visit → lead"
-            value={`${clicks ? ((leads / clicks) * 100).toFixed(1) : "0.0"}%`}
-            detail={`${clicks} visits`}
-          />
-          <VpnMetricCard
-            label="Lead → sale"
-            value={`${leads ? ((sales / leads) * 100).toFixed(1) : "0.0"}%`}
-            detail={`${leads} leads`}
-          />
-          <VpnMetricCard
-            label="Revenue"
-            value={`$${(Number(totals._sum.saleAmount || 0) / 100).toLocaleString()}`}
-            detail={`${sales} sales`}
-          />
-        </div>
+        <VpnStats
+          className="mb-6"
+          items={[
+            {
+              label: "Visit → lead",
+              value: `${clicks ? ((leads / clicks) * 100).toFixed(1) : "0.0"}%`,
+              detail: `${clicks} visits`,
+            },
+            {
+              label: "Lead → sale",
+              value: `${leads ? ((sales / leads) * 100).toFixed(1) : "0.0"}%`,
+              detail: `${leads} leads`,
+            },
+            {
+              label: "Revenue",
+              value: `$${(Number(totals._sum.saleAmount || 0) / 100).toLocaleString()}`,
+              detail: `${sales} sales`,
+            },
+          ]}
+        />
         <section>
           <div className="mb-3">
             <h2 className="text-content-emphasis text-sm font-semibold">
