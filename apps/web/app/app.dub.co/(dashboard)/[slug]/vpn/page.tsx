@@ -48,7 +48,7 @@ export default async function VpnOverviewPage() {
 
   return (
     <PageContent
-      title="VPN overview"
+      title="Overview"
       titleInfo={{ title: "Live subscriber and infrastructure overview." }}
     >
       <PageWidthWrapper className="pb-10">

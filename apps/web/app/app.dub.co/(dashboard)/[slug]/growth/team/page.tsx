@@ -1,10 +1,11 @@
 import { getSession } from "@/lib/auth/utils";
-import { DubCard, DubCardList } from "@/ui/vpn/server-card-list";
 import { prisma } from "@/lib/prisma";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
+import { UserAvatar } from "@/ui/users/user-avatar";
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
+import { DubCard, DubCardList } from "@/ui/vpn/server-card-list";
 import { Badge, Input } from "@dub/ui";
 import {
   changeGrowthMemberRole,
@@ -28,7 +29,7 @@ export default async function GrowthTeamPage({
           userId: true,
           role: true,
           createdAt: true,
-          user: { select: { name: true, email: true } },
+          user: { select: { id: true, name: true, email: true, image: true } },
         },
       },
       invites: {
@@ -43,7 +44,7 @@ export default async function GrowthTeamPage({
   const isOwner = current?.role === "owner";
   return (
     <PageContent
-      title="Growth team"
+      title="Team"
       titleInfo={{
         title: "People working on acquisition, offers, and analytics.",
       }}
@@ -105,6 +106,10 @@ export default async function GrowthTeamPage({
                 innerClassName="flex flex-wrap items-center gap-3 px-5 py-4"
                 hoverStateEnabled={false}
               >
+                <UserAvatar
+                  user={{ ...member.user, role: member.role }}
+                  className="size-8 border-none"
+                />
                 <div className="min-w-48 flex-1">
                   <p className="text-content-emphasis text-sm font-medium">
                     {member.user.name || member.user.email}

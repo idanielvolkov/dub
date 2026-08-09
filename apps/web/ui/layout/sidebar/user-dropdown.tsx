@@ -1,15 +1,22 @@
 "use client";
 
+import useWorkspace from "@/lib/swr/use-workspace";
 import { UserAvatar } from "@/ui/users/user-avatar";
 import { Icon, Popover, User } from "@dub/ui";
 import { cn } from "@dub/utils";
 import { LogOut } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { ComponentPropsWithoutRef, ElementType, useMemo, useState } from "react";
+import {
+  ComponentPropsWithoutRef,
+  ElementType,
+  useMemo,
+  useState,
+} from "react";
 
 export function UserDropdown() {
   const { data: session } = useSession();
+  const { role } = useWorkspace();
   const [openPopover, setOpenPopover] = useState(false);
 
   const menuOptions = useMemo(() => {
@@ -84,7 +91,7 @@ export function UserDropdown() {
       >
         {session?.user ? (
           <UserAvatar
-            user={session.user}
+            user={{ ...session.user, role }}
             className="size-7 border-none duration-75 sm:size-7"
           />
         ) : (

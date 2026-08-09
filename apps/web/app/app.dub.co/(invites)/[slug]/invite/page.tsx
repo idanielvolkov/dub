@@ -53,6 +53,7 @@ export default async function WorkspaceInvitePage({
             defaultProgramId: true,
             users: {
               select: {
+                role: true,
                 user: {
                   select: {
                     id: true,
@@ -155,14 +156,14 @@ export default async function WorkspaceInvitePage({
               >
                 {invite.project.users
                   .slice(0, MAX_TEAM_DISPLAY)
-                  .map(({ user: { id, name, email, image } }) => (
+                  .map(({ role, user: { id, name, email, image } }) => (
                     <div
                       key={id}
                       className="flex items-center justify-between gap-2 px-2.5 py-2"
                     >
                       <div className="flex min-w-0 items-center gap-2">
                         <UserAvatar
-                          user={{ id, name, image }}
+                          user={{ id, name, image, role }}
                           className="size-6"
                         />
                         <span className="text-content-default min-w-0 truncate text-sm font-medium">
