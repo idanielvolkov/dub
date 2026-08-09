@@ -4,7 +4,7 @@ import {
   RemnawaveHwidDevice,
   RemnawaveSubscriptionRequestRecord,
 } from "@/lib/remnawave/client";
-import { OperationSubmit } from "@/ui/vpn/operation-submit";
+import { TableRowMenu } from "@/ui/shared/table-row-menu";
 import {
   EmptyState,
   StatusBadge,
@@ -111,17 +111,27 @@ export function HwidDevicesTable({
         header: "Actions",
         meta: { disableTruncate: true },
         cell: ({ row }) => (
-          <form action={removeHwidDevice}>
-            <input type="hidden" name="slug" value={slug} />
-            <input type="hidden" name="userId" value={row.original.userId} />
-            <input type="hidden" name="hwid" value={row.original.hwid} />
-            <OperationSubmit
-              destructive
-              confirmMessage="Remove this device from the subscriber? The client may register again on its next connection."
-            >
-              Remove
-            </OperationSubmit>
-          </form>
+          <TableRowMenu
+            actions={[
+              {
+                label: "Remove device",
+                variant: "danger",
+                onClick: async () => {
+                  if (
+                    !window.confirm(
+                      "Remove this device from the subscriber? The client may register again on its next connection.",
+                    )
+                  )
+                    return;
+                  const data = new FormData();
+                  data.set("slug", slug);
+                  data.set("userId", String(row.original.userId));
+                  data.set("hwid", row.original.hwid);
+                  await removeHwidDevice(data);
+                },
+              },
+            ]}
+          />
         ),
       },
     ],
