@@ -2,10 +2,10 @@ import { getRemnawaveNodes, getRemnawaveUsers } from "@/lib/remnawave/client";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import {
-  VpnMetricCard,
   VpnPanel,
   VpnPanelHeader,
   VpnProgress,
+  VpnStats,
 } from "@/ui/vpn/vpn-ui";
 import { EmptyState, StatusBadge } from "@dub/ui";
 import { ChartActivity2 } from "@dub/ui/icons";
@@ -44,8 +44,8 @@ export default async function TrafficPage() {
       titleInfo={{ title: "Live usage totals reported by Remnawave." }}
     >
       <PageWidthWrapper className="pb-10">
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {[
+        <VpnStats
+          items={[
             ["Subscriber usage", formatBytes(used), `${users.length} accounts`],
             [
               "Plan allowance",
@@ -64,15 +64,12 @@ export default async function TrafficPage() {
               String(nodes.reduce((sum, node) => sum + node.usersOnline, 0)),
               "Live connections",
             ],
-          ].map(([label, value, hint]) => (
-            <VpnMetricCard
-              key={label}
-              label={label}
-              value={value}
-              detail={hint}
-            />
-          ))}
-        </div>
+          ].map(([label, value, hint]) => ({
+            label,
+            value,
+            detail: hint,
+          }))}
+        />
 
         <div className="mt-4 grid gap-4 lg:grid-cols-[1.35fr_1fr]">
           <VpnPanel>
