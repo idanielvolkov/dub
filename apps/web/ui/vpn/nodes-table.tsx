@@ -8,6 +8,7 @@ import {
   Input,
   Label,
   Modal,
+  ModalHeader,
   StatusBadge,
   Table,
   useTable,
@@ -151,7 +152,7 @@ export function NodesTable({
       >
         {selectedNode && (
           <>
-            <div className="border-border-subtle border-b px-6 py-4">
+            <ModalHeader>
               <div className="flex items-center gap-2">
                 <h3 className="text-content-emphasis text-lg font-medium">
                   {selectedNode.name}
@@ -166,7 +167,7 @@ export function NodesTable({
               <p className="text-content-subtle mt-1 font-mono text-xs">
                 {selectedNode.address}:{selectedNode.port}
               </p>
-            </div>
+            </ModalHeader>
             <div className="bg-bg-muted p-6">
               <form
                 action={saveNode}
