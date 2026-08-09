@@ -51,3 +51,38 @@ export async function requirePlatformAccess(
 
   return membership;
 }
+
+export async function authorizePlatformAction(
+  slug: string,
+  area: PlatformArea,
+  minimum: Exclude<PlatformAccessLevel, "none"> = "manage",
+) {
+  const session = await getSession();
+  if (!session?.user.id) throw new Error("Authentication required");
+
+  const membership = await prisma.projectUsers.findFirst({
+    where: { project: { slug }, userId: session.user.id },
+    select: {
+      role: true,
+      workspacePreferences: true,
+      projectId: true,
+    },
+  });
+  if (
+    !membership ||
+    !canAccessPlatformArea({
+      role: membership.role,
+      workspacePreferences: membership.workspacePreferences,
+      area,
+      minimum,
+    })
+  ) {
+    throw new Error(`You do not have ${minimum} access to ${area}`);
+  }
+
+  return {
+    projectId: membership.projectId,
+    userId: session.user.id,
+    role: membership.role,
+  };
+}

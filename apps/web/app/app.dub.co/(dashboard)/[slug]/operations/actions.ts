@@ -1,7 +1,6 @@
 "use server";
 
-import { getSession } from "@/lib/auth/utils";
-import { prisma } from "@/lib/prisma";
+import { authorizePlatformAction } from "@/lib/platform-access-server";
 import {
   addAllUsersToRemnawaveExternalSquad,
   createRemnawaveExternalSquad,
@@ -26,17 +25,7 @@ import {
 import { revalidatePath } from "next/cache";
 
 async function authorize(slug: string) {
-  const session = await getSession();
-  const workspace = session?.user.id
-    ? await prisma.project.findFirst({
-        where: {
-          slug,
-          users: { some: { userId: session.user.id, role: "owner" } },
-        },
-        select: { id: true },
-      })
-    : null;
-  if (!workspace) throw new Error("Unauthorized workspace access");
+  await authorizePlatformAction(slug, "remnawave", "manage");
 }
 
 const text = (data: FormData, key: string) =>

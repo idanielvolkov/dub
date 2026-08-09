@@ -1,6 +1,6 @@
 "use server";
 
-import { getSession } from "@/lib/auth/utils";
+import { authorizePlatformAction } from "@/lib/platform-access-server";
 import { prisma } from "@/lib/prisma";
 import { createRemnawaveUser } from "@/lib/remnawave/client";
 import {
@@ -16,19 +16,8 @@ import { redirect } from "next/navigation";
 const text = (data: FormData, key: string) =>
   String(data.get(key) || "").trim();
 
-async function ownerWorkspace(slug: string) {
-  const session = await getSession();
-  const workspace = session?.user.id
-    ? await prisma.project.findFirst({
-        where: {
-          slug,
-          users: { some: { userId: session.user.id, role: "owner" } },
-        },
-        select: { id: true },
-      })
-    : null;
-  if (!workspace) throw new Error("Workspace owner access required");
-  return { projectId: workspace.id, userId: session!.user.id };
+async function workspaceManager(slug: string) {
+  return authorizePlatformAction(slug, "workspace", "manage");
 }
 
 function planValues(formData: FormData) {
@@ -85,7 +74,7 @@ async function mutatePlans(
 
 export async function createVpnPlan(formData: FormData) {
   const slug = text(formData, "slug");
-  const { projectId, userId } = await ownerWorkspace(slug);
+  const { projectId, userId } = await workspaceManager(slug);
   const values = planValues(formData);
   validatePlan(values);
   const plan: VpnPlan = {
@@ -120,7 +109,7 @@ export async function createVpnPlan(formData: FormData) {
 
 export async function updateVpnPlan(formData: FormData) {
   const slug = text(formData, "slug");
-  const { projectId, userId } = await ownerWorkspace(slug);
+  const { projectId, userId } = await workspaceManager(slug);
   const id = text(formData, "id");
   const values = planValues(formData);
   validatePlan(values);
@@ -145,7 +134,7 @@ export async function updateVpnPlan(formData: FormData) {
 
 export async function setVpnPlanArchived(formData: FormData) {
   const slug = text(formData, "slug");
-  const { projectId, userId } = await ownerWorkspace(slug);
+  const { projectId, userId } = await workspaceManager(slug);
   const id = text(formData, "id");
   const archived = text(formData, "archived") === "true";
   await mutatePlans(projectId, (plans) =>
@@ -170,7 +159,8 @@ export async function setVpnPlanArchived(formData: FormData) {
 
 export async function provisionPlan(formData: FormData) {
   const slug = text(formData, "slug");
-  const { projectId, userId } = await ownerWorkspace(slug);
+  const { projectId, userId } = await workspaceManager(slug);
+  await authorizePlatformAction(slug, "remnawave", "manage");
   const username = text(formData, "username")
     .toLowerCase()
     .replace(/[^a-z0-9_-]/g, "-")

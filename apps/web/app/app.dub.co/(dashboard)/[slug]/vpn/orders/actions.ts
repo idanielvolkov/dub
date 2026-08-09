@@ -1,6 +1,6 @@
 "use server";
 
-import { getSession } from "@/lib/auth/utils";
+import { authorizePlatformAction } from "@/lib/platform-access-server";
 import { prisma } from "@/lib/prisma";
 import { createRemnawaveUser } from "@/lib/remnawave/client";
 import { VpnPlan, vpnPlansFromStore } from "@/lib/remnawave/plans";
@@ -12,30 +12,13 @@ import { revalidatePath } from "next/cache";
 const text = (data: FormData, key: string) =>
   String(data.get(key) || "").trim();
 
-async function workspaceAccess(slug: string, ownerOnly = false) {
-  const session = await getSession();
-  const workspace = session?.user.id
-    ? await prisma.project.findFirst({
-        where: {
-          slug,
-          users: {
-            some: {
-              userId: session.user.id,
-              role: ownerOnly ? "owner" : { in: ["owner", "member"] },
-            },
-          },
-        },
-        select: { id: true, store: true },
-      })
-    : null;
-  if (!workspace) {
-    throw new Error(
-      ownerOnly
-        ? "Workspace owner access required"
-        : "Business editor access required",
-    );
-  }
-  return { ...workspace, actorUserId: session!.user.id };
+async function workspaceAccess(slug: string) {
+  const access = await authorizePlatformAction(slug, "workspace", "manage");
+  const workspace = await prisma.project.findUniqueOrThrow({
+    where: { id: access.projectId },
+    select: { id: true, store: true },
+  });
+  return { ...workspace, actorUserId: access.userId };
 }
 
 async function mutateOrders(
@@ -146,7 +129,8 @@ export async function updateVpnOrder(formData: FormData) {
 
 export async function fulfillVpnOrder(formData: FormData) {
   const slug = text(formData, "slug");
-  const workspace = await workspaceAccess(slug, true);
+  const workspace = await workspaceAccess(slug);
+  await authorizePlatformAction(slug, "remnawave", "manage");
   const id = text(formData, "id");
   const orders = vpnOrdersFromStore(workspace.store);
   const order = orders.find((item) => item.id === id);

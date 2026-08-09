@@ -1,7 +1,6 @@
 "use server";
 
-import { getSession } from "@/lib/auth/utils";
-import { prisma } from "@/lib/prisma";
+import { authorizePlatformAction } from "@/lib/platform-access-server";
 import {
   createRemnawaveUser,
   deleteRemnawaveUser,
@@ -52,14 +51,7 @@ export async function createSubscriber(formData: FormData) {
     throw new Error("Username must contain at least 3 characters");
   }
 
-  const session = await getSession();
-  const workspace = session?.user.id
-    ? await prisma.project.findFirst({
-        where: { slug, users: { some: { userId: session.user.id } } },
-        select: { id: true },
-      })
-    : null;
-  if (!workspace) throw new Error("Unauthorized workspace access");
+  await authorizePlatformAction(slug, "remnawave", "manage");
 
   await createRemnawaveUser({
     username,
@@ -77,14 +69,7 @@ export async function createSubscriber(formData: FormData) {
 }
 
 async function authorize(slug: string) {
-  const session = await getSession();
-  const workspace = session?.user.id
-    ? await prisma.project.findFirst({
-        where: { slug, users: { some: { userId: session.user.id } } },
-        select: { id: true },
-      })
-    : null;
-  if (!workspace) throw new Error("Unauthorized workspace access");
+  await authorizePlatformAction(slug, "remnawave", "manage");
 }
 
 const text = (data: FormData, key: string) =>
