@@ -4,11 +4,9 @@ import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import { VpnPanel, VpnPanelHeader } from "@/ui/vpn/vpn-ui";
-import { Badge } from "@dub/ui";
+import { Badge, Checkbox, EmptyState, Input } from "@dub/ui";
+import { Discount } from "@dub/ui/icons";
 import { createPromotion, deletePromotion, updatePromotion } from "./actions";
-
-const inputClass =
-  "h-9 rounded-lg border border-neutral-200 bg-white px-3 text-sm outline-none transition focus:border-neutral-400";
 
 const Fields = ({
   promotion,
@@ -18,8 +16,8 @@ const Fields = ({
   <>
     <label className="grid gap-1 text-xs text-neutral-500">
       Code
-      <input
-        className={inputClass}
+      <Input
+        className="h-9"
         name="code"
         defaultValue={promotion?.code}
         placeholder="WELCOME20"
@@ -31,8 +29,8 @@ const Fields = ({
     </label>
     <label className="grid gap-1 text-xs text-neutral-500 lg:col-span-2">
       Description
-      <input
-        className={inputClass}
+      <Input
+        className="h-9"
         name="description"
         defaultValue={promotion?.description}
         placeholder="20% off the first month"
@@ -41,8 +39,8 @@ const Fields = ({
     </label>
     <label className="grid gap-1 text-xs text-neutral-500">
       Audience
-      <input
-        className={inputClass}
+      <Input
+        className="h-9"
         name="audience"
         defaultValue={promotion?.audience}
         placeholder="New subscribers"
@@ -62,8 +60,8 @@ const Fields = ({
     </label>
     <label className="grid gap-1 text-xs text-neutral-500">
       Value
-      <input
-        className={inputClass}
+      <Input
+        className="h-9"
         type="number"
         name="discountValue"
         min={0}
@@ -74,8 +72,8 @@ const Fields = ({
     </label>
     <label className="grid gap-1 text-xs text-neutral-500">
       Starts
-      <input
-        className={inputClass}
+      <Input
+        className="h-9"
         type="date"
         name="startsAt"
         defaultValue={promotion?.startsAt || ""}
@@ -83,8 +81,8 @@ const Fields = ({
     </label>
     <label className="grid gap-1 text-xs text-neutral-500">
       Ends
-      <input
-        className={inputClass}
+      <Input
+        className="h-9"
         type="date"
         name="endsAt"
         defaultValue={promotion?.endsAt || ""}
@@ -92,8 +90,8 @@ const Fields = ({
     </label>
     <label className="grid gap-1 text-xs text-neutral-500">
       Redemption limit
-      <input
-        className={inputClass}
+      <Input
+        className="h-9"
         type="number"
         name="maxRedemptions"
         min={0}
@@ -102,10 +100,10 @@ const Fields = ({
       <span>0 means unlimited</span>
     </label>
     <label className="flex items-center gap-2 self-end pb-2 text-sm">
-      <input
-        type="checkbox"
+      <Checkbox
         name="active"
         defaultChecked={promotion?.active ?? false}
+        className="size-4"
       />{" "}
       Active
     </label>
@@ -187,8 +185,12 @@ export default async function PromotionsPage({
               </div>
             ))}
             {!promotions.length && (
-              <div className="text-content-subtle p-10 text-center text-sm">
-                No promotions yet. Create the first offer above.
+              <div className="p-10">
+                <EmptyState
+                  icon={Discount}
+                  title="No promotions yet"
+                  description="Create the first offer above."
+                />
               </div>
             )}
           </div>
