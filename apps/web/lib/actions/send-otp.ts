@@ -64,7 +64,7 @@ export const sendOtpAction = actionClient
       }),
 
       sendEmail({
-        subject: "Dub: OTP to verify your account",
+        subject: "Detz: verification code",
         to: email,
         react: VerifyEmail({
           email,

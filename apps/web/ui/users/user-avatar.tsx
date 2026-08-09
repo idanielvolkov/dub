@@ -13,9 +13,9 @@ type User = {
 export async function getUserAvatarUrl(user?: User | null) {
   if (user?.image) return user.image;
 
-  if (!user?.id) return "https://api.dub.co/og/avatar";
+  if (!user?.id) return "/api/og/avatar";
 
-  const ogAvatar = `https://api.dub.co/og/avatar/${user.id}`;
+  const ogAvatar = `/api/og/avatar/${user.id}`;
 
   return user.email
     ? `https://0.gravatar.com/avatar/${await hashStringSHA256(user.email)}?d=${ogAvatar}`

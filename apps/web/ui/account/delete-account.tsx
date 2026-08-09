@@ -13,7 +13,7 @@ export default function DeleteAccountSection() {
         <div className="flex flex-col space-y-1 p-6">
           <h2 className="text-base font-semibold">Delete Account</h2>
           <p className="text-sm text-neutral-500">
-            Permanently delete your Dub account, all of your workspaces, links
+            Permanently delete your Detz account and all of your workspaces
             and their respective stats. This action cannot be undone - please
             proceed with caution.
           </p>

@@ -67,7 +67,7 @@ export const requestEmailChange = async ({
     throw new DubApiError({
       code: "forbidden",
       message:
-        "This action is temporarily unavailable for your account. Please try again later or contact support at dub.co/support",
+        "This action is temporarily unavailable for your account. Please try again later or contact Detz support.",
     });
   }
 

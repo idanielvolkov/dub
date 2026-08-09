@@ -47,7 +47,7 @@ export default function Layout({ children }: PropsWithChildren) {
       <div className="relative flex min-h-[100dvh] w-full flex-col items-center overflow-hidden md:justify-between">
         <div className="w-full px-4 pt-4 md:grow md:basis-0 md:px-0">
           <div className="flex justify-center pt-4">
-            <Link href="https://dub.co/home" target="_blank" className="block">
+            <Link href="https://detz.fun" target="_blank" className="block">
               <Wordmark className="h-8" />
             </Link>
           </div>

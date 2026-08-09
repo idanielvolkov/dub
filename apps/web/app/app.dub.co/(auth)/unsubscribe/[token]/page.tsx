@@ -5,8 +5,8 @@ import { constructMetadata } from "@dub/utils";
 import { UnsubscribeForm } from "./unsubscribe-form";
 
 export const metadata = constructMetadata({
-  title: "Email Preferences – Dub",
-  description: "Manage your email subscription preferences on Dub",
+  title: "Email Preferences – Detz",
+  description: "Manage your Detz email subscription preferences",
   noIndex: true,
 });
 

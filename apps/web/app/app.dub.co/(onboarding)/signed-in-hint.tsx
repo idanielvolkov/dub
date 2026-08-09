@@ -53,7 +53,7 @@ export function SignedInHint({
             className="h-8 w-fit rounded-lg px-3 text-xs shadow-sm"
           />
           <a
-            href="https://dub.co/contact/support"
+            href="https://detz.fun"
             target="_blank"
             className={cn(
               "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-neutral-200 bg-white text-neutral-700 shadow-sm transition-colors hover:bg-neutral-100",

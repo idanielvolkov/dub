@@ -59,7 +59,7 @@ export const requestPasswordResetAction = actionClient
     ]);
 
     await sendEmail({
-      subject: "Dub: Password reset instructions",
+      subject: "Detz: password reset instructions",
       to: email,
       react: ResetPasswordLink({
         email,
