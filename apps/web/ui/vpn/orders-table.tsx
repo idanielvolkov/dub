@@ -213,8 +213,9 @@ export function OrdersTable({
             />
           </div>
           <div className="grid gap-1.5">
-            <Label>Plan</Label>
+            <Label htmlFor="order-plan">Plan</Label>
             <FormCombobox
+              id="order-plan"
               name="planId"
               options={plans.map((plan) => ({
                 value: plan.id,

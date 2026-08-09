@@ -170,8 +170,9 @@ export function SubscribersTable({
             />
           </div>
           <div className="grid gap-1.5">
-            <Label>Duration</Label>
+            <Label htmlFor="subscriber-duration">Duration</Label>
             <FormCombobox
+              id="subscriber-duration"
               name="durationDays"
               defaultValue="30"
               options={[
@@ -249,8 +250,9 @@ export function SubscribersTable({
                   />
                 </div>
                 <div className="grid gap-1.5">
-                  <Label>Reset cycle</Label>
+                  <Label htmlFor="subscriber-reset-cycle">Reset cycle</Label>
                   <FormCombobox
+                    id="subscriber-reset-cycle"
                     name="trafficLimitStrategy"
                     defaultValue={selectedUser.trafficLimitStrategy}
                     options={[

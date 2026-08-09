@@ -13,15 +13,23 @@ import {
 } from "../../app/app.dub.co/(dashboard)/[slug]/vpn/plans/actions";
 
 function PlanFields({ plan }: { plan?: VpnPlan }) {
+  const fieldPrefix = plan ? `plan-${plan.id}` : "new-plan";
+
   return (
     <div className="grid gap-4 sm:grid-cols-2">
       <div className="grid gap-1.5">
-        <Label>Name</Label>
-        <Input name="name" defaultValue={plan?.name} required />
+        <Label htmlFor={`${fieldPrefix}-name`}>Name</Label>
+        <Input
+          id={`${fieldPrefix}-name`}
+          name="name"
+          defaultValue={plan?.name}
+          required
+        />
       </div>
       <div className="grid gap-1.5">
-        <Label>Price, USD</Label>
+        <Label htmlFor={`${fieldPrefix}-price`}>Price, USD</Label>
         <Input
+          id={`${fieldPrefix}-price`}
           name="price"
           type="number"
           min="0"
@@ -31,8 +39,9 @@ function PlanFields({ plan }: { plan?: VpnPlan }) {
         />
       </div>
       <div className="grid gap-1.5">
-        <Label>Duration, days</Label>
+        <Label htmlFor={`${fieldPrefix}-duration`}>Duration, days</Label>
         <Input
+          id={`${fieldPrefix}-duration`}
           name="durationDays"
           type="number"
           min="1"
@@ -41,8 +50,9 @@ function PlanFields({ plan }: { plan?: VpnPlan }) {
         />
       </div>
       <div className="grid gap-1.5">
-        <Label>Traffic, GB</Label>
+        <Label htmlFor={`${fieldPrefix}-traffic`}>Traffic, GB</Label>
         <Input
+          id={`${fieldPrefix}-traffic`}
           name="trafficGb"
           type="number"
           min="1"
@@ -52,8 +62,9 @@ function PlanFields({ plan }: { plan?: VpnPlan }) {
         />
       </div>
       <div className="grid gap-1.5">
-        <Label>Devices</Label>
+        <Label htmlFor={`${fieldPrefix}-devices`}>Devices</Label>
         <Input
+          id={`${fieldPrefix}-devices`}
           name="devices"
           type="number"
           min="1"
@@ -62,8 +73,9 @@ function PlanFields({ plan }: { plan?: VpnPlan }) {
         />
       </div>
       <div className="grid gap-1.5">
-        <Label>Traffic reset</Label>
+        <Label htmlFor={`${fieldPrefix}-reset`}>Traffic reset</Label>
         <FormCombobox
+          id={`${fieldPrefix}-reset`}
           name="reset"
           defaultValue={plan?.reset ?? "MONTH"}
           options={[
@@ -75,11 +87,19 @@ function PlanFields({ plan }: { plan?: VpnPlan }) {
         />
       </div>
       <div className="grid gap-1.5 sm:col-span-2">
-        <Label>Description</Label>
-        <Input name="description" defaultValue={plan?.description} />
+        <Label htmlFor={`${fieldPrefix}-description`}>Description</Label>
+        <Input
+          id={`${fieldPrefix}-description`}
+          name="description"
+          defaultValue={plan?.description}
+        />
       </div>
-      <Label className="flex items-center gap-2 font-normal sm:col-span-2">
+      <Label
+        htmlFor={`${fieldPrefix}-featured`}
+        className="flex cursor-pointer items-center gap-2 font-normal sm:col-span-2"
+      >
         <Checkbox
+          id={`${fieldPrefix}-featured`}
           name="featured"
           defaultChecked={plan?.featured}
           className="size-4 rounded"
@@ -176,8 +196,15 @@ export function PlanCardActions({
           <input type="hidden" name="slug" value={slug} />
           <input type="hidden" name="planId" value={plan.id} />
           <div className="grid gap-1.5">
-            <Label>Subscriber name</Label>
-            <Input name="username" minLength={3} required />
+            <Label htmlFor={`provision-${plan.id}-username`}>
+              Subscriber name
+            </Label>
+            <Input
+              id={`provision-${plan.id}-username`}
+              name="username"
+              minLength={3}
+              required
+            />
           </div>
           <OperationSubmit>Provision access</OperationSubmit>
         </form>

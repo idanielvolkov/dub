@@ -4,12 +4,14 @@ import { Combobox, ComboboxOption } from "@dub/ui";
 import { useState } from "react";
 
 export function FormCombobox({
+  id,
   name,
   options,
   defaultValue,
   placeholder = "Select",
   className,
 }: {
+  id?: string;
   name: string;
   options: ComboboxOption[];
   defaultValue?: string;
@@ -36,6 +38,7 @@ export function FormCombobox({
         hideSearch
         matchTriggerWidth
         buttonProps={{
+          id,
           className: `w-full justify-start border-neutral-300 px-3 ${className ?? ""}`,
         }}
       />
