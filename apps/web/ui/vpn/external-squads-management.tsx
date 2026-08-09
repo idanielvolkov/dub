@@ -7,7 +7,7 @@ import {
   removeAllExternalSquadUsers,
   removeExternalSquad,
   renameExternalSquad,
-} from "@/app/app.dub.co/(dashboard)/[slug]/operations/actions";
+} from "../../app/app.dub.co/(dashboard)/[slug]/operations/actions";
 import { Button, Input, Label, Modal } from "@dub/ui";
 import { useState } from "react";
 import { OperationSubmit } from "./operation-submit";
