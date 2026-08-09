@@ -1,4 +1,4 @@
-import { CardList } from "@dub/ui";
+import { CardList, CardListCard } from "@dub/ui";
 import { cn } from "@dub/utils";
 import { ReactNode } from "react";
 
@@ -26,7 +26,7 @@ export function VpnStats({
         )}
       >
         {items.map(({ label, value, detail, indicator }) => (
-          <CardList.Card
+          <CardListCard
             key={label}
             hoverStateEnabled={false}
             innerClassName="relative flex h-full flex-col p-3"
@@ -43,7 +43,7 @@ export function VpnStats({
                 {detail}
               </span>
             )}
-          </CardList.Card>
+          </CardListCard>
         ))}
       </CardList>
     </div>
