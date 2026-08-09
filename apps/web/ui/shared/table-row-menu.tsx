@@ -1,7 +1,7 @@
 "use client";
 
 import { MenuItem, Popover } from "@dub/ui";
-import { Icon, MoreVertical } from "@dub/ui/icons";
+import { Dots, Icon } from "@dub/ui/icons";
 import { useState } from "react";
 
 export function TableRowMenu({
@@ -44,7 +44,7 @@ export function TableRowMenu({
         aria-label="Open row actions"
         className="text-content-subtle hover:bg-bg-subtle active:bg-bg-muted flex size-8 items-center justify-center rounded-md transition-colors"
       >
-        <MoreVertical className="size-4" />
+        <Dots className="size-4" />
       </button>
     </Popover>
   );
