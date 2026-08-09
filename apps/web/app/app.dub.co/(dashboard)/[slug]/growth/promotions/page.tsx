@@ -1,9 +1,10 @@
 import { getGrowthPromotions } from "@/lib/growth/promotions";
+import { DubCard, DubCardList } from "@/ui/vpn/server-card-list";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
-import { Badge, CardList, Checkbox, EmptyState, Input } from "@dub/ui";
+import { Badge, Checkbox, EmptyState, Input } from "@dub/ui";
 import { Discount } from "@dub/ui/icons";
 import { createPromotion, deletePromotion, updatePromotion } from "./actions";
 
@@ -131,8 +132,8 @@ export default async function PromotionsPage({
               Prepare an offer for checkout and customer acquisition
             </p>
           </div>
-          <CardList>
-            <CardList.Card innerClassName="p-0" hoverStateEnabled={false}>
+          <DubCardList>
+            <DubCard innerClassName="p-0" hoverStateEnabled={false}>
               <form
                 action={createPromotion}
                 className="grid gap-3 p-5 md:grid-cols-2 lg:grid-cols-4"
@@ -143,8 +144,8 @@ export default async function PromotionsPage({
                   <OperationSubmit>Create promotion</OperationSubmit>
                 </div>
               </form>
-            </CardList.Card>
-          </CardList>
+            </DubCard>
+          </DubCardList>
         </section>
         <section>
           <div className="mb-3">
@@ -155,9 +156,9 @@ export default async function PromotionsPage({
               {promotions.length} saved offers
             </p>
           </div>
-          <CardList variant="compact">
+          <DubCardList variant="compact">
             {promotions.map((promotion) => (
-              <CardList.Card
+              <DubCard
                 key={promotion.id}
                 innerClassName="space-y-4 p-5"
                 hoverStateEnabled={false}
@@ -197,9 +198,9 @@ export default async function PromotionsPage({
                     Delete
                   </OperationSubmit>
                 </form>
-              </CardList.Card>
+              </DubCard>
             ))}
-          </CardList>
+          </DubCardList>
           {!promotions.length && (
             <div className="py-12">
               <EmptyState

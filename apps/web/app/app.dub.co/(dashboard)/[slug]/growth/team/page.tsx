@@ -1,10 +1,11 @@
 import { getSession } from "@/lib/auth";
+import { DubCard, DubCardList } from "@/ui/vpn/server-card-list";
 import { prisma } from "@/lib/prisma";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
-import { Badge, CardList, Input } from "@dub/ui";
+import { Badge, Input } from "@dub/ui";
 import {
   changeGrowthMemberRole,
   inviteGrowthMember,
@@ -58,8 +59,8 @@ export default async function GrowthTeamPage({
                 Members can edit Growth; viewers have read-only access
               </p>
             </div>
-            <CardList>
-              <CardList.Card innerClassName="p-0" hoverStateEnabled={false}>
+            <DubCardList>
+              <DubCard innerClassName="p-0" hoverStateEnabled={false}>
                 <form
                   action={inviteGrowthMember}
                   className="grid gap-3 p-5 sm:grid-cols-[1fr_160px_auto]"
@@ -83,8 +84,8 @@ export default async function GrowthTeamPage({
                   />
                   <OperationSubmit>Send invite</OperationSubmit>
                 </form>
-              </CardList.Card>
-            </CardList>
+              </DubCard>
+            </DubCardList>
           </section>
         )}
         <section>
@@ -97,9 +98,9 @@ export default async function GrowthTeamPage({
               pending
             </p>
           </div>
-          <CardList variant="compact">
+          <DubCardList variant="compact">
             {workspace.users.map((member) => (
-              <CardList.Card
+              <DubCard
                 key={member.userId}
                 innerClassName="flex flex-wrap items-center gap-3 px-5 py-4"
                 hoverStateEnabled={false}
@@ -154,10 +155,10 @@ export default async function GrowthTeamPage({
                     </form>
                   </>
                 )}
-              </CardList.Card>
+              </DubCard>
             ))}
             {workspace.invites.map((invite) => (
-              <CardList.Card
+              <DubCard
                 key={invite.email}
                 innerClassName="flex flex-wrap items-center gap-3 bg-neutral-50 px-5 py-4"
                 hoverStateEnabled={false}
@@ -182,9 +183,9 @@ export default async function GrowthTeamPage({
                     </OperationSubmit>
                   </form>
                 )}
-              </CardList.Card>
+              </DubCard>
             ))}
-          </CardList>
+          </DubCardList>
         </section>
       </PageWidthWrapper>
     </PageContent>

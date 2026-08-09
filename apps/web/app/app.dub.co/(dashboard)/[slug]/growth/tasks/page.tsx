@@ -1,4 +1,5 @@
 import { getGrowthTasks } from "@/lib/growth/tasks";
+import { DubCard, DubCardList } from "@/ui/vpn/server-card-list";
 import {
   GrowthTaskActions,
   GrowthTaskFields,
@@ -7,7 +8,7 @@ import {
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
-import { Badge, CardList, EmptyState } from "@dub/ui";
+import { Badge, EmptyState } from "@dub/ui";
 import { SquareCheck } from "@dub/ui/icons";
 import { createGrowthTask } from "./actions";
 
@@ -35,8 +36,8 @@ export default async function GrowthTasksPage({
               Add work for the growth team
             </p>
           </div>
-          <CardList>
-            <CardList.Card innerClassName="p-0" hoverStateEnabled={false}>
+          <DubCardList>
+            <DubCard innerClassName="p-0" hoverStateEnabled={false}>
               <form
                 action={createGrowthTask}
                 className="grid gap-3 p-5 md:grid-cols-2 lg:grid-cols-4"
@@ -47,8 +48,8 @@ export default async function GrowthTasksPage({
                   <OperationSubmit>Create task</OperationSubmit>
                 </div>
               </form>
-            </CardList.Card>
-          </CardList>
+            </DubCard>
+          </DubCardList>
         </section>
         <div className="grid items-start gap-4 xl:grid-cols-4">
           {growthTaskStatuses.map((column) => {
@@ -65,9 +66,9 @@ export default async function GrowthTasksPage({
                     {columnTasks.length} tasks
                   </p>
                 </div>
-                <CardList variant="compact">
+                <DubCardList variant="compact">
                   {columnTasks.map((task) => (
-                    <CardList.Card
+                    <DubCard
                       key={task.id}
                       innerClassName="space-y-3 p-4"
                       hoverStateEnabled={false}
@@ -94,9 +95,9 @@ export default async function GrowthTasksPage({
                           : ""}
                       </p>
                       <GrowthTaskActions slug={slug} task={task} />
-                    </CardList.Card>
+                    </DubCard>
                   ))}
-                </CardList>
+                </DubCardList>
                 {!columnTasks.length && (
                   <div className="py-8">
                     <EmptyState icon={SquareCheck} title="No tasks" />

@@ -1,9 +1,10 @@
 import { getGrowthWorkspace } from "@/lib/growth/get-growth-workspace";
+import { DubCard, DubCardList } from "@/ui/vpn/server-card-list";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
-import { Badge, CardList, EmptyState, Input } from "@dub/ui";
+import { Badge, EmptyState, Input } from "@dub/ui";
 import { Megaphone } from "@dub/ui/icons";
 import {
   archiveGrowthCampaign,
@@ -36,8 +37,8 @@ export default async function CampaignsPage({
               A trackable campaign link with UTM attribution
             </p>
           </div>
-          <CardList>
-            <CardList.Card innerClassName="p-0" hoverStateEnabled={false}>
+          <DubCardList>
+            <DubCard innerClassName="p-0" hoverStateEnabled={false}>
               {domain ? (
                 <form
                   action={createGrowthCampaign}
@@ -147,8 +148,8 @@ export default async function CampaignsPage({
                   Add and verify a short domain before creating campaigns.
                 </p>
               )}
-            </CardList.Card>
-          </CardList>
+            </DubCard>
+          </DubCardList>
         </section>
         <section>
           <div className="mb-3">
@@ -159,9 +160,9 @@ export default async function CampaignsPage({
               {campaigns.length} active records
             </p>
           </div>
-          <CardList variant="compact">
+          <DubCardList variant="compact">
             {campaigns.map((campaign) => (
-              <CardList.Card
+              <DubCard
                 key={campaign.id}
                 innerClassName="space-y-4 p-5"
                 hoverStateEnabled={false}
@@ -259,9 +260,9 @@ export default async function CampaignsPage({
                     Archive
                   </OperationSubmit>
                 </form>
-              </CardList.Card>
+              </DubCard>
             ))}
-          </CardList>
+          </DubCardList>
           {!campaigns.length && (
             <div className="py-12">
               <EmptyState icon={Megaphone} title="No campaigns yet" />

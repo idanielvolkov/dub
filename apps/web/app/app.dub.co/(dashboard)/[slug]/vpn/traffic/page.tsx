@@ -1,8 +1,9 @@
 import { getRemnawaveNodes, getRemnawaveUsers } from "@/lib/remnawave/client";
+import { DubCard, DubCardList } from "@/ui/vpn/server-card-list";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { VpnStats } from "@/ui/vpn/vpn-ui";
-import { CardList, EmptyState, ProgressBar, StatusBadge } from "@dub/ui";
+import { EmptyState, ProgressBar, StatusBadge } from "@dub/ui";
 import { ChartActivity2 } from "@dub/ui/icons";
 
 const formatBytes = (bytes: number) => {
@@ -77,14 +78,14 @@ export default async function TrafficPage() {
               </p>
             </div>
             {topUsers.length ? (
-              <CardList variant="compact">
+              <DubCardList variant="compact">
                 {topUsers.map((user) => {
                   const consumed = user.usedTrafficBytes || 0;
                   const percent = user.trafficLimitBytes
                     ? Math.min(100, (consumed / user.trafficLimitBytes) * 100)
                     : 0;
                   return (
-                    <CardList.Card key={user.uuid} hoverStateEnabled={false}>
+                    <DubCard key={user.uuid} hoverStateEnabled={false}>
                       <div className="flex items-center justify-between gap-3 text-sm">
                         <span className="text-content-emphasis font-medium">
                           {user.username}
@@ -104,10 +105,10 @@ export default async function TrafficPage() {
                           className="h-1.5"
                         />
                       </div>
-                    </CardList.Card>
+                    </DubCard>
                   );
                 })}
-              </CardList>
+              </DubCardList>
             ) : (
               <div className="p-8">
                 <EmptyState
@@ -128,9 +129,9 @@ export default async function TrafficPage() {
                 Current load across VPN nodes
               </p>
             </div>
-            <CardList variant="compact">
+            <DubCardList variant="compact">
               {nodes.map((node) => (
-                <CardList.Card key={node.uuid} hoverStateEnabled={false}>
+                <DubCard key={node.uuid} hoverStateEnabled={false}>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-content-emphasis font-medium">
                       {node.name}
@@ -145,9 +146,9 @@ export default async function TrafficPage() {
                     <span>{node.usersOnline} connected</span>
                     <span>{formatBytes(node.trafficUsedBytes || 0)}</span>
                   </div>
-                </CardList.Card>
+                </DubCard>
               ))}
-            </CardList>
+            </DubCardList>
             {!nodes.length && (
               <div className="p-8">
                 <EmptyState

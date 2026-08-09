@@ -1,10 +1,11 @@
 import { getGrowthLeads } from "@/lib/growth/leads";
+import { DubCard, DubCardList } from "@/ui/vpn/server-card-list";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import { VpnStats } from "@/ui/vpn/vpn-ui";
-import { Badge, CardList, EmptyState, Input } from "@dub/ui";
+import { Badge, EmptyState, Input } from "@dub/ui";
 import { Crosshairs3 } from "@dub/ui/icons";
 import { createGrowthLead, updateGrowthLead } from "./actions";
 
@@ -55,8 +56,8 @@ export default async function LeadsPage({
               Create a contact manually when attribution is unavailable
             </p>
           </div>
-          <CardList>
-            <CardList.Card innerClassName="p-0" hoverStateEnabled={false}>
+          <DubCardList>
+            <DubCard innerClassName="p-0" hoverStateEnabled={false}>
               <form
                 action={createGrowthLead}
                 className="grid gap-3 p-5 md:grid-cols-2 lg:grid-cols-4"
@@ -120,8 +121,8 @@ export default async function LeadsPage({
                   <OperationSubmit>Add lead</OperationSubmit>
                 </div>
               </form>
-            </CardList.Card>
-          </CardList>
+            </DubCard>
+          </DubCardList>
         </section>
         <section>
           <div className="mb-3">
@@ -132,9 +133,9 @@ export default async function LeadsPage({
               {leads.length} contacts from campaigns and manual entry
             </p>
           </div>
-          <CardList variant="compact">
+          <DubCardList variant="compact">
             {leads.map((lead) => (
-              <CardList.Card
+              <DubCard
                 key={lead.id}
                 innerClassName="space-y-4 p-5"
                 hoverStateEnabled={false}
@@ -198,9 +199,9 @@ export default async function LeadsPage({
                   </label>
                   <OperationSubmit>Save</OperationSubmit>
                 </form>
-              </CardList.Card>
+              </DubCard>
             ))}
-          </CardList>
+          </DubCardList>
           {!leads.length && (
             <div className="py-12">
               <EmptyState

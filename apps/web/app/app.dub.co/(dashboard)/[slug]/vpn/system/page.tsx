@@ -1,9 +1,10 @@
 import { getRemnawaveHealth, getRemnawaveNodes } from "@/lib/remnawave/client";
+import { DubCard, DubCardList } from "@/ui/vpn/server-card-list";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { ButtonLink } from "@/ui/placeholders/button-link";
 import { VpnStats } from "@/ui/vpn/vpn-ui";
-import { CardList, EmptyState, StatusBadge } from "@dub/ui";
+import { EmptyState, StatusBadge } from "@dub/ui";
 import { ArrowUpRight2, WindowSettings } from "@dub/ui/icons";
 
 const formatMemory = (bytes: number) => `${Math.round(bytes / 1024 / 1024)} MB`;
@@ -74,9 +75,9 @@ export default async function SystemPage() {
             </ButtonLink>
           </div>
           {metrics.length ? (
-            <CardList variant="compact">
+            <DubCardList variant="compact">
               {metrics.map((metric) => (
-                <CardList.Card
+                <DubCard
                   key={`${metric.instanceType}-${metric.uptime}`}
                   hoverStateEnabled={false}
                 >
@@ -115,9 +116,9 @@ export default async function SystemPage() {
                       {metric.activeHandles}
                     </div>
                   </div>
-                </CardList.Card>
+                </DubCard>
               ))}
-            </CardList>
+            </DubCardList>
           ) : (
             <div className="p-8">
               <EmptyState

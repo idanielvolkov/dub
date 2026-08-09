@@ -2,11 +2,12 @@ import {
   getRemnawaveSubscriptionSettings,
   getRemnawaveSubscriptionTemplates,
 } from "@/lib/remnawave/client";
+import { DubCard, DubCardList } from "@/ui/vpn/server-card-list";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import { VpnStats } from "@/ui/vpn/vpn-ui";
-import { Badge, CardList, Checkbox, EmptyState } from "@dub/ui";
+import { Badge, Checkbox, EmptyState } from "@dub/ui";
 import { QRCode } from "@dub/ui/icons";
 import { saveSubscriptionSettings } from "../actions";
 
@@ -61,8 +62,8 @@ export default async function SubscriptionsPage({
                 Applied to every generated subscription
               </p>
             </div>
-            <CardList>
-              <CardList.Card innerClassName="p-5" hoverStateEnabled={false}>
+            <DubCardList>
+              <DubCard innerClassName="p-5" hoverStateEnabled={false}>
                 <form
                   action={saveSubscriptionSettings}
                   className="flex flex-wrap items-center gap-5"
@@ -97,8 +98,8 @@ export default async function SubscriptionsPage({
                     <OperationSubmit>Save settings</OperationSubmit>
                   </div>
                 </form>
-              </CardList.Card>
-            </CardList>
+              </DubCard>
+            </DubCardList>
           </section>
         )}
         <section>
@@ -110,9 +111,9 @@ export default async function SubscriptionsPage({
               Formats served to VPN clients
             </p>
           </div>
-          <CardList variant="compact">
+          <DubCardList variant="compact">
             {templates.templates.map((template) => (
-              <CardList.Card key={template.uuid} hoverStateEnabled={false}>
+              <DubCard key={template.uuid} hoverStateEnabled={false}>
                 <div className="flex min-h-9 items-center justify-between gap-3">
                   <div>
                     <p className="text-content-emphasis text-sm font-medium">
@@ -124,9 +125,9 @@ export default async function SubscriptionsPage({
                   </div>
                   <Badge variant="gray">{template.templateType}</Badge>
                 </div>
-              </CardList.Card>
+              </DubCard>
             ))}
-          </CardList>
+          </DubCardList>
           {!templates.templates.length && (
             <div className="py-12">
               <EmptyState
