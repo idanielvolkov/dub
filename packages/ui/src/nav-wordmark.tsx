@@ -33,7 +33,7 @@ export function NavWordmark({
   isInApp?: boolean;
   className?: string;
 }) {
-  const { domain = "dub.co" } = useParams() as { domain: string };
+  const { domain = "detz.fun" } = useParams() as { domain: string };
 
   const { theme } = useContext(NavContext);
 
@@ -97,19 +97,18 @@ export function NavWordmark({
               icon={<Type strokeWidth={2} className="h-4 w-4" />}
             />
             <ContextMenuButton
-              text="Brand Guidelines"
+              text="Detz Home"
               variant="outline"
-              onClick={() => window.open("https://dub.co/brand", "_blank")}
+              onClick={() => window.open("https://detz.fun", "_blank")}
               icon={<BoxSelect strokeWidth={2} className="h-4 w-4" />}
             />
-            {/* If it's in the app or it's a domain placeholder page (not dub.co homepage), show the home button */}
-            {isInApp || domain != "dub.co" ? (
+            {isInApp || domain != "detz.fun" ? (
               <ContextMenuButton
                 text="Home Page"
                 variant="outline"
                 onClick={() =>
                   window.open(
-                    `https://dub.co${isInApp ? "/home" : ""}`,
+                    "https://detz.fun",
                     "_blank",
                   )
                 }
@@ -119,7 +118,7 @@ export function NavWordmark({
               <ContextMenuButton
                 text="Dashboard"
                 variant="outline"
-                onClick={() => window.open("https://app.dub.co", "_blank")}
+                onClick={() => window.open("https://app.detz.fun", "_blank")}
                 icon={<LayoutGrid strokeWidth={2} className="h-4 w-4" />}
               />
             )}

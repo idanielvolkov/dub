@@ -101,7 +101,7 @@ function DeleteWorkspaceModal({
               {name || slug}
             </h3>
             <p className="text-xs font-medium text-neutral-500">
-              app.dub.co/{slug}
+              app.detz.fun/{slug}
             </p>
           </div>
         </div>

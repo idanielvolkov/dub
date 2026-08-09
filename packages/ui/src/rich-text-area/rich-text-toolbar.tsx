@@ -192,7 +192,7 @@ function LinkButton() {
 
           if (!isSafeLinkHref(url.trim())) {
             toast.error(
-              "Enter a full URL starting with http://, https://, or mailto: (e.g. https://dub.co).",
+              "Enter a full URL starting with http://, https://, or mailto: (e.g. https://detz.fun).",
             );
             editor.chain().focus().setNodeSelection(nodePos).run();
             return;
@@ -220,7 +220,7 @@ function LinkButton() {
 
         if (!isSafeLinkHref(url.trim())) {
           toast.error(
-            "Enter a full URL starting with http://, https://, or mailto: (e.g. https://dub.co).",
+            "Enter a full URL starting with http://, https://, or mailto: (e.g. https://detz.fun).",
           );
           return;
         }

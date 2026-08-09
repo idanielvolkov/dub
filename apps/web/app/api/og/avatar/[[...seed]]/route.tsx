@@ -16,7 +16,7 @@ export async function GET(
     "Access-Control-Allow-Headers": "Content-Type",
   };
 
-  if (origin && origin.endsWith(".dub.co")) {
+  if (origin && origin.endsWith(".detz.fun")) {
     corsHeaders["Access-Control-Allow-Origin"] = origin;
   }
 

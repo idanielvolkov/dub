@@ -8,7 +8,7 @@ export async function HelpButton({
 }) {
   return (
     <a
-      href="https://dub.co/contact/support"
+      href="https://detz.fun"
       target="_blank"
       className={cn(
         "shrink-0 items-center justify-center rounded-lg",
