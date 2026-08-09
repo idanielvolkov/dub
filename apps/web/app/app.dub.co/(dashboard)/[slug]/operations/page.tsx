@@ -9,6 +9,7 @@ import {
 } from "@/lib/remnawave/client";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
+import { ButtonLink } from "@/ui/placeholders/button-link";
 import { VpnMetricCard, VpnPanel, VpnPanelHeader } from "@/ui/vpn/vpn-ui";
 import { StatusBadge } from "@dub/ui";
 import Link from "next/link";
@@ -53,14 +54,15 @@ export default async function OperationsPage({
         title: "Technical control plane backed by the Remnawave API.",
       }}
       controls={
-        <a
+        <ButtonLink
           href="https://panel.detz.fun"
           target="_blank"
           rel="noreferrer"
-          className="border-border-subtle hover:bg-bg-muted rounded-lg border px-3 py-2 text-sm font-medium transition-colors"
+          variant="secondary"
+          className="h-9 px-3 text-sm"
         >
           Open native panel ↗
-        </a>
+        </ButtonLink>
       }
     >
       <PageWidthWrapper className="pb-10">

@@ -1,8 +1,10 @@
 import { getRemnawaveHealth, getRemnawaveNodes } from "@/lib/remnawave/client";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
+import { ButtonLink } from "@/ui/placeholders/button-link";
 import { VpnMetricCard, VpnPanel, VpnPanelHeader } from "@/ui/vpn/vpn-ui";
-import { StatusBadge } from "@dub/ui";
+import { EmptyState, StatusBadge } from "@dub/ui";
+import { WindowSettings } from "@dub/ui/icons";
 
 const formatMemory = (bytes: number) => `${Math.round(bytes / 1024 / 1024)} MB`;
 const formatUptime = (seconds: number) => {
@@ -53,14 +55,15 @@ export default async function SystemPage() {
             title="Runtime processes"
             description="Live resource data from the Remnawave panel"
             controls={
-              <a
+              <ButtonLink
                 href="https://panel.detz.fun"
                 target="_blank"
                 rel="noreferrer"
-                className="border-border-subtle bg-bg-default text-content-emphasis hover:bg-bg-muted rounded-lg border px-3 py-2 text-sm font-medium transition-colors"
+                variant="secondary"
+                className="h-9 px-3 text-sm"
               >
                 Open technical panel ↗
-              </a>
+              </ButtonLink>
             }
           />
           {metrics.length ? (
@@ -116,8 +119,12 @@ export default async function SystemPage() {
               </div>
             </div>
           ) : (
-            <div className="p-8 text-center text-sm text-neutral-500">
-              Runtime metrics are temporarily unavailable.
+            <div className="p-8">
+              <EmptyState
+                icon={WindowSettings}
+                title="Runtime metrics unavailable"
+                description="Remnawave did not return process telemetry."
+              />
             </div>
           )}
         </VpnPanel>

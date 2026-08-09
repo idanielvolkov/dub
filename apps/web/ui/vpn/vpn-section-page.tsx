@@ -1,5 +1,6 @@
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
+import { CardList } from "@dub/ui";
 import { ReactNode } from "react";
 
 export function VpnSectionPage({
@@ -14,12 +15,14 @@ export function VpnSectionPage({
   return (
     <PageContent title={title} titleInfo={{ title: description }}>
       <PageWidthWrapper className="pb-10">
-        <div className="border-border-subtle bg-bg-default rounded-xl border p-6">
-          <p className="text-content-default max-w-2xl text-sm leading-6">
-            {description}
-          </p>
-          {children}
-        </div>
+        <CardList>
+          <CardList.Card innerClassName="p-6" hoverStateEnabled={false}>
+            <p className="text-content-default max-w-2xl text-sm leading-6">
+              {description}
+            </p>
+            {children}
+          </CardList.Card>
+        </CardList>
       </PageWidthWrapper>
     </PageContent>
   );
