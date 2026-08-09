@@ -8,8 +8,8 @@ import {
   PlanCardActions,
   RestorePlanButton,
 } from "@/ui/vpn/plan-actions";
-import { VpnPanel } from "@/ui/vpn/vpn-ui";
-import { Badge, CardList } from "@dub/ui";
+import { Badge, CardList, EmptyState } from "@dub/ui";
+import { Cards } from "@dub/ui/icons";
 
 export default async function PlansPage({
   params,
@@ -44,51 +44,65 @@ export default async function PlansPage({
       <PageWidthWrapper className="space-y-6 pb-10">
         <div className="grid gap-4 lg:grid-cols-3">
           {activePlans.map((plan) => (
-            <VpnPanel
-              key={plan.id}
-              className={`hover:drop-shadow-card-hover relative flex flex-col p-5 transition-[filter] ${plan.featured ? "border-border-emphasis" : ""}`}
-            >
-              {plan.featured && (
-                <Badge variant="black" className="absolute right-4 top-4">
-                  Most popular
-                </Badge>
-              )}
-              <p className="text-content-emphasis font-semibold">{plan.name}</p>
-              <div className="mt-3 flex items-end gap-1">
-                <span className="text-content-emphasis text-3xl font-semibold tracking-tight">
-                  ${plan.price}
-                </span>
-                <span className="text-content-subtle pb-1 text-sm">
-                  /{plan.durationDays} days
-                </span>
-              </div>
-              <p className="text-content-subtle mt-3 min-h-10 text-sm leading-5">
-                {plan.description}
-              </p>
-              <dl className="border-border-subtle mt-5 space-y-2 border-t pt-4 text-sm">
-                <div className="flex justify-between">
-                  <dt className="text-content-subtle">Traffic</dt>
-                  <dd className="text-content-emphasis font-medium">
-                    {plan.trafficGb} GB
-                  </dd>
+            <CardList key={plan.id}>
+              <CardList.Card
+                outerClassName={
+                  plan.featured ? "border-neutral-900" : undefined
+                }
+                innerClassName="relative flex flex-col p-5"
+              >
+                {plan.featured && (
+                  <Badge variant="black" className="absolute right-4 top-4">
+                    Most popular
+                  </Badge>
+                )}
+                <p className="text-content-emphasis font-semibold">
+                  {plan.name}
+                </p>
+                <div className="mt-3 flex items-end gap-1">
+                  <span className="text-content-emphasis text-3xl font-semibold tracking-tight">
+                    ${plan.price}
+                  </span>
+                  <span className="text-content-subtle pb-1 text-sm">
+                    /{plan.durationDays} days
+                  </span>
                 </div>
-                <div className="flex justify-between">
-                  <dt className="text-content-subtle">Devices</dt>
-                  <dd className="text-content-emphasis font-medium">
-                    {plan.devices}
-                  </dd>
-                </div>
-                <div className="flex justify-between">
-                  <dt className="text-content-subtle">Reset</dt>
-                  <dd className="text-content-emphasis font-medium capitalize">
-                    {plan.reset.toLowerCase().replace("_", " ")}
-                  </dd>
-                </div>
-              </dl>
-              {isOwner && <PlanCardActions slug={slug} plan={plan} />}
-            </VpnPanel>
+                <p className="text-content-subtle mt-3 min-h-10 text-sm leading-5">
+                  {plan.description}
+                </p>
+                <dl className="border-border-subtle mt-5 space-y-2 border-t pt-4 text-sm">
+                  <div className="flex justify-between">
+                    <dt className="text-content-subtle">Traffic</dt>
+                    <dd className="text-content-emphasis font-medium">
+                      {plan.trafficGb} GB
+                    </dd>
+                  </div>
+                  <div className="flex justify-between">
+                    <dt className="text-content-subtle">Devices</dt>
+                    <dd className="text-content-emphasis font-medium">
+                      {plan.devices}
+                    </dd>
+                  </div>
+                  <div className="flex justify-between">
+                    <dt className="text-content-subtle">Reset</dt>
+                    <dd className="text-content-emphasis font-medium capitalize">
+                      {plan.reset.toLowerCase().replace("_", " ")}
+                    </dd>
+                  </div>
+                </dl>
+                {isOwner && <PlanCardActions slug={slug} plan={plan} />}
+              </CardList.Card>
+            </CardList>
           ))}
         </div>
+
+        {!activePlans.length && (
+          <EmptyState
+            icon={Cards}
+            title="No active plans"
+            description="Create a plan to start selling VPN access."
+          />
+        )}
 
         {isOwner && (
           <div className="flex justify-end">
@@ -97,28 +111,30 @@ export default async function PlansPage({
         )}
 
         {isOwner && archivedPlans.length > 0 && (
-          <VpnPanel className="p-5">
-            <h2 className="text-content-emphasis font-semibold">
-              Archived plans
-            </h2>
-            <CardList variant="compact" className="mt-4">
-              {archivedPlans.map((plan) => (
-                <CardList.Card key={plan.id} hoverStateEnabled={false}>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-content-emphasis text-sm font-medium">
-                        {plan.name}
-                      </p>
-                      <p className="text-content-subtle text-xs">
-                        ${plan.price}
-                      </p>
+          <CardList>
+            <CardList.Card innerClassName="p-5" hoverStateEnabled={false}>
+              <h2 className="text-content-emphasis font-semibold">
+                Archived plans
+              </h2>
+              <CardList variant="compact" className="mt-4">
+                {archivedPlans.map((plan) => (
+                  <CardList.Card key={plan.id} hoverStateEnabled={false}>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-content-emphasis text-sm font-medium">
+                          {plan.name}
+                        </p>
+                        <p className="text-content-subtle text-xs">
+                          ${plan.price}
+                        </p>
+                      </div>
+                      <RestorePlanButton slug={slug} planId={plan.id} />
                     </div>
-                    <RestorePlanButton slug={slug} planId={plan.id} />
-                  </div>
-                </CardList.Card>
-              ))}
-            </CardList>
-          </VpnPanel>
+                  </CardList.Card>
+                ))}
+              </CardList>
+            </CardList.Card>
+          </CardList>
         )}
 
         <p className="text-content-subtle text-xs">
