@@ -24,14 +24,26 @@ export default async function FinancePage({
     where: { slug, users: { some: { userId: session?.user.id } } },
     select: {
       store: true,
-      users: { where: { userId: session?.user.id }, select: { role: true } },
+      users: {
+        where: { userId: session?.user.id },
+        select: { role: true, workspacePreferences: true },
+      },
     },
   });
   const orders = vpnOrdersFromStore(workspace.store);
   const expenses = financeExpensesFromStore(workspace.store);
-  const canManage = ["owner", "billing"].includes(
-    workspace.users[0]?.role || "viewer",
-  );
+  const membership = workspace.users[0];
+  const preferences =
+    membership?.workspacePreferences &&
+    typeof membership.workspacePreferences === "object" &&
+    !Array.isArray(membership.workspacePreferences)
+      ? (membership.workspacePreferences as Record<string, unknown>)
+      : {};
+  const canManage =
+    membership?.role === "owner" ||
+    membership?.role === "billing" ||
+    preferences.accessTemplate === "finance" ||
+    preferences.accessTemplate === "administrator";
   const paid = orders.filter((order) => order.paymentStatus === "paid");
   const pending = orders.filter((order) => order.paymentStatus !== "paid");
   const revenue = paid.reduce((sum, order) => sum + order.amount, 0);

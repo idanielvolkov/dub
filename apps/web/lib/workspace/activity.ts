@@ -1,6 +1,7 @@
 import "server-only";
 
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 
 export async function recordWorkspaceActivity({
   workspaceId,
@@ -28,7 +29,9 @@ export async function recordWorkspaceActivity({
       resourceType,
       resourceId,
       description,
-      changeSet: changeSet || undefined,
+      changeSet: changeSet
+        ? (changeSet as Prisma.InputJsonValue)
+        : undefined,
     },
   });
 }

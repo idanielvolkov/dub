@@ -19,14 +19,31 @@ async function context(slug: string) {
           users: {
             some: {
               userId: session.user.id,
-              role: { in: ["owner", "billing"] },
             },
           },
         },
-        select: { id: true },
+        select: {
+          id: true,
+          users: {
+            where: { userId: session.user.id },
+            select: { role: true, workspacePreferences: true },
+          },
+        },
       })
     : null;
-  if (!workspace || !session?.user.id)
+  const membership = workspace?.users[0];
+  const preferences =
+    membership?.workspacePreferences &&
+    typeof membership.workspacePreferences === "object" &&
+    !Array.isArray(membership.workspacePreferences)
+      ? (membership.workspacePreferences as Record<string, unknown>)
+      : {};
+  const financeManager =
+    membership?.role === "owner" ||
+    membership?.role === "billing" ||
+    preferences.accessTemplate === "finance" ||
+    preferences.accessTemplate === "administrator";
+  if (!workspace || !session?.user.id || !financeManager)
     throw new Error("Finance access required");
   return { workspace, userId: session.user.id };
 }
