@@ -109,6 +109,11 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
             exact: true,
           },
           {
+            name: "Customers",
+            icon: Users,
+            href: `/${slug}/vpn/customers`,
+          },
+          {
             name: "Plans",
             icon: iconOr(Cards, Receipt2),
             href: `/${slug}/vpn/plans`,

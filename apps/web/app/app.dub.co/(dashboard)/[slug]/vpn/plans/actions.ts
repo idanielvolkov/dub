@@ -8,6 +8,7 @@ import {
   VpnPlanReset,
   vpnPlansFromStore,
 } from "@/lib/remnawave/plans";
+import { recordWorkspaceActivity } from "@/lib/workspace/activity";
 import { Prisma } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -27,7 +28,7 @@ async function ownerWorkspace(slug: string) {
       })
     : null;
   if (!workspace) throw new Error("Workspace owner access required");
-  return workspace.id;
+  return { projectId: workspace.id, userId: session!.user.id };
 }
 
 function planValues(formData: FormData) {
@@ -84,26 +85,42 @@ async function mutatePlans(
 
 export async function createVpnPlan(formData: FormData) {
   const slug = text(formData, "slug");
-  const projectId = await ownerWorkspace(slug);
+  const { projectId, userId } = await ownerWorkspace(slug);
   const values = planValues(formData);
   validatePlan(values);
+  const plan: VpnPlan = {
+    id: crypto.randomUUID(),
+    createdAt: new Date().toISOString(),
+    archived: false,
+    ...values,
+  };
   await mutatePlans(projectId, (plans) => [
     ...plans.map((plan) =>
       values.featured ? { ...plan, featured: false } : plan,
     ),
-    {
-      id: crypto.randomUUID(),
-      createdAt: new Date().toISOString(),
-      archived: false,
-      ...values,
-    },
+    plan,
   ]);
+  await recordWorkspaceActivity({
+    workspaceId: projectId,
+    userId,
+    action: "created",
+    resourceType: "vpn_plan",
+    resourceId: plan.id,
+    description: `Created ${plan.name} plan`,
+    changeSet: {
+      price: plan.price,
+      durationDays: plan.durationDays,
+      trafficGb: plan.trafficGb,
+      devices: plan.devices,
+    },
+  });
   revalidatePath(`/${slug}/vpn/plans`);
+  revalidatePath(`/${slug}/vpn/activity`);
 }
 
 export async function updateVpnPlan(formData: FormData) {
   const slug = text(formData, "slug");
-  const projectId = await ownerWorkspace(slug);
+  const { projectId, userId } = await ownerWorkspace(slug);
   const id = text(formData, "id");
   const values = planValues(formData);
   validatePlan(values);
@@ -113,12 +130,22 @@ export async function updateVpnPlan(formData: FormData) {
       return values.featured ? { ...plan, featured: false } : plan;
     }),
   );
+  await recordWorkspaceActivity({
+    workspaceId: projectId,
+    userId,
+    action: "updated",
+    resourceType: "vpn_plan",
+    resourceId: id,
+    description: `Updated ${values.name} plan`,
+    changeSet: values,
+  });
   revalidatePath(`/${slug}/vpn/plans`);
+  revalidatePath(`/${slug}/vpn/activity`);
 }
 
 export async function setVpnPlanArchived(formData: FormData) {
   const slug = text(formData, "slug");
-  const projectId = await ownerWorkspace(slug);
+  const { projectId, userId } = await ownerWorkspace(slug);
   const id = text(formData, "id");
   const archived = text(formData, "archived") === "true";
   await mutatePlans(projectId, (plans) =>
@@ -128,12 +155,22 @@ export async function setVpnPlanArchived(formData: FormData) {
         : plan,
     ),
   );
+  await recordWorkspaceActivity({
+    workspaceId: projectId,
+    userId,
+    action: archived ? "archived" : "restored",
+    resourceType: "vpn_plan",
+    resourceId: id,
+    description: `${archived ? "Archived" : "Restored"} a VPN plan`,
+    changeSet: { archived },
+  });
   revalidatePath(`/${slug}/vpn/plans`);
+  revalidatePath(`/${slug}/vpn/activity`);
 }
 
 export async function provisionPlan(formData: FormData) {
   const slug = text(formData, "slug");
-  const projectId = await ownerWorkspace(slug);
+  const { projectId, userId } = await ownerWorkspace(slug);
   const username = text(formData, "username")
     .toLowerCase()
     .replace(/[^a-z0-9_-]/g, "-")
@@ -150,7 +187,7 @@ export async function provisionPlan(formData: FormData) {
   );
   if (!plan) throw new Error("This plan is unavailable");
 
-  await createRemnawaveUser({
+  const subscriber = await createRemnawaveUser({
     username,
     expireAt: new Date(
       Date.now() + plan.durationDays * 24 * 60 * 60 * 1000,
@@ -158,6 +195,15 @@ export async function provisionPlan(formData: FormData) {
     trafficLimitBytes: plan.trafficGb * 1024 ** 3,
     trafficLimitStrategy: plan.reset,
     hwidDeviceLimit: plan.devices,
+  });
+  await recordWorkspaceActivity({
+    workspaceId: projectId,
+    userId,
+    action: "provisioned",
+    resourceType: "vpn_plan",
+    resourceId: plan.id,
+    description: `Provisioned ${plan.name} access for ${username}`,
+    changeSet: { username, subscriberUuid: subscriber.response.uuid },
   });
   redirect(`/${slug}/operations/users`);
 }
