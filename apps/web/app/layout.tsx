@@ -2,6 +2,7 @@ import { geistMono, inter, satoshi } from "@/styles/fonts";
 import "@/styles/globals.css";
 import { cn, constructMetadata } from "@dub/utils";
 import Script from "next/script";
+import { ClientErrorBoundary } from "./client-error-boundary";
 import RootProviders from "./providers";
 
 export const metadata = constructMetadata();
@@ -17,7 +18,9 @@ export default function RootLayout({
       className={cn(satoshi.variable, inter.variable, geistMono.variable)}
     >
       <body>
-        <RootProviders>{children}</RootProviders>
+        <ClientErrorBoundary>
+          <RootProviders>{children}</RootProviders>
+        </ClientErrorBoundary>
 
         <Script id="recover-stale-client-bundle" strategy="beforeInteractive">
           {`
@@ -39,7 +42,7 @@ export default function RootLayout({
 
             const isStaleBundleError = (value) => {
               const message = String(value?.message || value?.reason?.message || value?.reason || value || "");
-              return /ChunkLoadError|Loading chunk|Failed to fetch dynamically imported module|Importing a module script failed|module script.*failed|CSS_CHUNK_LOAD_FAILED/i.test(message);
+              return /ChunkLoadError|Loading chunk|Failed to fetch dynamically imported module|Importing a module script failed|module script.*failed|CSS_CHUNK_LOAD_FAILED|Minified React error #130|Element type is invalid/i.test(message);
             };
 
             window.addEventListener("error", (event) => {
