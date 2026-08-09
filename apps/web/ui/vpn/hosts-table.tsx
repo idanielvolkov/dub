@@ -7,6 +7,7 @@ import {
   Checkbox,
   EmptyState,
   Input,
+  Label,
   Modal,
   StatusBadge,
   Table,
@@ -160,49 +161,60 @@ export function HostsTable({
               <form action={saveHost} className="grid gap-4 sm:grid-cols-2">
                 <input type="hidden" name="slug" value={slug} />
                 <input type="hidden" name="uuid" value={selectedHost.uuid} />
-                <label className="text-content-default grid gap-1.5 text-sm font-medium sm:col-span-2">
-                  Remark
+                <div className="grid gap-1.5 sm:col-span-2">
+                  <Label htmlFor="host-remark">Remark</Label>
                   <Input
+                    id="host-remark"
                     name="remark"
                     defaultValue={selectedHost.remark}
                     required
                   />
-                </label>
-                <label className="text-content-default grid gap-1.5 text-sm font-medium">
-                  Address
+                </div>
+                <div className="grid gap-1.5">
+                  <Label htmlFor="host-address">Address</Label>
                   <Input
+                    id="host-address"
                     name="address"
                     defaultValue={selectedHost.address}
                     required
                   />
-                </label>
-                <label className="text-content-default grid gap-1.5 text-sm font-medium">
-                  Port
+                </div>
+                <div className="grid gap-1.5">
+                  <Label htmlFor="host-port">Port</Label>
                   <Input
+                    id="host-port"
                     name="port"
                     type="number"
                     min={1}
                     max={65535}
                     defaultValue={selectedHost.port || 443}
                   />
-                </label>
+                </div>
                 <div className="border-border-subtle space-y-3 rounded-xl border bg-white p-4 sm:col-span-2">
-                  <label className="text-content-default flex items-center gap-3 text-sm">
+                  <Label
+                    htmlFor="host-disabled"
+                    className="text-content-default flex cursor-pointer items-center gap-3 font-normal"
+                  >
                     <Checkbox
+                      id="host-disabled"
                       className="size-4 rounded"
                       name="isDisabled"
                       defaultChecked={selectedHost.isDisabled}
                     />
                     Disable this host
-                  </label>
-                  <label className="text-content-default flex items-center gap-3 text-sm">
+                  </Label>
+                  <Label
+                    htmlFor="host-hidden"
+                    className="text-content-default flex cursor-pointer items-center gap-3 font-normal"
+                  >
                     <Checkbox
+                      id="host-hidden"
                       className="size-4 rounded"
                       name="isHidden"
                       defaultChecked={selectedHost.isHidden}
                     />
                     Hide this host from subscriptions
-                  </label>
+                  </Label>
                 </div>
                 <div className="flex justify-end sm:col-span-2">
                   <OperationSubmit>Save changes</OperationSubmit>

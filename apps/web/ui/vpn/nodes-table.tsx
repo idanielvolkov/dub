@@ -6,6 +6,7 @@ import {
   Button,
   EmptyState,
   Input,
+  Label,
   Modal,
   StatusBadge,
   Table,
@@ -171,22 +172,24 @@ export function NodesTable({
               >
                 <input type="hidden" name="slug" value={slug} />
                 <input type="hidden" name="uuid" value={selectedNode.uuid} />
-                <label className="text-content-default grid gap-1.5 text-sm font-medium">
-                  Node name
+                <div className="grid gap-1.5">
+                  <Label htmlFor="node-name">Node name</Label>
                   <Input
+                    id="node-name"
                     name="name"
                     defaultValue={selectedNode.name}
                     required
                   />
-                </label>
-                <label className="text-content-default grid gap-1.5 text-sm font-medium">
-                  Country
+                </div>
+                <div className="grid gap-1.5">
+                  <Label htmlFor="node-country">Country</Label>
                   <Input
+                    id="node-country"
                     name="countryCode"
                     defaultValue={selectedNode.countryCode}
                     maxLength={2}
                   />
-                </label>
+                </div>
                 <div className="flex justify-end sm:col-span-2">
                   <OperationSubmit>Save changes</OperationSubmit>
                 </div>
