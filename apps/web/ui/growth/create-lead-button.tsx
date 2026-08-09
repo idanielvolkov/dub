@@ -31,7 +31,7 @@ export function CreateLeadButton({ slug }: { slug: string }) {
       >
         <ModalHeader
           title="Add lead"
-          description="Create a contact when campaign attribution is unavailable."
+          description="Add a contact without campaign attribution."
         />
         <ModalBody asChild className="bg-bg-muted">
           <form action={createGrowthLead} className="grid gap-4 md:grid-cols-2">

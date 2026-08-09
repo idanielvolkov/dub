@@ -23,8 +23,8 @@ export default async function ConfigurationsPage({
   );
   return (
     <PageContent
-      title="Profiles & squads"
-      titleInfo={{ title: "Xray profiles and internal access squads." }}
+      title="Configurations"
+      titleInfo={{ title: "Manage config profiles and internal squads." }}
     >
       <PageWidthWrapper className="space-y-8 pb-10">
         <ConfigurationsTables

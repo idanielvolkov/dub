@@ -15,7 +15,7 @@ export default async function UsersPage({
   return (
     <PageContent
       title="Users"
-      titleInfo={{ title: "Create and manage VPN access in Remnawave." }}
+      titleInfo={{ title: "Manage users and VPN access." }}
     >
       <PageWidthWrapper className="pb-10">
         {usersState.error ? (

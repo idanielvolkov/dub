@@ -153,7 +153,7 @@ export function CreatePlanButton({ slug }: { slug: string }) {
         open={open}
         setOpen={setOpen}
         title="Create plan"
-        description="Add a new plan to the Detz catalog."
+        description="Create a plan for your VPN catalog."
       >
         <ModalBody asChild className="bg-bg-muted">
           <form action={createVpnPlan} className="space-y-5">
@@ -198,16 +198,14 @@ export function PlanCardActions({
         open={provisionOpen}
         setOpen={setProvisionOpen}
         title={`Provision ${plan.name}`}
-        description="Create a Remnawave subscriber with this plan's limits."
+        description="Create a Remnawave user with this plan's limits."
       >
         <ModalBody asChild className="bg-bg-muted">
           <form action={provisionPlan} className="space-y-4">
             <input type="hidden" name="slug" value={slug} />
             <input type="hidden" name="planId" value={plan.id} />
             <div className="grid gap-1.5">
-              <Label htmlFor={`provision-${plan.id}-username`}>
-                Subscriber name
-              </Label>
+              <Label htmlFor={`provision-${plan.id}-username`}>Username</Label>
               <Input
                 id={`provision-${plan.id}-username`}
                 name="username"
@@ -231,7 +229,7 @@ export function PlanCardActions({
         open={editOpen}
         setOpen={setEditOpen}
         title={`Edit ${plan.name}`}
-        description="Update pricing and Remnawave access limits."
+        description="Update pricing and access limits."
       >
         <ModalBody className="bg-bg-muted">
           <form action={updateVpnPlan} className="space-y-5">
@@ -250,7 +248,7 @@ export function PlanCardActions({
             <input type="hidden" name="archived" value="true" />
             <OperationSubmit
               destructive
-              confirmMessage="Archive this plan? Existing subscribers will not be affected."
+              confirmMessage="Archive this plan? Existing users will not be affected."
             >
               Archive plan
             </OperationSubmit>

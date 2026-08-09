@@ -33,10 +33,9 @@ export default async function OperationsDevicesPage({
 
   return (
     <PageContent
-      title="Devices & requests"
+      title="Devices"
       titleInfo={{
-        title:
-          "Inspect connected client devices and recent subscription requests from Remnawave.",
+        title: "Review registered devices and subscription requests.",
       }}
     >
       <PageWidthWrapper className="space-y-8 pb-10">
@@ -50,7 +49,7 @@ export default async function OperationsDevicesPage({
             {
               label: "Average per user",
               value: deviceStats?.stats.averageHwidDevicesPerUser ?? 0,
-              detail: "HWID-enabled subscribers",
+              detail: "HWID-enabled users",
             },
             {
               label: "Recent requests",

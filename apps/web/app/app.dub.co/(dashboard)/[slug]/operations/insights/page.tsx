@@ -6,8 +6,8 @@ import {
 } from "@/lib/remnawave/client";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import { VpnStats } from "@/ui/vpn/vpn-ui";
 import { ExternalSquadsManagement } from "@/ui/vpn/external-squads-management";
+import { VpnStats } from "@/ui/vpn/vpn-ui";
 import { Badge, CardList, CardListCard, EmptyState } from "@dub/ui";
 import { ChartActivity2 } from "@dub/ui/icons";
 
@@ -32,9 +32,9 @@ export default async function OperationsInsightsPage({
 
   return (
     <PageContent
-      title="Insights & billing"
+      title="Insights"
       titleInfo={{
-        title: "Device adoption, subscription activity and infrastructure costs from Remnawave.",
+        title: "Monitor client activity and infrastructure costs.",
       }}
     >
       <PageWidthWrapper className="space-y-8 pb-10">
@@ -126,11 +126,15 @@ export default async function OperationsInsightsPage({
                       {provider.name}
                     </p>
                     <p className="text-content-subtle mt-1 text-xs">
-                      {provider.billingNodes.length} nodes · {provider.billingHistory.totalBills} bills
+                      {provider.billingNodes.length} nodes ·{" "}
+                      {provider.billingHistory.totalBills} bills
                     </p>
                   </div>
                   <Badge variant="gray">
-                    ${provider.billingHistory.totalAmount.toLocaleString("en-US")}
+                    $
+                    {provider.billingHistory.totalAmount.toLocaleString(
+                      "en-US",
+                    )}
                   </Badge>
                 </div>
               </CardListCard>

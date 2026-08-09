@@ -39,7 +39,7 @@ export default async function PlansPage({
   return (
     <PageContent
       title="Plans"
-      titleInfo={{ title: "Manage the catalog and provision VPN access." }}
+      titleInfo={{ title: "Manage pricing and access limits." }}
     >
       <PageWidthWrapper className="space-y-6 pb-10">
         <div className="grid items-stretch gap-4 lg:grid-cols-3">
@@ -143,8 +143,8 @@ export default async function PlansPage({
         )}
 
         <p className="text-content-subtle text-xs">
-          Provisioning creates a subscriber directly in Remnawave. Catalog
-          prices are informational until online checkout is connected.
+          Provisioning creates a user in Remnawave. Prices are informational
+          until checkout is connected.
         </p>
       </PageWidthWrapper>
     </PageContent>

@@ -93,7 +93,7 @@ export function NetworkActivityTable({ nodes }: { nodes: RemnawaveNode[] }) {
             Network activity
           </h2>
           <p className="text-content-subtle text-sm">
-            Live availability, subscribers and traffic reported by Remnawave
+            Live availability, users, and traffic
           </p>
         </div>
         <StatusBadge

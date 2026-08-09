@@ -62,8 +62,8 @@ export async function inviteGrowthMember(formData: FormData) {
   const inviteUrl = `${process.env.NEXTAUTH_URL}/api/auth/callback/email?${params}`;
   await sendEmail({
     to: email,
-    subject: `Invitation to ${workspace.name} Growth Workspace`,
-    text: `${session.user.name || session.user.email} invited you to the ${workspace.name} Growth Workspace as ${role}. Open this secure link within 14 days: ${inviteUrl}`,
+    subject: `Invitation to ${workspace.name} Marketing`,
+    text: `${session.user.name || session.user.email} invited you to ${workspace.name} Marketing as ${role}. Open this secure link within 14 days: ${inviteUrl}`,
     replyTo: "noreply",
   });
   revalidatePath(`/${slug}/growth/team`);

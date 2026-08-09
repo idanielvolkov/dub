@@ -45,7 +45,7 @@ export default async function GrowthTeamPage({
     <PageContent
       title="Team"
       titleInfo={{
-        title: "People working on acquisition, offers, and analytics.",
+        title: "Manage your marketing team.",
       }}
     >
       <PageWidthWrapper className="pb-10">
@@ -56,7 +56,7 @@ export default async function GrowthTeamPage({
                 Invite marketer
               </h2>
               <p className="text-content-subtle text-sm">
-                Members can edit Growth; viewers have read-only access
+                Members can edit Marketing; viewers have read-only access
               </p>
             </div>
             <CardList>

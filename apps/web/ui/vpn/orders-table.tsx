@@ -158,7 +158,7 @@ export function OrdersTable({
       <Modal showModal={showCreateModal} setShowModal={setShowCreateModal}>
         <ModalHeader
           title="Create order"
-          description="Record a VPN sale before payment or provisioning."
+          description="Add a sale before payment or fulfillment."
         />
         <ModalBody asChild className="bg-bg-muted">
           <form action={createVpnOrder} className="space-y-4">
@@ -280,9 +280,7 @@ export function OrdersTable({
                   <input type="hidden" name="slug" value={slug} />
                   <input type="hidden" name="id" value={selectedOrder.id} />
                   <div className="grid gap-1.5">
-                    <Label htmlFor="order-subscriber-name">
-                      Subscriber name
-                    </Label>
+                    <Label htmlFor="order-subscriber-name">Username</Label>
                     <Input
                       id="order-subscriber-name"
                       name="subscriberUsername"
@@ -292,7 +290,7 @@ export function OrdersTable({
                     />
                   </div>
                   <div className="flex justify-end">
-                    <OperationSubmit confirmMessage="Create this subscriber in Remnawave using the purchased plan limits?">
+                    <OperationSubmit confirmMessage="Create this user in Remnawave using the purchased plan limits?">
                       Provision access
                     </OperationSubmit>
                   </div>
@@ -300,7 +298,7 @@ export function OrdersTable({
               )}
               {selectedOrder.fulfillmentStatus === "fulfilled" && (
                 <div className="border-border-subtle border-t pt-5">
-                  <p className="text-content-subtle text-xs">Subscriber</p>
+                  <p className="text-content-subtle text-xs">User</p>
                   <p className="text-content-emphasis mt-1 font-medium">
                     {selectedOrder.subscriberUsername}
                   </p>

@@ -16,7 +16,7 @@ export default async function HostsPage({
   return (
     <PageContent
       title="Hosts"
-      titleInfo={{ title: "Remnawave subscription hosts." }}
+      titleInfo={{ title: "Manage subscription hosts." }}
     >
       <PageWidthWrapper className="pb-10">
         {hostsState.error ? (

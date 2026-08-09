@@ -36,7 +36,7 @@ export default async function OperationsPage({
     ["Nodes", nodes.length, `/${slug}/operations/nodes`],
     ["Hosts", hosts.length, `/${slug}/operations/hosts`],
     [
-      "Profiles & squads",
+      "Configurations",
       profiles.total + squads.total,
       `/${slug}/operations/configurations`,
     ],
@@ -51,7 +51,7 @@ export default async function OperationsPage({
     <PageContent
       title="Overview"
       titleInfo={{
-        title: "Technical control plane backed by the Remnawave API.",
+        title: "Manage your Remnawave installation.",
       }}
       controls={
         <ButtonLink
@@ -61,7 +61,7 @@ export default async function OperationsPage({
           variant="secondary"
           className="h-9 px-3 text-sm"
         >
-          Open native panel
+          Open Remnawave
           <ArrowUpRight2 className="ml-1.5 size-3.5" />
         </ButtonLink>
       }
@@ -95,10 +95,10 @@ export default async function OperationsPage({
         <section className="mt-6">
           <div className="mb-3">
             <h2 className="text-content-emphasis text-sm font-semibold">
-              Control plane
+              Resources
             </h2>
             <p className="text-content-subtle text-sm">
-              Every section reads directly from your Remnawave installation
+              Live data from Remnawave
             </p>
           </div>
           <CardList variant="compact">

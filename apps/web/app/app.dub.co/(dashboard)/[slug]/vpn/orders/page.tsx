@@ -38,7 +38,7 @@ export default async function OrdersPage({
   return (
     <PageContent
       title="Orders"
-      titleInfo={{ title: "Track VPN sales, payments, and provisioning." }}
+      titleInfo={{ title: "Track sales, payments, and fulfillment." }}
     >
       <PageWidthWrapper className="space-y-6 pb-10">
         <VpnStats
