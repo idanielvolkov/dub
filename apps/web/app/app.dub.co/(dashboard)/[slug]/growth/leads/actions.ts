@@ -1,7 +1,7 @@
 "use server";
 
 import { createId } from "@/lib/api/create-id";
-import { getSession } from "@/lib/auth";
+import { getSession } from "@/lib/auth/utils";
 import { GrowthLeadMeta, leadMetaFromStore } from "@/lib/growth/leads";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";

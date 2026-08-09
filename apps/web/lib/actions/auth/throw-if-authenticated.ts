@@ -1,4 +1,4 @@
-import { getSession } from "@/lib/auth";
+import { getSession } from "@/lib/auth/utils";
 
 export const throwIfAuthenticated = async ({ next, ctx }) => {
   const session = await getSession();

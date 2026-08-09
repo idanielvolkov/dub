@@ -1,4 +1,5 @@
-import { getSession, hashToken } from "@/lib/auth";
+import { hashToken } from "@/lib/auth/hash-token";
+import { getSession } from "@/lib/auth/utils";
 import {
   assertCanConfirmEmailChange,
   deleteEmailChangeRequest,

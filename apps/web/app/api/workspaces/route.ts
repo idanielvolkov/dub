@@ -2,7 +2,7 @@ import { DubApiError } from "@/lib/api/errors";
 import { generateRandomString } from "@/lib/api/utils/generate-random-string";
 import { createWorkspaceId } from "@/lib/api/workspaces/create-workspace-id";
 import { prefixWorkspaceId } from "@/lib/api/workspaces/workspace-id";
-import { withSession } from "@/lib/auth";
+import { withSession } from "@/lib/auth/session";
 import { checkIfUserExists } from "@/lib/planetscale";
 import { prisma } from "@/lib/prisma";
 import { storage } from "@/lib/storage";

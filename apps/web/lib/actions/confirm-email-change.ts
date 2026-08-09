@@ -1,6 +1,6 @@
 "use server";
 
-import { hashToken } from "@/lib/auth";
+import { hashToken } from "@/lib/auth/hash-token";
 import {
   assertCanConfirmEmailChange,
   EmailChangeRequestData,

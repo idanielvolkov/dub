@@ -1,6 +1,6 @@
 "use server";
 
-import { getSession } from "@/lib/auth";
+import { getSession } from "@/lib/auth/utils";
 import { GrowthPromotion, promotionsFromStore } from "@/lib/growth/promotions";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";

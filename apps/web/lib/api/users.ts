@@ -1,4 +1,5 @@
-import { Session, hashToken } from "@/lib/auth";
+import { hashToken } from "@/lib/auth/hash-token";
+import type { Session } from "@/lib/auth/utils";
 import { prisma } from "@/lib/prisma";
 import { WorkspaceWithUsers } from "@/lib/types";
 import { sendEmail } from "@dub/email";

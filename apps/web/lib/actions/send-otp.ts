@@ -8,7 +8,7 @@ import { sendEmail } from "@dub/email";
 import VerifyEmail from "@dub/email/templates/verify-email";
 import { flattenValidationErrors } from "next-safe-action";
 import * as z from "zod/v4";
-import { generateOTP } from "../auth";
+import { generateOTP } from "../auth/utils";
 import { EMAIL_OTP_EXPIRY_IN } from "../auth/constants";
 import { emailSchema, passwordSchema } from "../zod/schemas/auth";
 import { throwIfAuthenticated } from "./auth/throw-if-authenticated";

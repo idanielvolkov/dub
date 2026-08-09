@@ -1,4 +1,4 @@
-import { getSession } from "@/lib/auth";
+import { getSession } from "@/lib/auth/utils";
 import { prisma } from "@/lib/prisma";
 import { vpnPlansFromStore } from "@/lib/remnawave/plans";
 import { vpnOrdersFromStore } from "@/lib/vpn/orders";

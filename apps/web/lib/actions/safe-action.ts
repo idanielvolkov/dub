@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { createSafeActionClient } from "next-safe-action";
 import { after } from "next/server";
 import { normalizeWorkspaceId } from "../api/workspaces/workspace-id";
-import { getSession } from "../auth";
+import { getSession } from "../auth/utils";
 import { logger } from "../axiom/server";
 import { PlanProps } from "../types";
 

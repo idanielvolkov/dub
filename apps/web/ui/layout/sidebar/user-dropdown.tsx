@@ -1,38 +1,16 @@
 "use client";
 
-import usePartnerProfile from "@/lib/swr/use-partner-profile";
 import { UserAvatar } from "@/ui/users/user-avatar";
-import {
-  ArrowsOppositeDirectionX,
-  Gift,
-  Icon,
-  Popover,
-  useCurrentSubdomain,
-  User,
-} from "@dub/ui";
-import { Gear } from "@dub/ui/icons";
-import { APP_DOMAIN, cn, PARTNERS_DOMAIN } from "@dub/utils";
+import { Icon, Popover, User } from "@dub/ui";
+import { cn } from "@dub/utils";
 import { LogOut } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
-import {
-  ComponentPropsWithoutRef,
-  ElementType,
-  useMemo,
-  useState,
-} from "react";
+import { ComponentPropsWithoutRef, ElementType, useMemo, useState } from "react";
 
 export function UserDropdown() {
   const { data: session } = useSession();
-  const { partner } = usePartnerProfile();
   const [openPopover, setOpenPopover] = useState(false);
-  const { subdomain } = useCurrentSubdomain();
-  const { slug: paramsSlug } = useParams() as { slug?: string | string[] };
-
-  const workspaceSlug =
-    (Array.isArray(paramsSlug) ? paramsSlug[0] : paramsSlug) ||
-    session?.user?.["defaultWorkspace"];
 
   const menuOptions = useMemo(() => {
     const options: Array<{
@@ -50,42 +28,6 @@ export function UserDropdown() {
       },
     ];
 
-    // Add subdomain-specific options
-    if (subdomain === "partners") {
-      options.push({
-        label: "Switch to workspace",
-        icon: ArrowsOppositeDirectionX,
-        href: APP_DOMAIN,
-      });
-    }
-
-    if (subdomain === "app") {
-      if (workspaceSlug) {
-        options.push({
-          label: "Workspace settings",
-          icon: Gear,
-          href: `/${workspaceSlug}/settings`,
-          onClick: () => setOpenPopover(false),
-        });
-      }
-
-      options.push({
-        label: "Refer and earn",
-        icon: Gift,
-        href: "/account/settings/referrals",
-        onClick: () => setOpenPopover(false),
-      });
-
-      if (partner) {
-        options.push({
-          label: "Switch to partner account",
-          icon: ArrowsOppositeDirectionX,
-          href: PARTNERS_DOMAIN,
-        });
-      }
-    }
-
-    // Add logout option
     options.push({
       type: "button",
       label: "Log out",
@@ -98,7 +40,7 @@ export function UserDropdown() {
     });
 
     return options;
-  }, [subdomain, partner, workspaceSlug, setOpenPopover]);
+  }, []);
 
   return (
     <Popover

@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { cache } from "react";
-import { getSession } from "../auth";
+import { getSession } from "../auth/utils";
 
 export const getDefaultWorkspace = cache(async () => {
   const session = await getSession();

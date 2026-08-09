@@ -1,11 +1,8 @@
 "use server";
 
-import { createLink } from "@/lib/api/links/create-link";
-import { processLink } from "@/lib/api/links/process-link";
-import { getSession } from "@/lib/auth";
+import { getSession } from "@/lib/auth/utils";
 import { prisma } from "@/lib/prisma";
-import type { ProcessedLinkProps } from "@/lib/types";
-import { createLinkBodySchema } from "@/lib/zod/schemas/links";
+import { nanoid } from "@dub/utils";
 import { revalidatePath } from "next/cache";
 
 const text = (data: FormData, key: string) =>
@@ -53,29 +50,28 @@ export async function createGrowthCampaign(formData: FormData) {
   if (!workspace.domains.some((item) => item.slug === domain))
     throw new Error("Invalid campaign domain");
 
-  const payload = createLinkBodySchema.parse({
-    domain,
-    key: text(formData, "key")
-      .toLowerCase()
-      .replace(/[^a-z0-9/_-]/g, "-")
-      .slice(0, 80),
-    url: text(formData, "url"),
-    title: text(formData, "title").slice(0, 120),
-    utm_source: text(formData, "source") || undefined,
-    utm_medium: text(formData, "medium") || undefined,
-    utm_campaign: text(formData, "campaign") || undefined,
-    comments: metadata(formData),
+  const key = text(formData, "key")
+    .toLowerCase()
+    .replace(/[^a-z0-9/_-]/g, "-")
+    .slice(0, 80);
+  const url = new URL(text(formData, "url")).toString();
+
+  await prisma.link.create({
+    data: {
+      id: nanoid(24),
+      domain,
+      key,
+      url,
+      shortLink: `${domain}/${key}`,
+      title: text(formData, "title").slice(0, 120),
+      utm_source: text(formData, "source").slice(0, 255) || null,
+      utm_medium: text(formData, "medium").slice(0, 255) || null,
+      utm_campaign: text(formData, "campaign").slice(0, 255) || null,
+      comments: metadata(formData),
+      projectId: workspace.id,
+      userId: session.user.id,
+    },
   });
-  const processed = await processLink({
-    payload,
-    workspace,
-    userId: session.user.id,
-  });
-  if (processed.error) throw new Error(processed.error);
-  await createLink({
-    ...processed.link,
-    projectId: workspace.id,
-  } as ProcessedLinkProps);
   revalidatePath(`/${slug}/growth`);
   revalidatePath(`/${slug}/growth/campaigns`);
 }

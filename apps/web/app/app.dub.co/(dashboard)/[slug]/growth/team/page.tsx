@@ -1,4 +1,4 @@
-import { getSession } from "@/lib/auth";
+import { getSession } from "@/lib/auth/utils";
 import { DubCard, DubCardList } from "@/ui/vpn/server-card-list";
 import { prisma } from "@/lib/prisma";
 import { PageContent } from "@/ui/layout/page-content";
