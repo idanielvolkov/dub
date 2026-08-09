@@ -160,6 +160,7 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
             href: `/${slug}/growth/campaigns`,
           },
           { name: "Leads", icon: Users, href: `/${slug}/growth/leads` },
+          { name: "Team", icon: Users, href: `/${slug}/growth/team` },
           {
             name: "Promo codes",
             icon: Receipt2,
