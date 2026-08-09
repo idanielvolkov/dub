@@ -11,12 +11,15 @@ import {
 import { prisma } from "@/lib/prisma";
 import { recordWorkspaceActivity } from "@/lib/workspace/activity";
 import { sendEmail } from "@dub/email";
-import { Prisma } from "@prisma/client";
+import { Prisma, WorkspaceRole } from "@prisma/client";
 import { randomBytes } from "crypto";
 import { revalidatePath } from "next/cache";
 
 const text = (data: FormData, key: string) =>
   String(data.get(key) || "").trim();
+
+const teamRole = (value: string): Exclude<WorkspaceRole, "owner"> =>
+  value === "viewer" || value === "billing" ? value : "member";
 
 async function ownerContext(slug: string) {
   const session = await getSession();
@@ -35,7 +38,7 @@ async function ownerContext(slug: string) {
 export async function inviteGrowthMember(formData: FormData) {
   const slug = text(formData, "slug");
   const email = text(formData, "email").toLowerCase();
-  const role = text(formData, "role") === "viewer" ? "viewer" : "member";
+  const role = teamRole(text(formData, "role"));
   const { session, workspace } = await ownerContext(slug);
   if (!/^\S+@\S+\.\S+$/.test(email))
     throw new Error("Enter a valid email address");
@@ -70,8 +73,8 @@ export async function inviteGrowthMember(formData: FormData) {
   const inviteUrl = `${process.env.NEXTAUTH_URL}/api/auth/callback/email?${params}`;
   await sendEmail({
     to: email,
-    subject: `Invitation to ${workspace.name} Marketing`,
-    text: `${session.user.name || session.user.email} invited you to ${workspace.name} Marketing as ${role}. Open this secure link within 14 days: ${inviteUrl}`,
+    subject: `Invitation to ${workspace.name}`,
+    text: `${session.user.name || session.user.email} invited you to ${workspace.name} as ${role}. Open this secure link within 14 days: ${inviteUrl}`,
     replyTo: "noreply",
   });
   await recordWorkspaceActivity({
@@ -90,7 +93,7 @@ export async function inviteGrowthMember(formData: FormData) {
 export async function changeGrowthMemberRole(formData: FormData) {
   const slug = text(formData, "slug");
   const { workspace, session } = await ownerContext(slug);
-  const role = text(formData, "role") === "viewer" ? "viewer" : "member";
+  const role = teamRole(text(formData, "role"));
   await prisma.projectUsers.update({
     where: {
       userId_projectId: {
@@ -205,14 +208,24 @@ export async function removeGrowthMember(formData: FormData) {
 
 export async function revokeGrowthInvite(formData: FormData) {
   const slug = text(formData, "slug");
-  const { workspace } = await ownerContext(slug);
+  const { workspace, session } = await ownerContext(slug);
+  const email = text(formData, "email");
   await prisma.projectInvite.delete({
     where: {
       email_projectId: {
-        email: text(formData, "email"),
+        email,
         projectId: workspace.id,
       },
     },
   });
+  await recordWorkspaceActivity({
+    workspaceId: workspace.id,
+    userId: session.user.id,
+    action: "revoked",
+    resourceType: "workspace_invite",
+    resourceId: email,
+    description: `Revoked the invitation for ${email}`,
+  });
   revalidatePath(`/${slug}/growth/team`);
+  revalidatePath(`/${slug}/vpn/activity`);
 }

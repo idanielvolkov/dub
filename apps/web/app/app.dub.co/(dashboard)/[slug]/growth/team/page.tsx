@@ -1,5 +1,9 @@
 import { getSession } from "@/lib/auth/utils";
-import { getPlatformAccess } from "@/lib/platform-access";
+import {
+  getPlatformAccess,
+  PLATFORM_ACCESS_TEMPLATES,
+  PLATFORM_AREAS,
+} from "@/lib/platform-access";
 import { prisma } from "@/lib/prisma";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
@@ -14,6 +18,24 @@ import {
   removeGrowthMember,
   revokeGrowthInvite,
 } from "./actions";
+
+const areaLabel = {
+  workspace: "Workspace",
+  support: "Support",
+  finance: "Finance",
+  remnawave: "Remnawave API",
+  marketing: "Marketing",
+} as const;
+
+const templateLabel = {
+  custom: "Custom",
+  administrator: "Administrator",
+  support: "Support",
+  finance: "Finance",
+  marketer: "Marketer",
+  technician: "Technician",
+  analyst: "Analyst",
+} as const;
 
 export default async function GrowthTeamPage({
   params,
@@ -64,7 +86,7 @@ export default async function GrowthTeamPage({
     <PageContent
       title="Team"
       titleInfo={{
-        title: "Manage your marketing team.",
+        title: "Manage members, roles, and access across the platform.",
       }}
     >
       <PageWidthWrapper className="pb-10">
@@ -72,10 +94,10 @@ export default async function GrowthTeamPage({
           <section className="mb-6">
             <div className="mb-3">
               <h2 className="text-content-emphasis text-sm font-semibold">
-                Invite marketer
+                Invite member
               </h2>
               <p className="text-content-subtle text-sm">
-                Members can edit Marketing; viewers have read-only access
+                Add a teammate with an initial workspace role
               </p>
             </div>
             <CardList>
@@ -89,7 +111,7 @@ export default async function GrowthTeamPage({
                     className="h-9"
                     type="email"
                     name="email"
-                    placeholder="marketer@company.com"
+                    placeholder="teammate@company.com"
                     required
                   />
                   <FormCombobox
@@ -97,8 +119,9 @@ export default async function GrowthTeamPage({
                     defaultValue="member"
                     className="h-9"
                     options={[
-                      { value: "member", label: "Marketing member" },
+                      { value: "member", label: "Member" },
                       { value: "viewer", label: "Viewer" },
+                      { value: "billing", label: "Billing" },
                     ]}
                   />
                   <OperationSubmit>Send invite</OperationSubmit>
@@ -107,6 +130,51 @@ export default async function GrowthTeamPage({
             </CardList>
           </section>
         )}
+        <section className="mb-6">
+          <div className="mb-3">
+            <h2 className="text-content-emphasis text-sm font-semibold">
+              Access templates
+            </h2>
+            <p className="text-content-subtle text-sm">
+              Start with a role and customize access for each person
+            </p>
+          </div>
+          <CardList variant="compact">
+            {Object.entries(PLATFORM_ACCESS_TEMPLATES)
+              .filter(([key]) => key !== "custom")
+              .map(([key, access]) => (
+                <CardListCard
+                  key={key}
+                  innerClassName="flex flex-wrap items-center gap-3 px-5 py-4"
+                  hoverStateEnabled={false}
+                >
+                  <div className="min-w-40 flex-1">
+                    <p className="text-content-emphasis text-sm font-medium">
+                      {templateLabel[key as keyof typeof templateLabel]}
+                    </p>
+                    <p className="text-content-subtle text-xs">
+                      Ready-to-use platform permissions
+                    </p>
+                  </div>
+                  {access &&
+                    PLATFORM_AREAS.map((area) => (
+                      <Badge
+                        key={area}
+                        variant={
+                          access[area] === "manage"
+                            ? "blue"
+                            : access[area] === "view"
+                              ? "gray"
+                              : "neutral"
+                        }
+                      >
+                        {areaLabel[area]} · {access[area]}
+                      </Badge>
+                    ))}
+                </CardListCard>
+              ))}
+          </CardList>
+        </section>
         <section>
           <div className="mb-3">
             <h2 className="text-content-emphasis text-sm font-semibold">
@@ -194,16 +262,10 @@ export default async function GrowthTeamPage({
                           ]}
                         />
                       </label>
-                      {(
-                        [
-                          ["workspace", "Workspace"],
-                          ["remnawave", "Remnawave API"],
-                          ["marketing", "Marketing"],
-                        ] as const
-                      ).map(([area, label]) => (
+                      {PLATFORM_AREAS.map((area) => (
                         <label key={area} className="space-y-1">
                           <span className="text-content-subtle text-xs font-medium">
-                            {label}
+                            {areaLabel[area]}
                           </span>
                           <FormCombobox
                             name={area}
@@ -242,8 +304,9 @@ export default async function GrowthTeamPage({
                           defaultValue={member.role}
                           className="h-9 min-w-32"
                           options={[
-                            { value: "member", label: "Marketing" },
+                            { value: "member", label: "Member" },
                             { value: "viewer", label: "Viewer" },
+                            { value: "billing", label: "Billing" },
                           ]}
                         />
                         <OperationSubmit>Update</OperationSubmit>
