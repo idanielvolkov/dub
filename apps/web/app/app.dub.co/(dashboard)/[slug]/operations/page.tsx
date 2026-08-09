@@ -7,10 +7,10 @@ import {
   getRemnawaveSubscriptionTemplates,
   getRemnawaveUsers,
 } from "@/lib/remnawave/client";
-import { DubCard, DubCardList } from "@/ui/vpn/server-card-list";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { ButtonLink } from "@/ui/placeholders/button-link";
+import { DubCard, DubCardList } from "@/ui/vpn/server-card-list";
 import { VpnStats } from "@/ui/vpn/vpn-ui";
 import { StatusBadge } from "@dub/ui";
 import { ArrowUpRight2, ChevronRight } from "@dub/ui/icons";
@@ -51,7 +51,7 @@ export default async function OperationsPage({
 
   return (
     <PageContent
-      title="Remnawave Operations"
+      title="Remnawave"
       titleInfo={{
         title: "Technical control plane backed by the Remnawave API.",
       }}
