@@ -5,7 +5,7 @@ import { vpnOrdersFromStore } from "@/lib/vpn/orders";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { OrdersTable } from "@/ui/vpn/orders-table";
-import { VpnMetricCard } from "@/ui/vpn/vpn-ui";
+import { VpnStats } from "@/ui/vpn/vpn-ui";
 
 export default async function OrdersPage({
   params,
@@ -41,31 +41,28 @@ export default async function OrdersPage({
       titleInfo={{ title: "Track VPN sales, payments, and provisioning." }}
     >
       <PageWidthWrapper className="space-y-6 pb-10">
-        <div className="grid gap-4 md:grid-cols-4">
-          <VpnMetricCard
-            label="Orders"
-            value={orders.length}
-            detail="All sales"
-          />
-          <VpnMetricCard
-            label="Paid"
-            value={paid.length}
-            detail="Confirmed payments"
-          />
-          <VpnMetricCard
-            label="Provisioned"
-            value={
-              orders.filter((order) => order.fulfillmentStatus === "fulfilled")
-                .length
-            }
-            detail="VPN access issued"
-          />
-          <VpnMetricCard
-            label="Revenue"
-            value={`$${revenue.toLocaleString("en-US", { maximumFractionDigits: 2 })}`}
-            detail="Marked as paid"
-          />
-        </div>
+        <VpnStats
+          items={[
+            { label: "Orders", value: orders.length, detail: "All sales" },
+            {
+              label: "Paid",
+              value: paid.length,
+              detail: "Confirmed payments",
+            },
+            {
+              label: "Provisioned",
+              value: orders.filter(
+                (order) => order.fulfillmentStatus === "fulfilled",
+              ).length,
+              detail: "VPN access issued",
+            },
+            {
+              label: "Revenue",
+              value: `$${revenue.toLocaleString("en-US", { maximumFractionDigits: 2 })}`,
+              detail: "Marked as paid",
+            },
+          ]}
+        />
         <OrdersTable
           slug={slug}
           orders={orders}

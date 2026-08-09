@@ -3,8 +3,7 @@ import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
-import { VpnPanel, VpnPanelHeader } from "@/ui/vpn/vpn-ui";
-import { Badge, EmptyState, Input } from "@dub/ui";
+import { Badge, CardList, EmptyState, Input } from "@dub/ui";
 import { SquareCheck } from "@dub/ui/icons";
 import {
   createGrowthTask,
@@ -101,36 +100,52 @@ export default async function GrowthTasksPage({
       }}
     >
       <PageWidthWrapper className="pb-10">
-        <VpnPanel className="mb-4">
-          <VpnPanelHeader
-            title="Create task"
-            description="Add work for the growth team"
-          />
-          <form
-            action={createGrowthTask}
-            className="grid gap-3 p-5 md:grid-cols-2 lg:grid-cols-4"
-          >
-            <input type="hidden" name="slug" value={slug} />
-            <TaskFields />
-            <div className="lg:col-span-4">
-              <OperationSubmit>Create task</OperationSubmit>
-            </div>
-          </form>
-        </VpnPanel>
+        <section className="mb-6">
+          <div className="mb-3">
+            <h2 className="text-content-emphasis text-sm font-semibold">
+              Create task
+            </h2>
+            <p className="text-content-subtle text-sm">
+              Add work for the growth team
+            </p>
+          </div>
+          <CardList>
+            <CardList.Card innerClassName="p-0" hoverStateEnabled={false}>
+              <form
+                action={createGrowthTask}
+                className="grid gap-3 p-5 md:grid-cols-2 lg:grid-cols-4"
+              >
+                <input type="hidden" name="slug" value={slug} />
+                <TaskFields />
+                <div className="lg:col-span-4">
+                  <OperationSubmit>Create task</OperationSubmit>
+                </div>
+              </form>
+            </CardList.Card>
+          </CardList>
+        </section>
         <div className="grid items-start gap-4 xl:grid-cols-4">
           {columns.map((column) => {
             const columnTasks = tasks.filter(
               (task) => task.status === column.value,
             );
             return (
-              <VpnPanel key={column.value}>
-                <VpnPanelHeader
-                  title={column.label}
-                  description={`${columnTasks.length} tasks`}
-                />
-                <div className="divide-border-subtle divide-y">
+              <section key={column.value}>
+                <div className="mb-3">
+                  <h2 className="text-content-emphasis text-sm font-semibold">
+                    {column.label}
+                  </h2>
+                  <p className="text-content-subtle text-sm">
+                    {columnTasks.length} tasks
+                  </p>
+                </div>
+                <CardList variant="compact">
                   {columnTasks.map((task) => (
-                    <div key={task.id} className="space-y-3 p-4">
+                    <CardList.Card
+                      key={task.id}
+                      innerClassName="space-y-3 p-4"
+                      hoverStateEnabled={false}
+                    >
                       <div className="flex items-start justify-between gap-2">
                         <p className="text-content-emphasis text-sm font-medium">
                           {task.title}
@@ -179,15 +194,15 @@ export default async function GrowthTasksPage({
                           </OperationSubmit>
                         </form>
                       </details>
-                    </div>
+                    </CardList.Card>
                   ))}
-                  {!columnTasks.length && (
-                    <div className="p-6">
-                      <EmptyState icon={SquareCheck} title="No tasks" />
-                    </div>
-                  )}
-                </div>
-              </VpnPanel>
+                </CardList>
+                {!columnTasks.length && (
+                  <div className="py-8">
+                    <EmptyState icon={SquareCheck} title="No tasks" />
+                  </div>
+                )}
+              </section>
             );
           })}
         </div>

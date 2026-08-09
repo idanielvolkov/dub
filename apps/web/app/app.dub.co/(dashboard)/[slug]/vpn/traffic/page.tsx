@@ -1,13 +1,8 @@
 import { getRemnawaveNodes, getRemnawaveUsers } from "@/lib/remnawave/client";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import {
-  VpnPanel,
-  VpnPanelHeader,
-  VpnProgress,
-  VpnStats,
-} from "@/ui/vpn/vpn-ui";
-import { EmptyState, StatusBadge } from "@dub/ui";
+import { VpnStats } from "@/ui/vpn/vpn-ui";
+import { CardList, EmptyState, ProgressBar, StatusBadge } from "@dub/ui";
 import { ChartActivity2 } from "@dub/ui/icons";
 
 const formatBytes = (bytes: number) => {
@@ -71,21 +66,25 @@ export default async function TrafficPage() {
           }))}
         />
 
-        <div className="mt-4 grid gap-4 lg:grid-cols-[1.35fr_1fr]">
-          <VpnPanel>
-            <VpnPanelHeader
-              title="Subscriber consumption"
-              description="Usage against the assigned plan allowance"
-            />
+        <div className="mt-6 grid gap-6 lg:grid-cols-[1.35fr_1fr]">
+          <section>
+            <div className="mb-3">
+              <h2 className="text-content-emphasis text-sm font-semibold">
+                Subscriber consumption
+              </h2>
+              <p className="text-content-subtle text-sm">
+                Usage against the assigned plan allowance
+              </p>
+            </div>
             {topUsers.length ? (
-              <div className="divide-border-subtle divide-y">
+              <CardList variant="compact">
                 {topUsers.map((user) => {
                   const consumed = user.usedTrafficBytes || 0;
                   const percent = user.trafficLimitBytes
                     ? Math.min(100, (consumed / user.trafficLimitBytes) * 100)
                     : 0;
                   return (
-                    <div key={user.uuid} className="px-5 py-4">
+                    <CardList.Card key={user.uuid} hoverStateEnabled={false}>
                       <div className="flex items-center justify-between gap-3 text-sm">
                         <span className="text-content-emphasis font-medium">
                           {user.username}
@@ -98,16 +97,17 @@ export default async function TrafficPage() {
                         </span>
                       </div>
                       <div className="mt-2">
-                        <VpnProgress
+                        <ProgressBar
                           value={
                             user.trafficLimitBytes ? Math.max(1, percent) : 0
                           }
+                          className="h-1.5"
                         />
                       </div>
-                    </div>
+                    </CardList.Card>
                   );
                 })}
-              </div>
+              </CardList>
             ) : (
               <div className="p-8">
                 <EmptyState
@@ -117,16 +117,20 @@ export default async function TrafficPage() {
                 />
               </div>
             )}
-          </VpnPanel>
+          </section>
 
-          <VpnPanel>
-            <VpnPanelHeader
-              title="Server distribution"
-              description="Current load across VPN nodes"
-            />
-            <div className="divide-border-subtle divide-y px-5">
+          <section>
+            <div className="mb-3">
+              <h2 className="text-content-emphasis text-sm font-semibold">
+                Server distribution
+              </h2>
+              <p className="text-content-subtle text-sm">
+                Current load across VPN nodes
+              </p>
+            </div>
+            <CardList variant="compact">
               {nodes.map((node) => (
-                <div key={node.uuid} className="py-4">
+                <CardList.Card key={node.uuid} hoverStateEnabled={false}>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-content-emphasis font-medium">
                       {node.name}
@@ -141,9 +145,9 @@ export default async function TrafficPage() {
                     <span>{node.usersOnline} connected</span>
                     <span>{formatBytes(node.trafficUsedBytes || 0)}</span>
                   </div>
-                </div>
+                </CardList.Card>
               ))}
-            </div>
+            </CardList>
             {!nodes.length && (
               <div className="p-8">
                 <EmptyState
@@ -153,7 +157,7 @@ export default async function TrafficPage() {
                 />
               </div>
             )}
-          </VpnPanel>
+          </section>
         </div>
       </PageWidthWrapper>
     </PageContent>

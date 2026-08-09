@@ -3,8 +3,7 @@ import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
-import { VpnPanel, VpnPanelHeader } from "@/ui/vpn/vpn-ui";
-import { Badge, Checkbox, EmptyState, Input } from "@dub/ui";
+import { Badge, CardList, Checkbox, EmptyState, Input } from "@dub/ui";
 import { Discount } from "@dub/ui/icons";
 import { createPromotion, deletePromotion, updatePromotion } from "./actions";
 
@@ -123,30 +122,46 @@ export default async function PromotionsPage({
       titleInfo={{ title: "Commercial offers managed by the growth team." }}
     >
       <PageWidthWrapper className="pb-10">
-        <VpnPanel className="mb-4">
-          <VpnPanelHeader
-            title="Create promotion"
-            description="Prepare an offer for checkout and customer acquisition"
-          />
-          <form
-            action={createPromotion}
-            className="grid gap-3 p-5 md:grid-cols-2 lg:grid-cols-4"
-          >
-            <input type="hidden" name="slug" value={slug} />
-            <Fields />
-            <div className="lg:col-span-4">
-              <OperationSubmit>Create promotion</OperationSubmit>
-            </div>
-          </form>
-        </VpnPanel>
-        <VpnPanel>
-          <VpnPanelHeader
-            title="Promotion library"
-            description={`${promotions.length} saved offers`}
-          />
-          <div className="divide-border-subtle divide-y">
+        <section className="mb-6">
+          <div className="mb-3">
+            <h2 className="text-content-emphasis text-sm font-semibold">
+              Create promotion
+            </h2>
+            <p className="text-content-subtle text-sm">
+              Prepare an offer for checkout and customer acquisition
+            </p>
+          </div>
+          <CardList>
+            <CardList.Card innerClassName="p-0" hoverStateEnabled={false}>
+              <form
+                action={createPromotion}
+                className="grid gap-3 p-5 md:grid-cols-2 lg:grid-cols-4"
+              >
+                <input type="hidden" name="slug" value={slug} />
+                <Fields />
+                <div className="lg:col-span-4">
+                  <OperationSubmit>Create promotion</OperationSubmit>
+                </div>
+              </form>
+            </CardList.Card>
+          </CardList>
+        </section>
+        <section>
+          <div className="mb-3">
+            <h2 className="text-content-emphasis text-sm font-semibold">
+              Promotion library
+            </h2>
+            <p className="text-content-subtle text-sm">
+              {promotions.length} saved offers
+            </p>
+          </div>
+          <CardList variant="compact">
             {promotions.map((promotion) => (
-              <div key={promotion.id} className="space-y-4 p-5">
+              <CardList.Card
+                key={promotion.id}
+                innerClassName="space-y-4 p-5"
+                hoverStateEnabled={false}
+              >
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex items-center gap-2">
                     <code className="text-content-emphasis text-sm font-semibold">
@@ -182,19 +197,19 @@ export default async function PromotionsPage({
                     Delete
                   </OperationSubmit>
                 </form>
-              </div>
+              </CardList.Card>
             ))}
-            {!promotions.length && (
-              <div className="p-10">
-                <EmptyState
-                  icon={Discount}
-                  title="No promotions yet"
-                  description="Create the first offer above."
-                />
-              </div>
-            )}
-          </div>
-        </VpnPanel>
+          </CardList>
+          {!promotions.length && (
+            <div className="py-12">
+              <EmptyState
+                icon={Discount}
+                title="No promotions yet"
+                description="Create the first offer above."
+              />
+            </div>
+          )}
+        </section>
         <p className="text-content-subtle mt-4 text-xs">
           The library is ready for checkout validation. Automatic redemption
           counting will activate together with the payment webhook.
