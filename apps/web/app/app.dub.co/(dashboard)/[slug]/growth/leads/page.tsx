@@ -5,7 +5,7 @@ import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import { VpnStats } from "@/ui/vpn/vpn-ui";
-import { Badge, EmptyState, Input } from "@dub/ui";
+import { Badge, EmptyState, Input, Label } from "@dub/ui";
 import { Crosshairs3 } from "@dub/ui/icons";
 import { createGrowthLead, updateGrowthLead } from "./actions";
 
@@ -63,40 +63,44 @@ export default async function LeadsPage({
                 className="grid gap-3 p-5 md:grid-cols-2 lg:grid-cols-4"
               >
                 <input type="hidden" name="slug" value={slug} />
-                <label className="grid gap-1 text-xs text-neutral-500">
-                  Name
-                  <Input className="h-9" name="name" placeholder="Alex Smith" />
-                </label>
-                <label className="grid gap-1 text-xs text-neutral-500">
-                  Email
+                <div className="grid gap-1.5">
+                  <Label htmlFor="new-lead-name">Name</Label>
+                  <Input id="new-lead-name" className="h-9" name="name" placeholder="Alex Smith" />
+                </div>
+                <div className="grid gap-1.5">
+                  <Label htmlFor="new-lead-email">Email</Label>
                   <Input
+                    id="new-lead-email"
                     className="h-9"
                     type="email"
                     name="email"
                     placeholder="alex@example.com"
                     required
                   />
-                </label>
-                <label className="grid gap-1 text-xs text-neutral-500">
-                  Country
+                </div>
+                <div className="grid gap-1.5">
+                  <Label htmlFor="new-lead-country">Country</Label>
                   <Input
+                    id="new-lead-country"
                     className="h-9"
                     name="country"
                     maxLength={2}
                     placeholder="US"
                   />
-                </label>
-                <label className="grid gap-1 text-xs text-neutral-500">
-                  Owner
+                </div>
+                <div className="grid gap-1.5">
+                  <Label htmlFor="new-lead-owner">Owner</Label>
                   <Input
+                    id="new-lead-owner"
                     className="h-9"
                     name="owner"
                     placeholder="Sales team"
                   />
-                </label>
-                <label className="grid gap-1 text-xs text-neutral-500">
-                  Stage
+                </div>
+                <div className="grid gap-1.5">
+                  <Label htmlFor="new-lead-stage">Stage</Label>
                   <FormCombobox
+                    id="new-lead-stage"
                     name="status"
                     defaultValue="new"
                     className="h-9"
@@ -108,15 +112,16 @@ export default async function LeadsPage({
                       { value: "lost", label: "Lost" },
                     ]}
                   />
-                </label>
-                <label className="grid gap-1 text-xs text-neutral-500 md:col-span-2 lg:col-span-3">
-                  Note
+                </div>
+                <div className="grid gap-1.5 md:col-span-2 lg:col-span-3">
+                  <Label htmlFor="new-lead-note">Note</Label>
                   <Input
+                    id="new-lead-note"
                     className="h-9"
                     name="note"
                     placeholder="Interested in annual business plan"
                   />
-                </label>
+                </div>
                 <div className="lg:col-span-4">
                   <OperationSubmit>Add lead</OperationSubmit>
                 </div>
@@ -166,9 +171,10 @@ export default async function LeadsPage({
                 >
                   <input type="hidden" name="slug" value={slug} />
                   <input type="hidden" name="id" value={lead.id} />
-                  <label className="grid gap-1 text-xs text-neutral-500">
-                    Stage
+                  <div className="grid gap-1.5">
+                    <Label htmlFor={`lead-${lead.id}-stage`}>Stage</Label>
                     <FormCombobox
+                      id={`lead-${lead.id}-stage`}
                       name="status"
                       defaultValue={lead.meta.status}
                       className="h-9"
@@ -180,23 +186,25 @@ export default async function LeadsPage({
                         { value: "lost", label: "Lost" },
                       ]}
                     />
-                  </label>
-                  <label className="grid gap-1 text-xs text-neutral-500">
-                    Owner
+                  </div>
+                  <div className="grid gap-1.5">
+                    <Label htmlFor={`lead-${lead.id}-owner`}>Owner</Label>
                     <Input
+                      id={`lead-${lead.id}-owner`}
                       className="h-9"
                       name="owner"
                       defaultValue={lead.meta.owner}
                     />
-                  </label>
-                  <label className="grid gap-1 text-xs text-neutral-500">
-                    Note
+                  </div>
+                  <div className="grid gap-1.5">
+                    <Label htmlFor={`lead-${lead.id}-note`}>Note</Label>
                     <Input
+                      id={`lead-${lead.id}-note`}
                       className="h-9"
                       name="note"
                       defaultValue={lead.meta.note}
                     />
-                  </label>
+                  </div>
                   <OperationSubmit>Save</OperationSubmit>
                 </form>
               </DubCard>

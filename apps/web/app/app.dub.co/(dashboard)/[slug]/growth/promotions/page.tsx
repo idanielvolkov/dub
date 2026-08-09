@@ -4,7 +4,7 @@ import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
-import { Badge, Checkbox, EmptyState, Input } from "@dub/ui";
+import { Badge, Checkbox, EmptyState, Input, Label } from "@dub/ui";
 import { Discount } from "@dub/ui/icons";
 import { createPromotion, deletePromotion, updatePromotion } from "./actions";
 
@@ -12,11 +12,14 @@ const Fields = ({
   promotion,
 }: {
   promotion?: Awaited<ReturnType<typeof getGrowthPromotions>>[number];
-}) => (
-  <>
-    <label className="grid gap-1 text-xs text-neutral-500">
-      Code
+}) => {
+  const fieldPrefix = promotion ? `promotion-${promotion.id}` : "new-promotion";
+
+  return <>
+    <div className="grid gap-1.5">
+      <Label htmlFor={`${fieldPrefix}-code`}>Code</Label>
       <Input
+        id={`${fieldPrefix}-code`}
         className="h-9"
         name="code"
         defaultValue={promotion?.code}
@@ -26,29 +29,32 @@ const Fields = ({
         maxLength={32}
         required
       />
-    </label>
-    <label className="grid gap-1 text-xs text-neutral-500 lg:col-span-2">
-      Description
+    </div>
+    <div className="grid gap-1.5 lg:col-span-2">
+      <Label htmlFor={`${fieldPrefix}-description`}>Description</Label>
       <Input
+        id={`${fieldPrefix}-description`}
         className="h-9"
         name="description"
         defaultValue={promotion?.description}
         placeholder="20% off the first month"
         required
       />
-    </label>
-    <label className="grid gap-1 text-xs text-neutral-500">
-      Audience
+    </div>
+    <div className="grid gap-1.5">
+      <Label htmlFor={`${fieldPrefix}-audience`}>Audience</Label>
       <Input
+        id={`${fieldPrefix}-audience`}
         className="h-9"
         name="audience"
         defaultValue={promotion?.audience}
         placeholder="New subscribers"
       />
-    </label>
-    <label className="grid gap-1 text-xs text-neutral-500">
-      Discount type
+    </div>
+    <div className="grid gap-1.5">
+      <Label htmlFor={`${fieldPrefix}-discount-type`}>Discount type</Label>
       <FormCombobox
+        id={`${fieldPrefix}-discount-type`}
         name="discountType"
         defaultValue={promotion?.discountType || "percentage"}
         className="h-9"
@@ -57,10 +63,11 @@ const Fields = ({
           { value: "fixed", label: "Fixed amount" },
         ]}
       />
-    </label>
-    <label className="grid gap-1 text-xs text-neutral-500">
-      Value
+    </div>
+    <div className="grid gap-1.5">
+      <Label htmlFor={`${fieldPrefix}-value`}>Value</Label>
       <Input
+        id={`${fieldPrefix}-value`}
         className="h-9"
         type="number"
         name="discountValue"
@@ -69,46 +76,53 @@ const Fields = ({
         defaultValue={promotion?.discountValue || 0}
         required
       />
-    </label>
-    <label className="grid gap-1 text-xs text-neutral-500">
-      Starts
+    </div>
+    <div className="grid gap-1.5">
+      <Label htmlFor={`${fieldPrefix}-starts`}>Starts</Label>
       <Input
+        id={`${fieldPrefix}-starts`}
         className="h-9"
         type="date"
         name="startsAt"
         defaultValue={promotion?.startsAt || ""}
       />
-    </label>
-    <label className="grid gap-1 text-xs text-neutral-500">
-      Ends
+    </div>
+    <div className="grid gap-1.5">
+      <Label htmlFor={`${fieldPrefix}-ends`}>Ends</Label>
       <Input
+        id={`${fieldPrefix}-ends`}
         className="h-9"
         type="date"
         name="endsAt"
         defaultValue={promotion?.endsAt || ""}
       />
-    </label>
-    <label className="grid gap-1 text-xs text-neutral-500">
-      Redemption limit
+    </div>
+    <div className="grid gap-1.5">
+      <Label htmlFor={`${fieldPrefix}-limit`}>Redemption limit</Label>
       <Input
+        id={`${fieldPrefix}-limit`}
         className="h-9"
         type="number"
         name="maxRedemptions"
         min={0}
         defaultValue={promotion?.maxRedemptions || 0}
       />
-      <span>0 means unlimited</span>
-    </label>
-    <label className="flex items-center gap-2 self-end pb-2 text-sm">
+      <span className="text-content-subtle text-xs">0 means unlimited</span>
+    </div>
+    <Label
+      htmlFor={`${fieldPrefix}-active`}
+      className="flex cursor-pointer items-center gap-2 self-end pb-2 font-normal"
+    >
       <Checkbox
+        id={`${fieldPrefix}-active`}
         name="active"
         defaultChecked={promotion?.active ?? false}
         className="size-4"
       />{" "}
       Active
-    </label>
+    </Label>
   </>
-);
+};
 
 export default async function PromotionsPage({
   params,
