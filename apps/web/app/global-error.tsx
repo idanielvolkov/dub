@@ -13,6 +13,10 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const diagnostic = [error.name, error.message, error.digest]
+    .filter(Boolean)
+    .join(": ");
+
   useEffect(() => {
     const recoveryStarted = (
       window as RecoveryWindow
@@ -66,8 +70,37 @@ export default function GlobalError({
               }}
             >
               Detz will refresh automatically when an outdated browser bundle is
-              detected.
+              detected. If the problem persists, open the diagnostic details
+              below.
             </p>
+            <details
+              style={{
+                margin: "0 0 20px",
+                border: "1px solid #e5e5e5",
+                borderRadius: 8,
+                padding: 12,
+                fontSize: 12,
+              }}
+            >
+              <summary style={{ cursor: "pointer", fontWeight: 600 }}>
+                Diagnostic details
+              </summary>
+              <pre
+                style={{
+                  margin: "12px 0 0",
+                  maxHeight: 160,
+                  overflow: "auto",
+                  whiteSpace: "pre-wrap",
+                  wordBreak: "break-word",
+                  color: "#525252",
+                  fontFamily:
+                    "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+                }}
+              >
+                {diagnostic || "Unknown client error"}
+                {error.stack ? `\n\n${error.stack}` : ""}
+              </pre>
+            </details>
             <button
               type="button"
               onClick={reset}
