@@ -1,16 +1,14 @@
 import { getGrowthTasks } from "@/lib/growth/tasks";
 import { DubCard, DubCardList } from "@/ui/vpn/server-card-list";
 import {
+  CreateGrowthTaskButton,
   GrowthTaskActions,
-  GrowthTaskFields,
   growthTaskStatuses,
 } from "@/ui/growth/growth-task-actions";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import { Badge, EmptyState } from "@dub/ui";
 import { SquareCheck } from "@dub/ui/icons";
-import { createGrowthTask } from "./actions";
 
 export default async function GrowthTasksPage({
   params,
@@ -25,32 +23,9 @@ export default async function GrowthTasksPage({
       titleInfo={{
         title: "Marketing work, ownership, deadlines, and progress.",
       }}
+      controls={<CreateGrowthTaskButton slug={slug} />}
     >
       <PageWidthWrapper className="pb-10">
-        <section className="mb-6">
-          <div className="mb-3">
-            <h2 className="text-content-emphasis text-sm font-semibold">
-              Create task
-            </h2>
-            <p className="text-content-subtle text-sm">
-              Add work for the growth team
-            </p>
-          </div>
-          <DubCardList>
-            <DubCard innerClassName="p-0" hoverStateEnabled={false}>
-              <form
-                action={createGrowthTask}
-                className="grid gap-3 p-5 md:grid-cols-2 lg:grid-cols-4"
-              >
-                <input type="hidden" name="slug" value={slug} />
-                <GrowthTaskFields />
-                <div className="lg:col-span-4">
-                  <OperationSubmit>Create task</OperationSubmit>
-                </div>
-              </form>
-            </DubCard>
-          </DubCardList>
-        </section>
         <div className="grid items-start gap-4 xl:grid-cols-4">
           {growthTaskStatuses.map((column) => {
             const columnTasks = tasks.filter(
