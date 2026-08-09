@@ -42,7 +42,7 @@ export default function RootLayout({
 
             const isStaleBundleError = (value) => {
               const message = String(value?.message || value?.reason?.message || value?.reason || value || "");
-              return /ChunkLoadError|Loading chunk|Failed to fetch dynamically imported module|Importing a module script failed|module script.*failed|CSS_CHUNK_LOAD_FAILED/i.test(message);
+              return /ChunkLoadError|Loading chunk|Failed to fetch dynamically imported module|Importing a module script failed|module script.*failed|CSS_CHUNK_LOAD_FAILED|Minified React error #130|Element type is invalid/i.test(message);
             };
 
             window.addEventListener("error", (event) => {

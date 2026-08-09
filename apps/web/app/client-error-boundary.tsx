@@ -7,6 +7,10 @@ type State = {
   componentStack: string;
 };
 
+type RecoveryWindow = Window & {
+  __detzRecoverFromClientError?: (error?: unknown) => boolean;
+};
+
 export class ClientErrorBoundary extends Component<
   { children: ReactNode },
   State
@@ -18,6 +22,11 @@ export class ClientErrorBoundary extends Component<
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
+    const recoveryStarted = (
+      window as RecoveryWindow
+    ).__detzRecoverFromClientError?.(error);
+    if (recoveryStarted) return;
+
     this.setState({ componentStack: info.componentStack ?? "" });
     console.error("[detz] React component crash", error, info.componentStack);
   }
@@ -38,6 +47,13 @@ export class ClientErrorBoundary extends Component<
             {"\n\nComponent stack:\n"}
             {this.state.componentStack || "Capturing component stack…"}
           </pre>
+          <button
+            type="button"
+            className="mt-4 h-10 w-full rounded-lg bg-black text-sm font-medium text-white"
+            onClick={() => window.location.reload()}
+          >
+            Try again
+          </button>
         </section>
       </main>
     );
