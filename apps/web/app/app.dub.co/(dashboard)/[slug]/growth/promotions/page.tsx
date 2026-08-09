@@ -20,7 +20,7 @@ export default async function PromotionsPage({
   return (
     <PageContent
       title="Promo codes"
-      titleInfo={{ title: "Commercial offers managed by the growth team." }}
+      titleInfo={{ title: "Manage offers and discount codes." }}
       controls={<CreatePromotionButton slug={slug} />}
     >
       <PageWidthWrapper className="pb-10">

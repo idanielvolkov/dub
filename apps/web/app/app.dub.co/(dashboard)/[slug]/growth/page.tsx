@@ -18,7 +18,7 @@ export default async function GrowthPage({
     <PageContent
       title="Overview"
       titleInfo={{
-        title: "A dedicated workspace for your marketing and growth team.",
+        title: "Track campaigns, leads, and attributed revenue.",
       }}
       controls={
         <ButtonLink

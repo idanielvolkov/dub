@@ -49,7 +49,7 @@ export async function createSubscriber(formData: FormData) {
     : "NO_RESET";
 
   if (username.length < 3) {
-    throw new Error("Subscriber name must contain at least 3 characters");
+    throw new Error("Username must contain at least 3 characters");
   }
 
   const session = await getSession();

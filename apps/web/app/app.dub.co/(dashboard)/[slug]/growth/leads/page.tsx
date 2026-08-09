@@ -33,7 +33,7 @@ export default async function LeadsPage({
     <PageContent
       title="Leads"
       titleInfo={{
-        title: "Attributed prospects and the marketing sales pipeline.",
+        title: "Manage contacts and the sales pipeline.",
       }}
       controls={<CreateLeadButton slug={slug} />}
     >

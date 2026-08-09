@@ -26,7 +26,7 @@ export default async function CampaignsPage({
     <PageContent
       title="Campaigns"
       titleInfo={{
-        title: "Acquisition campaigns, ownership and live attribution.",
+        title: "Manage campaigns and attribution.",
       }}
       controls={
         <CreateCampaignButton

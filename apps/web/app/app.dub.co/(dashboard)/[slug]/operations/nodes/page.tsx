@@ -14,7 +14,10 @@ export default async function NodesPage({
     getRemnawaveNodesState(),
   ]);
   return (
-    <PageContent title="Nodes" titleInfo={{ title: "Live Remnawave nodes." }}>
+    <PageContent
+      title="Nodes"
+      titleInfo={{ title: "Manage nodes connected to Remnawave." }}
+    >
       <PageWidthWrapper className="pb-10">
         {nodesState.error ? (
           <RemnawaveUnavailable detail={nodesState.error} />

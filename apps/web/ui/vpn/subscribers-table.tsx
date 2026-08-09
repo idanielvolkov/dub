@@ -56,7 +56,7 @@ export function SubscribersTable({
     () => [
       {
         id: "subscriber",
-        header: "Subscriber",
+        header: "User",
         cell: ({ row }) => (
           <div>
             <p className="text-content-emphasis font-medium">
@@ -109,20 +109,20 @@ export function SubscribersTable({
           <TableRowMenu
             actions={[
               {
-                label: "Edit subscriber",
+                label: "Edit user",
                 icon: Pen2,
                 onClick: () => setSelectedUser(row.original),
               },
               {
-                label: "Copy subscription link",
+                label: "Copy access link",
                 icon: Copy,
                 onClick: () =>
                   toast.promise(copyToClipboard(row.original.subscriptionUrl), {
-                    success: "Subscription link copied",
+                    success: "Access link copied",
                   }),
               },
               {
-                label: "Open subscription link",
+                label: "Open access link",
                 icon: Link4,
                 onClick: () =>
                   window.open(
@@ -144,11 +144,9 @@ export function SubscribersTable({
     <>
       <div className="mb-3 flex items-center justify-between gap-4">
         <div>
-          <h2 className="text-content-emphasis text-sm font-semibold">
-            VPN subscribers
-          </h2>
+          <h2 className="text-content-emphasis text-sm font-semibold">Users</h2>
           <p className="text-content-subtle text-sm">
-            {users.length} subscribers in Remnawave
+            {users.length} users in Remnawave
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -161,27 +159,27 @@ export function SubscribersTable({
           />
           <Button
             className="w-fit"
-            text="Add subscriber"
+            text="Add user"
             onClick={() => setShowCreateModal(true)}
           />
         </div>
       </div>
       <Table
         {...table}
-        resourceName={(plural) => (plural ? "subscribers" : "subscriber")}
+        resourceName={(plural) => (plural ? "users" : "user")}
         emptyState={
           <EmptyState
             icon={ShieldUser}
-            title="No subscribers yet"
-            description="Add a subscriber to create VPN access in Remnawave."
+            title="No users yet"
+            description="Add a user to create VPN access."
           />
         }
       />
 
       <Modal showModal={showBulkModal} setShowModal={setShowBulkModal}>
         <ModalHeader
-          title="Bulk subscriber actions"
-          description="Apply operational changes to every Remnawave subscriber."
+          title="Bulk actions"
+          description="Apply changes to all Remnawave users."
         />
         <ModalBody className="bg-bg-muted space-y-4">
           <form
@@ -203,7 +201,7 @@ export function SubscribersTable({
                 />
               </div>
               <OperationSubmit
-                confirmMessage={`Extend all ${users.length} subscribers by the selected number of days?`}
+                confirmMessage={`Extend all ${users.length} users by the selected number of days?`}
               >
                 Extend all
               </OperationSubmit>
@@ -219,11 +217,11 @@ export function SubscribersTable({
                 Reset all traffic
               </p>
               <p className="text-content-subtle mt-1 text-xs">
-                Clear usage counters for every subscriber.
+                Clear usage counters for every user.
               </p>
             </div>
             <OperationSubmit
-              confirmMessage={`Reset traffic for all ${users.length} subscribers?`}
+              confirmMessage={`Reset traffic for all ${users.length} users?`}
             >
               Reset all
             </OperationSubmit>
@@ -245,14 +243,14 @@ export function SubscribersTable({
         className="max-w-xl"
       >
         <ModalHeader
-          title="Add subscriber"
-          description="Create VPN access directly in Remnawave."
+          title="Add user"
+          description="Create a user in Remnawave."
         />
         <ModalBody asChild className="bg-bg-muted">
           <form action={createSubscriber} className="grid gap-4 sm:grid-cols-2">
             <input type="hidden" name="slug" value={slug} />
             <div className="grid gap-1.5">
-              <Label htmlFor="subscriber-username">Subscriber name</Label>
+              <Label htmlFor="subscriber-username">Username</Label>
               <Input
                 id="subscriber-username"
                 name="username"
@@ -339,7 +337,7 @@ export function SubscribersTable({
                 text="Cancel"
                 onClick={() => setShowCreateModal(false)}
               />
-              <OperationSubmit>Add subscriber</OperationSubmit>
+              <OperationSubmit>Add user</OperationSubmit>
             </ModalFooter>
           </form>
         </ModalBody>
@@ -373,12 +371,10 @@ export function SubscribersTable({
             <ModalBody className="bg-bg-muted">
               <div className="border-border-subtle mb-4 flex items-center gap-3 rounded-xl border bg-white p-3">
                 <div className="min-w-0 flex-1">
-                  <p className="text-content-subtle text-xs">
-                    Subscription link
-                  </p>
+                  <p className="text-content-subtle text-xs">Access link</p>
                   <CopyText
                     value={selectedUser.subscriptionUrl}
-                    successMessage="Subscription link copied"
+                    successMessage="Access link copied"
                     className="text-content-emphasis mt-1 block max-w-full truncate font-mono text-xs"
                   >
                     {selectedUser.subscriptionUrl}
@@ -386,7 +382,7 @@ export function SubscribersTable({
                 </div>
                 <CopyButton
                   value={selectedUser.subscriptionUrl}
-                  successMessage="Subscription link copied"
+                  successMessage="Access link copied"
                   className="shrink-0"
                 />
                 <Button
@@ -503,7 +499,7 @@ export function SubscribersTable({
                 <input type="hidden" name="slug" value={slug} />
                 <input type="hidden" name="uuid" value={selectedUser.uuid} />
                 <OperationSubmit
-                  confirmMessage={`Generate a new subscription link for ${selectedUser.username}?`}
+                  confirmMessage={`Generate a new access link for ${selectedUser.username}?`}
                 >
                   Revoke link
                 </OperationSubmit>

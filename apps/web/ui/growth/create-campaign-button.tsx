@@ -42,7 +42,7 @@ export function CreateCampaignButton({
       >
         <ModalHeader
           title="Create campaign"
-          description="Create a trackable campaign link with UTM attribution."
+          description="Create a campaign link with UTM attribution."
         />
         <ModalBody asChild className="bg-bg-muted">
           <form

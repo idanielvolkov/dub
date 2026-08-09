@@ -32,7 +32,7 @@ export default async function SubscriptionsPage({
     <PageContent
       title="Subscriptions"
       titleInfo={{
-        title: "Templates and global Remnawave subscription behavior.",
+        title: "Manage templates and subscription settings.",
       }}
     >
       <PageWidthWrapper className="pb-10">

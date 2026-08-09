@@ -42,12 +42,12 @@ export default async function TrafficPage() {
   return (
     <PageContent
       title="Traffic"
-      titleInfo={{ title: "Live usage totals reported by Remnawave." }}
+      titleInfo={{ title: "Monitor usage across users and nodes." }}
     >
       <PageWidthWrapper className="pb-10">
         <VpnStats
           items={[
-            ["Subscriber usage", formatBytes(used), `${users.length} accounts`],
+            ["User traffic", formatBytes(used), `${users.length} users`],
             [
               "Plan allowance",
               formatBytes(allowance),
@@ -76,7 +76,7 @@ export default async function TrafficPage() {
           <section>
             <div className="mb-3">
               <h2 className="text-content-emphasis text-sm font-semibold">
-                Subscriber consumption
+                User traffic
               </h2>
               <p className="text-content-subtle text-sm">
                 Usage against the assigned plan allowance
@@ -119,7 +119,7 @@ export default async function TrafficPage() {
                 <EmptyState
                   icon={ChartActivity2}
                   title="No traffic yet"
-                  description="Usage appears after subscribers start using the VPN."
+                  description="Usage appears after users start using the VPN."
                 />
               </div>
             )}

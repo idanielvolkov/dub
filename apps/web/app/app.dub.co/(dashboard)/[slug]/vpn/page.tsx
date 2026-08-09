@@ -48,7 +48,7 @@ export default async function BusinessOverviewPage({
   return (
     <PageContent
       title="Overview"
-      titleInfo={{ title: "Plans, sales, payments, and order fulfillment." }}
+      titleInfo={{ title: "Track revenue, orders, and plan performance." }}
       controls={
         <ButtonLink
           href={`/${slug}/vpn/orders`}

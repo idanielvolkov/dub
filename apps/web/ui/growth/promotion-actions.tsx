@@ -66,7 +66,7 @@ export function PromotionFields({
           id={`${prefix}-audience`}
           name="audience"
           defaultValue={promotion?.audience}
-          placeholder="New subscribers"
+          placeholder="New users"
         />
       </div>
       <div className="grid gap-1.5">
@@ -155,7 +155,7 @@ export function CreatePromotionButton({ slug }: { slug: string }) {
       >
         <ModalHeader
           title="Create promo code"
-          description="Prepare an offer for checkout and customer acquisition."
+          description="Create an offer for your customers."
         />
         <ModalBody asChild className="bg-bg-muted">
           <form action={createPromotion} className="grid gap-4 md:grid-cols-2">

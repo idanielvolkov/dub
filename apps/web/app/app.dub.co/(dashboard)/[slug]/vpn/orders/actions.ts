@@ -142,7 +142,7 @@ export async function fulfillVpnOrder(formData: FormData) {
     .toLowerCase()
     .replace(/[^a-z0-9_-]/g, "-")
     .slice(0, 36);
-  if (username.length < 3) throw new Error("Enter a subscriber username");
+  if (username.length < 3) throw new Error("Enter a username");
 
   const subscriber = await createRemnawaveUser({
     username,

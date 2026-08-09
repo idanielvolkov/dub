@@ -139,7 +139,7 @@ export async function provisionPlan(formData: FormData) {
     .replace(/[^a-z0-9_-]/g, "-")
     .slice(0, 36);
   if (username.length < 3)
-    throw new Error("Enter at least 3 characters for the subscriber name");
+    throw new Error("Enter at least 3 characters for the username");
 
   const workspace = await prisma.project.findUniqueOrThrow({
     where: { id: projectId },

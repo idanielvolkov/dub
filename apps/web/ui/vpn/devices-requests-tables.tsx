@@ -119,7 +119,7 @@ export function HwidDevicesTable({
                 onClick: async () => {
                   if (
                     !window.confirm(
-                      "Remove this device from the subscriber? The client may register again on its next connection.",
+                      "Remove this device from the user? The client may register again on its next connection.",
                     )
                   )
                     return;

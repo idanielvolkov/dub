@@ -67,9 +67,8 @@ const NAV_GROUPS: SidebarNavGroups<SidebarNavData> = ({
     : []),
   {
     id: "growth",
-    name: "Growth Workspace",
-    description:
-      "Campaigns, acquisition, leads, promotions, and marketing analytics.",
+    name: "Marketing",
+    description: "Manage campaigns, leads, promotions, and analytics.",
     icon: MarketingTarget,
     href: slug ? `/${slug}/growth` : "/growth",
     active: pathname.startsWith(`/${slug}/growth`),
@@ -136,7 +135,7 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
         name: "Configuration",
         items: [
           {
-            name: "Profiles & squads",
+            name: "Configurations",
             icon: iconOr(Sliders, ShieldCheck),
             href: `/${slug}/operations/configurations`,
           },
@@ -156,12 +155,12 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
             href: `/${slug}/operations/traffic`,
           },
           {
-            name: "Devices & requests",
+            name: "Devices",
             icon: iconOr(ShieldKeyhole, ShieldCheck),
             href: `/${slug}/operations/devices`,
           },
           {
-            name: "Insights & billing",
+            name: "Insights",
             icon: iconOr(ChartActivity2, LinesY),
             href: `/${slug}/operations/insights`,
           },
@@ -170,7 +169,7 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
     ],
   }),
   growth: ({ slug }) => ({
-    title: "Growth Workspace",
+    title: "Marketing",
     direction: "left",
     content: [
       {
