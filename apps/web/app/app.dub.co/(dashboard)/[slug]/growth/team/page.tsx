@@ -5,16 +5,13 @@ import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import { VpnPanel, VpnPanelHeader } from "@/ui/vpn/vpn-ui";
-import { Badge } from "@dub/ui";
+import { Badge, Input } from "@dub/ui";
 import {
   changeGrowthMemberRole,
   inviteGrowthMember,
   removeGrowthMember,
   revokeGrowthInvite,
 } from "./actions";
-
-const inputClass =
-  "h-9 rounded-lg border border-neutral-200 bg-white px-3 text-sm outline-none transition focus:border-neutral-400";
 
 export default async function GrowthTeamPage({
   params,
@@ -63,8 +60,8 @@ export default async function GrowthTeamPage({
               className="grid gap-3 p-5 sm:grid-cols-[1fr_160px_auto]"
             >
               <input type="hidden" name="slug" value={slug} />
-              <input
-                className={inputClass}
+              <Input
+                className="h-9"
                 type="email"
                 name="email"
                 placeholder="marketer@company.com"

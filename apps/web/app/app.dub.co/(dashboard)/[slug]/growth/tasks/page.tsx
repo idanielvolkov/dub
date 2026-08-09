@@ -4,15 +4,14 @@ import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import { VpnPanel, VpnPanelHeader } from "@/ui/vpn/vpn-ui";
-import { Badge } from "@dub/ui";
+import { Badge, EmptyState, Input } from "@dub/ui";
+import { SquareCheck } from "@dub/ui/icons";
 import {
   createGrowthTask,
   deleteGrowthTask,
   updateGrowthTask,
 } from "./actions";
 
-const inputClass =
-  "h-9 rounded-lg border border-neutral-200 bg-white px-3 text-sm outline-none transition focus:border-neutral-400";
 const columns: { value: GrowthTask["status"]; label: string }[] = [
   { value: "backlog", label: "Backlog" },
   { value: "in_progress", label: "In progress" },
@@ -25,8 +24,8 @@ function TaskFields({ task }: { task?: GrowthTask }) {
     <>
       <label className="grid gap-1 text-xs text-neutral-500 md:col-span-2">
         Title
-        <input
-          className={inputClass}
+        <Input
+          className="h-9"
           name="title"
           defaultValue={task?.title}
           placeholder="Prepare Telegram launch"
@@ -36,8 +35,8 @@ function TaskFields({ task }: { task?: GrowthTask }) {
       </label>
       <label className="grid gap-1 text-xs text-neutral-500">
         Assignee
-        <input
-          className={inputClass}
+        <Input
+          className="h-9"
           name="assignee"
           defaultValue={task?.assignee}
           placeholder="Alex"
@@ -45,8 +44,8 @@ function TaskFields({ task }: { task?: GrowthTask }) {
       </label>
       <label className="grid gap-1 text-xs text-neutral-500">
         Due date
-        <input
-          className={inputClass}
+        <Input
+          className="h-9"
           type="date"
           name="dueDate"
           defaultValue={task?.dueDate || ""}
@@ -76,8 +75,8 @@ function TaskFields({ task }: { task?: GrowthTask }) {
       </label>
       <label className="grid gap-1 text-xs text-neutral-500 md:col-span-2">
         Description
-        <input
-          className={inputClass}
+        <Input
+          className="h-9"
           name="description"
           defaultValue={task?.description}
           placeholder="Deliverables and acceptance criteria"
@@ -183,9 +182,9 @@ export default async function GrowthTasksPage({
                     </div>
                   ))}
                   {!columnTasks.length && (
-                    <p className="text-content-subtle p-6 text-center text-xs">
-                      No tasks
-                    </p>
+                    <div className="p-6">
+                      <EmptyState icon={SquareCheck} title="No tasks" />
+                    </div>
                   )}
                 </div>
               </VpnPanel>

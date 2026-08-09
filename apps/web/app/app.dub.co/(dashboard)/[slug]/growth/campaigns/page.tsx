@@ -4,15 +4,13 @@ import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import { VpnPanel, VpnPanelHeader } from "@/ui/vpn/vpn-ui";
-import { Badge } from "@dub/ui";
+import { Badge, EmptyState, Input } from "@dub/ui";
+import { Megaphone } from "@dub/ui/icons";
 import {
   archiveGrowthCampaign,
   createGrowthCampaign,
   updateGrowthCampaign,
 } from "./actions";
-
-const inputClass =
-  "h-9 rounded-lg border border-neutral-200 bg-white px-3 text-sm outline-none transition focus:border-neutral-400";
 
 export default async function CampaignsPage({
   params,
@@ -43,8 +41,8 @@ export default async function CampaignsPage({
               <input type="hidden" name="slug" value={slug} />
               <label className="grid gap-1 text-xs text-neutral-500 md:col-span-2">
                 Campaign name
-                <input
-                  className={inputClass}
+                <Input
+                  className="h-9"
                   name="title"
                   placeholder="Summer VPN launch"
                   required
@@ -52,8 +50,8 @@ export default async function CampaignsPage({
               </label>
               <label className="grid gap-1 text-xs text-neutral-500 md:col-span-2">
                 Destination URL
-                <input
-                  className={inputClass}
+                <Input
+                  className="h-9"
                   type="url"
                   name="url"
                   placeholder="https://detz.fun/pricing"
@@ -74,8 +72,8 @@ export default async function CampaignsPage({
               </label>
               <label className="grid gap-1 text-xs text-neutral-500">
                 Short path
-                <input
-                  className={inputClass}
+                <Input
+                  className="h-9"
                   name="key"
                   placeholder="summer"
                   pattern="[A-Za-z0-9/_-]+"
@@ -84,40 +82,32 @@ export default async function CampaignsPage({
               </label>
               <label className="grid gap-1 text-xs text-neutral-500">
                 UTM campaign
-                <input
-                  className={inputClass}
+                <Input
+                  className="h-9"
                   name="campaign"
                   placeholder="summer-2026"
                 />
               </label>
               <label className="grid gap-1 text-xs text-neutral-500">
                 Owner
-                <input
-                  className={inputClass}
+                <Input
+                  className="h-9"
                   name="owner"
                   placeholder="Marketing team"
                 />
               </label>
               <label className="grid gap-1 text-xs text-neutral-500">
                 Source
-                <input
-                  className={inputClass}
-                  name="source"
-                  placeholder="telegram"
-                />
+                <Input className="h-9" name="source" placeholder="telegram" />
               </label>
               <label className="grid gap-1 text-xs text-neutral-500">
                 Medium
-                <input
-                  className={inputClass}
-                  name="medium"
-                  placeholder="social"
-                />
+                <Input className="h-9" name="medium" placeholder="social" />
               </label>
               <label className="grid gap-1 text-xs text-neutral-500">
                 Budget
-                <input
-                  className={inputClass}
+                <Input
+                  className="h-9"
                   type="number"
                   name="budget"
                   min={0}
@@ -186,8 +176,8 @@ export default async function CampaignsPage({
                   <input type="hidden" name="id" value={campaign.id} />
                   <label className="grid gap-1 text-xs text-neutral-500 lg:col-span-2">
                     Name
-                    <input
-                      className={inputClass}
+                    <Input
+                      className="h-9"
                       name="title"
                       defaultValue={campaign.title || ""}
                       required
@@ -195,24 +185,24 @@ export default async function CampaignsPage({
                   </label>
                   <label className="grid gap-1 text-xs text-neutral-500">
                     UTM campaign
-                    <input
-                      className={inputClass}
+                    <Input
+                      className="h-9"
                       name="campaign"
                       defaultValue={campaign.utm_campaign || ""}
                     />
                   </label>
                   <label className="grid gap-1 text-xs text-neutral-500">
                     Owner
-                    <input
-                      className={inputClass}
+                    <Input
+                      className="h-9"
                       name="owner"
                       defaultValue={campaign.meta.owner}
                     />
                   </label>
                   <label className="grid gap-1 text-xs text-neutral-500">
                     Budget
-                    <input
-                      className={inputClass}
+                    <Input
+                      className="h-9"
                       type="number"
                       name="budget"
                       min={0}
@@ -253,8 +243,8 @@ export default async function CampaignsPage({
               </div>
             ))}
             {!campaigns.length && (
-              <div className="text-content-subtle p-10 text-center text-sm">
-                No campaigns yet.
+              <div className="p-10">
+                <EmptyState icon={Megaphone} title="No campaigns yet" />
               </div>
             )}
           </div>

@@ -4,11 +4,9 @@ import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import { VpnMetricCard, VpnPanel, VpnPanelHeader } from "@/ui/vpn/vpn-ui";
-import { Badge } from "@dub/ui";
+import { Badge, EmptyState, Input } from "@dub/ui";
+import { Crosshairs3 } from "@dub/ui/icons";
 import { createGrowthLead, updateGrowthLead } from "./actions";
-
-const inputClass =
-  "h-9 rounded-lg border border-neutral-200 bg-white px-3 text-sm outline-none transition focus:border-neutral-400";
 
 export default async function LeadsPage({
   params,
@@ -61,16 +59,12 @@ export default async function LeadsPage({
             <input type="hidden" name="slug" value={slug} />
             <label className="grid gap-1 text-xs text-neutral-500">
               Name
-              <input
-                className={inputClass}
-                name="name"
-                placeholder="Alex Smith"
-              />
+              <Input className="h-9" name="name" placeholder="Alex Smith" />
             </label>
             <label className="grid gap-1 text-xs text-neutral-500">
               Email
-              <input
-                className={inputClass}
+              <Input
+                className="h-9"
                 type="email"
                 name="email"
                 placeholder="alex@example.com"
@@ -79,8 +73,8 @@ export default async function LeadsPage({
             </label>
             <label className="grid gap-1 text-xs text-neutral-500">
               Country
-              <input
-                className={inputClass}
+              <Input
+                className="h-9"
                 name="country"
                 maxLength={2}
                 placeholder="US"
@@ -88,11 +82,7 @@ export default async function LeadsPage({
             </label>
             <label className="grid gap-1 text-xs text-neutral-500">
               Owner
-              <input
-                className={inputClass}
-                name="owner"
-                placeholder="Sales team"
-              />
+              <Input className="h-9" name="owner" placeholder="Sales team" />
             </label>
             <label className="grid gap-1 text-xs text-neutral-500">
               Stage
@@ -111,8 +101,8 @@ export default async function LeadsPage({
             </label>
             <label className="grid gap-1 text-xs text-neutral-500 md:col-span-2 lg:col-span-3">
               Note
-              <input
-                className={inputClass}
+              <Input
+                className="h-9"
                 name="note"
                 placeholder="Interested in annual business plan"
               />
@@ -173,16 +163,16 @@ export default async function LeadsPage({
                   </label>
                   <label className="grid gap-1 text-xs text-neutral-500">
                     Owner
-                    <input
-                      className={inputClass}
+                    <Input
+                      className="h-9"
                       name="owner"
                       defaultValue={lead.meta.owner}
                     />
                   </label>
                   <label className="grid gap-1 text-xs text-neutral-500">
                     Note
-                    <input
-                      className={inputClass}
+                    <Input
+                      className="h-9"
                       name="note"
                       defaultValue={lead.meta.note}
                     />
@@ -192,8 +182,12 @@ export default async function LeadsPage({
               </div>
             ))}
             {!leads.length && (
-              <div className="text-content-subtle p-10 text-center text-sm">
-                No leads yet. Add one above or start an attributed campaign.
+              <div className="p-10">
+                <EmptyState
+                  icon={Crosshairs3}
+                  title="No leads yet"
+                  description="Add one above or start an attributed campaign."
+                />
               </div>
             )}
           </div>
