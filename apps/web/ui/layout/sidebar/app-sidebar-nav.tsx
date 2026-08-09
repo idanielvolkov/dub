@@ -91,6 +91,11 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
             href: `/${slug}/vpn/plans`,
           },
           {
+            name: "Orders",
+            icon: Receipt2,
+            href: `/${slug}/vpn/orders`,
+          },
+          {
             name: "Traffic",
             icon: LinesY,
             href: `/${slug}/vpn/traffic`,
