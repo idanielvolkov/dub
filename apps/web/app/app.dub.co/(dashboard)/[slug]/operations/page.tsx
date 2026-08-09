@@ -12,7 +12,7 @@ import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { ButtonLink } from "@/ui/placeholders/button-link";
 import { VpnStats } from "@/ui/vpn/vpn-ui";
 import { CardList, StatusBadge } from "@dub/ui";
-import { ChevronRight } from "@dub/ui/icons";
+import { ArrowUpRight2, ChevronRight } from "@dub/ui/icons";
 import Link from "next/link";
 
 export default async function OperationsPage({
@@ -62,7 +62,8 @@ export default async function OperationsPage({
           variant="secondary"
           className="h-9 px-3 text-sm"
         >
-          Open native panel ↗
+          Open native panel
+          <ArrowUpRight2 className="ml-1.5 size-3.5" />
         </ButtonLink>
       }
     >

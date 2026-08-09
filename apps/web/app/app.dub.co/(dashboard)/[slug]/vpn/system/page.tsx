@@ -4,7 +4,7 @@ import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { ButtonLink } from "@/ui/placeholders/button-link";
 import { VpnStats } from "@/ui/vpn/vpn-ui";
 import { CardList, EmptyState, StatusBadge } from "@dub/ui";
-import { WindowSettings } from "@dub/ui/icons";
+import { ArrowUpRight2, WindowSettings } from "@dub/ui/icons";
 
 const formatMemory = (bytes: number) => `${Math.round(bytes / 1024 / 1024)} MB`;
 const formatUptime = (seconds: number) => {
@@ -69,7 +69,8 @@ export default async function SystemPage() {
               variant="secondary"
               className="h-9 px-3 text-sm"
             >
-              Open technical panel ↗
+              Open technical panel
+              <ArrowUpRight2 className="ml-1.5 size-3.5" />
             </ButtonLink>
           </div>
           {metrics.length ? (
