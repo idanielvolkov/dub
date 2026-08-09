@@ -1,10 +1,9 @@
 "use client";
 
-import { useParams, usePathname } from "next/navigation";
-import { ReactNode } from "react";
+import useWorkspace from "@/lib/swr/use-workspace";
 import {
-  CubeSettings,
   ConnectedDots,
+  CubeSettings,
   Gauge6,
   Gear2,
   Globe,
@@ -14,15 +13,22 @@ import {
   ShieldCheck,
   Users,
 } from "@dub/ui/icons";
+import { useParams, usePathname } from "next/navigation";
+import { ReactNode } from "react";
 import { SidebarNav, SidebarNavAreas, SidebarNavGroups } from "./sidebar-nav";
 import { WorkspaceDropdown } from "./workspace-dropdown";
 
 type SidebarNavData = {
   slug: string;
   pathname: string;
+  isOwner: boolean;
 };
 
-const NAV_GROUPS: SidebarNavGroups<SidebarNavData> = ({ slug, pathname }) => [
+const NAV_GROUPS: SidebarNavGroups<SidebarNavData> = ({
+  slug,
+  pathname,
+  isOwner,
+}) => [
   {
     id: "vpn",
     name: "VPN Business",
@@ -32,15 +38,19 @@ const NAV_GROUPS: SidebarNavGroups<SidebarNavData> = ({ slug, pathname }) => [
     href: slug ? `/${slug}/vpn` : "/vpn",
     active: pathname.startsWith(`/${slug}/vpn`),
   },
-  {
-    id: "operations",
-    name: "Remnawave Operations",
-    description:
-      "Technical control of users, nodes, hosts, profiles, and subscriptions.",
-    icon: CubeSettings,
-    href: slug ? `/${slug}/operations` : "/operations",
-    active: pathname.startsWith(`/${slug}/operations`),
-  },
+  ...(isOwner
+    ? [
+        {
+          id: "operations",
+          name: "Remnawave Operations",
+          description:
+            "Technical control of users, nodes, hosts, profiles, and subscriptions.",
+          icon: CubeSettings,
+          href: slug ? `/${slug}/operations` : "/operations",
+          active: pathname.startsWith(`/${slug}/operations`),
+        },
+      ]
+    : []),
   {
     id: "growth",
     name: "Growth Workspace",
@@ -200,6 +210,7 @@ export function AppSidebarNav({
 }) {
   const { slug } = useParams() as { slug?: string };
   const pathname = usePathname();
+  const { isOwner } = useWorkspace();
 
   return (
     <SidebarNav
@@ -217,6 +228,7 @@ export function AppSidebarNav({
       data={{
         slug: slug || "",
         pathname,
+        isOwner: Boolean(isOwner),
       }}
       toolContent={toolContent}
       switcher={<WorkspaceDropdown />}

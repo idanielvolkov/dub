@@ -9,7 +9,7 @@ import { ReactNode } from "react";
 export default function WorkspaceAuth({ children }: { children: ReactNode }) {
   const { slug } = useParams();
   const pathname = usePathname();
-  const { loading, error } = useWorkspace();
+  const { loading, error, isOwner } = useWorkspace();
 
   if (loading) {
     return <LayoutLoader />;
@@ -34,6 +34,10 @@ export default function WorkspaceAuth({ children }: { children: ReactNode }) {
 
   if (!isProductPath) {
     redirect(`/${slug}/vpn`);
+  }
+
+  if (pathname.startsWith(`/${slug}/operations`) && !isOwner) {
+    redirect(`/${slug}/growth`);
   }
 
   return children;
