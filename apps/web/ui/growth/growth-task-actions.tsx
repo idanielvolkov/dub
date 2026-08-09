@@ -6,6 +6,7 @@ import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import { Button, Input, Label, Modal } from "@dub/ui";
 import { useState } from "react";
 import {
+  createGrowthTask,
   deleteGrowthTask,
   updateGrowthTask,
 } from "../../app/app.dub.co/(dashboard)/[slug]/growth/tasks/actions";
@@ -135,6 +136,50 @@ export function GrowthTaskActions({
             </OperationSubmit>
           </form>
         </div>
+      </Modal>
+    </>
+  );
+}
+
+export function CreateGrowthTaskButton({ slug }: { slug: string }) {
+  const [showModal, setShowModal] = useState(false);
+
+  return (
+    <>
+      <Button
+        className="h-9 w-fit px-3"
+        text="Create task"
+        onClick={() => setShowModal(true)}
+      />
+      <Modal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        className="max-w-xl"
+      >
+        <div className="border-border-subtle border-b px-6 py-4">
+          <h3 className="text-content-emphasis text-lg font-medium">
+            Create task
+          </h3>
+          <p className="text-content-subtle mt-1 text-sm">
+            Add work for the growth team.
+          </p>
+        </div>
+        <form
+          action={createGrowthTask}
+          className="bg-bg-muted grid gap-4 p-6 md:grid-cols-2"
+        >
+          <input type="hidden" name="slug" value={slug} />
+          <GrowthTaskFields />
+          <div className="flex justify-end gap-2 md:col-span-2">
+            <Button
+              className="w-fit"
+              variant="secondary"
+              text="Cancel"
+              onClick={() => setShowModal(false)}
+            />
+            <OperationSubmit>Create task</OperationSubmit>
+          </div>
+        </form>
       </Modal>
     </>
   );
