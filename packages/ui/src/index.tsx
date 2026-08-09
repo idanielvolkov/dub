@@ -77,7 +77,6 @@ export * from "./motion-constants";
 export * from "./popup";
 export * from "./progress-bar";
 export * from "./tab-select";
-export * from "./tooltip-advanced-link-features";
 
 // logos
 export * from "./composite-logo";
