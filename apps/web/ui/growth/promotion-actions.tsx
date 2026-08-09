@@ -13,8 +13,8 @@ type PromotionFieldsValue = {
   audience: string;
   discountType: string;
   discountValue: number;
-  startsAt: string;
-  endsAt: string;
+  startsAt: string | null;
+  endsAt: string | null;
   maxRedemptions: number;
   active: boolean;
 };
