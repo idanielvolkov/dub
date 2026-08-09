@@ -6,7 +6,8 @@ import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import { VpnMetricCard, VpnPanel, VpnPanelHeader } from "@/ui/vpn/vpn-ui";
-import { Badge } from "@dub/ui";
+import { Badge, Checkbox, EmptyState } from "@dub/ui";
+import { QRCode } from "@dub/ui/icons";
 import { saveSubscriptionSettings } from "../actions";
 
 export default async function SubscriptionsPage({
@@ -60,26 +61,26 @@ export default async function SubscriptionsPage({
               <input type="hidden" name="slug" value={slug} />
               <input type="hidden" name="uuid" value={settings.uuid} />
               <label className="flex items-center gap-2 text-sm">
-                <input
-                  type="checkbox"
+                <Checkbox
                   name="randomizeHosts"
                   defaultChecked={settings.randomizeHosts}
+                  className="size-4"
                 />{" "}
                 Randomize hosts
               </label>
               <label className="flex items-center gap-2 text-sm">
-                <input
-                  type="checkbox"
+                <Checkbox
                   name="serveJsonAtBaseSubscription"
                   defaultChecked={settings.serveJsonAtBaseSubscription}
+                  className="size-4"
                 />{" "}
                 Serve base JSON
               </label>
               <label className="flex items-center gap-2 text-sm">
-                <input
-                  type="checkbox"
+                <Checkbox
                   name="isShowCustomRemarks"
                   defaultChecked={settings.isShowCustomRemarks}
+                  className="size-4"
                 />{" "}
                 Custom remarks
               </label>
@@ -111,6 +112,15 @@ export default async function SubscriptionsPage({
                 <Badge variant="gray">{template.templateType}</Badge>
               </div>
             ))}
+            {!templates.templates.length && (
+              <div className="p-10">
+                <EmptyState
+                  icon={QRCode}
+                  title="No subscription templates"
+                  description="Create a template in Remnawave to display it here."
+                />
+              </div>
+            )}
           </div>
         </VpnPanel>
       </PageWidthWrapper>
