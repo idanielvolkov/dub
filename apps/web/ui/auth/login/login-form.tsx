@@ -16,15 +16,8 @@ import { AuthMethodsSeparator } from "../auth-methods-separator";
 import { EmailSignIn } from "./email-sign-in";
 import { GitHubButton } from "./github-button";
 import { GoogleButton } from "./google-button";
-import { SSOSignIn } from "./sso-sign-in";
 
-export const authMethods = [
-  "google",
-  "github",
-  "email",
-  "saml",
-  "password",
-] as const;
+export const authMethods = ["google", "github", "email", "password"] as const;
 
 export type AuthMethod = (typeof authMethods)[number];
 
@@ -35,8 +28,6 @@ export const errorCodes = {
     "Account has been locked due to too many login attempts. Please contact support to unlock your account.",
   "too-many-login-attempts": "Too many login attempts. Please try again later.",
   "email-not-verified": "Please verify your email address.",
-  "require-saml-sso":
-    "Your organization requires authentication through your company's identity provider.",
   EmailSignin:
     "Failed to send login email. Please try again in a minute or contact support.",
   Callback:
@@ -54,21 +45,17 @@ export const LoginFormContext = createContext<{
   setAuthMethod: Dispatch<SetStateAction<AuthMethod | undefined>>;
   clickedMethod: AuthMethod | undefined;
   showPasswordField: boolean;
-  showSSOOption: boolean;
   setShowPasswordField: Dispatch<SetStateAction<boolean>>;
   setClickedMethod: Dispatch<SetStateAction<AuthMethod | undefined>>;
   setLastUsedAuthMethod: Dispatch<SetStateAction<AuthMethod | undefined>>;
-  setShowSSOOption: Dispatch<SetStateAction<boolean>>;
 }>({
   authMethod: undefined,
   setAuthMethod: () => {},
   clickedMethod: undefined,
   showPasswordField: false,
-  showSSOOption: false,
   setShowPasswordField: () => {},
   setClickedMethod: () => {},
   setLastUsedAuthMethod: () => {},
-  setShowSSOOption: () => {},
 });
 
 export default function LoginForm({
@@ -80,7 +67,6 @@ export default function LoginForm({
 }) {
   const searchParams = useSearchParams();
   const [showPasswordField, setShowPasswordField] = useState(false);
-  const [showSSOOption, setShowSSOOption] = useState(false);
   const [clickedMethod, setClickedMethod] = useState<AuthMethod | undefined>(
     undefined,
   );
@@ -128,10 +114,6 @@ export default function LoginForm({
       component: EmailSignIn,
       props: { next },
     },
-    {
-      method: "saml",
-      component: SSOSignIn,
-    },
   ];
 
   const currentAuthProvider = authProviders.find(
@@ -149,11 +131,9 @@ export default function LoginForm({
         setAuthMethod,
         clickedMethod,
         showPasswordField,
-        showSSOOption,
         setShowPasswordField,
         setClickedMethod,
         setLastUsedAuthMethod,
-        setShowSSOOption,
       }}
     >
       <div className="flex flex-col gap-3">

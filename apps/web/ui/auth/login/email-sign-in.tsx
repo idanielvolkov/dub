@@ -26,7 +26,6 @@ export const EmailSignIn = ({ next }: { next?: string }) => {
     setAuthMethod,
     clickedMethod,
     setLastUsedAuthMethod,
-    setShowSSOOption,
   } = useContext(LoginFormContext);
 
   const { executeAsync, isPending } = useAction(checkAccountExistsAction, {
@@ -181,7 +180,6 @@ export const EmailSignIn = ({ next }: { next?: string }) => {
             type: "button",
             onClick: (e) => {
               e.preventDefault();
-              setShowSSOOption(false);
               setAuthMethod("email");
             },
           })}
