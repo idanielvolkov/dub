@@ -11,6 +11,8 @@ import {
   Input,
   Label,
   Modal,
+  ModalBody,
+  ModalFooter,
   ModalHeader,
   StatusBadge,
   Table,
@@ -158,55 +160,57 @@ export function OrdersTable({
           title="Create order"
           description="Record a VPN sale before payment or provisioning."
         />
-        <form action={createVpnOrder} className="bg-bg-muted space-y-4 p-6">
-          <input type="hidden" name="slug" value={slug} />
-          <div className="grid gap-1.5">
-            <Label htmlFor="order-customer-name">Customer name</Label>
-            <Input
-              id="order-customer-name"
-              name="customerName"
-              placeholder="Alex Smith"
-            />
-          </div>
-          <div className="grid gap-1.5">
-            <Label htmlFor="order-customer-email">Email</Label>
-            <Input
-              id="order-customer-email"
-              type="email"
-              name="customerEmail"
-              required
-            />
-          </div>
-          <div className="grid gap-1.5">
-            <Label htmlFor="order-plan">Plan</Label>
-            <FormCombobox
-              id="order-plan"
-              name="planId"
-              options={plans.map((plan) => ({
-                value: plan.id,
-                label: `${plan.name} · $${plan.price}`,
-              }))}
-              placeholder="Select a plan"
-            />
-          </div>
-          <div className="grid gap-1.5">
-            <Label htmlFor="order-note">Note</Label>
-            <Input
-              id="order-note"
-              name="note"
-              placeholder="Payment reference"
-            />
-          </div>
-          <div className="flex justify-end gap-2 pt-2">
-            <Button
-              className="w-fit"
-              variant="secondary"
-              text="Cancel"
-              onClick={() => setShowCreateModal(false)}
-            />
-            <OperationSubmit>Create order</OperationSubmit>
-          </div>
-        </form>
+        <ModalBody asChild className="bg-bg-muted">
+          <form action={createVpnOrder} className="space-y-4">
+            <input type="hidden" name="slug" value={slug} />
+            <div className="grid gap-1.5">
+              <Label htmlFor="order-customer-name">Customer name</Label>
+              <Input
+                id="order-customer-name"
+                name="customerName"
+                placeholder="Alex Smith"
+              />
+            </div>
+            <div className="grid gap-1.5">
+              <Label htmlFor="order-customer-email">Email</Label>
+              <Input
+                id="order-customer-email"
+                type="email"
+                name="customerEmail"
+                required
+              />
+            </div>
+            <div className="grid gap-1.5">
+              <Label htmlFor="order-plan">Plan</Label>
+              <FormCombobox
+                id="order-plan"
+                name="planId"
+                options={plans.map((plan) => ({
+                  value: plan.id,
+                  label: `${plan.name} · $${plan.price}`,
+                }))}
+                placeholder="Select a plan"
+              />
+            </div>
+            <div className="grid gap-1.5">
+              <Label htmlFor="order-note">Note</Label>
+              <Input
+                id="order-note"
+                name="note"
+                placeholder="Payment reference"
+              />
+            </div>
+            <ModalFooter className="-mx-6 -mb-5">
+              <Button
+                className="w-fit"
+                variant="secondary"
+                text="Cancel"
+                onClick={() => setShowCreateModal(false)}
+              />
+              <OperationSubmit>Create order</OperationSubmit>
+            </ModalFooter>
+          </form>
+        </ModalBody>
       </Modal>
 
       <Modal

@@ -2,7 +2,16 @@
 
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
-import { Button, Checkbox, Input, Label, Modal, ModalHeader } from "@dub/ui";
+import {
+  Button,
+  Checkbox,
+  Input,
+  Label,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+} from "@dub/ui";
 import { useState } from "react";
 import { createPromotion } from "../../app/app.dub.co/(dashboard)/[slug]/growth/promotions/actions";
 
@@ -148,22 +157,21 @@ export function CreatePromotionButton({ slug }: { slug: string }) {
           title="Create promo code"
           description="Prepare an offer for checkout and customer acquisition."
         />
-        <form
-          action={createPromotion}
-          className="bg-bg-muted grid gap-4 p-6 md:grid-cols-2"
-        >
-          <input type="hidden" name="slug" value={slug} />
-          <PromotionFields />
-          <div className="flex justify-end gap-2 md:col-span-2">
-            <Button
-              className="w-fit"
-              variant="secondary"
-              text="Cancel"
-              onClick={() => setShowModal(false)}
-            />
-            <OperationSubmit>Create promo code</OperationSubmit>
-          </div>
-        </form>
+        <ModalBody asChild className="bg-bg-muted">
+          <form action={createPromotion} className="grid gap-4 md:grid-cols-2">
+            <input type="hidden" name="slug" value={slug} />
+            <PromotionFields />
+            <ModalFooter className="-mx-6 -mb-5 mt-1 md:col-span-2">
+              <Button
+                className="w-fit"
+                variant="secondary"
+                text="Cancel"
+                onClick={() => setShowModal(false)}
+              />
+              <OperationSubmit>Create promo code</OperationSubmit>
+            </ModalFooter>
+          </form>
+        </ModalBody>
       </Modal>
     </>
   );

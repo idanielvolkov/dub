@@ -2,6 +2,7 @@
 
 import { cn } from "@dub/utils";
 import * as Dialog from "@radix-ui/react-dialog";
+import { Slot } from "@radix-ui/react-slot";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { useRouter } from "next/navigation";
 import {
@@ -179,10 +180,13 @@ export function ModalHeader({
 }
 
 export function ModalBody({
+  asChild = false,
   className,
   ...props
-}: HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("px-6 py-5", className)} {...props} />;
+}: HTMLAttributes<HTMLDivElement> & { asChild?: boolean }) {
+  const Component = asChild ? Slot : "div";
+
+  return <Component className={cn("px-6 py-5", className)} {...props} />;
 }
 
 export function ModalFooter({

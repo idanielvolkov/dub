@@ -3,7 +3,16 @@
 import { VpnPlan } from "@/lib/remnawave/plans";
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
-import { Button, Checkbox, Input, Label, Modal, ModalHeader } from "@dub/ui";
+import {
+  Button,
+  Checkbox,
+  Input,
+  Label,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+} from "@dub/ui";
 import { useState } from "react";
 import {
   createVpnPlan,
@@ -146,19 +155,21 @@ export function CreatePlanButton({ slug }: { slug: string }) {
         title="Create plan"
         description="Add a new plan to the Detz catalog."
       >
-        <form action={createVpnPlan} className="bg-bg-muted space-y-5 p-6">
-          <input type="hidden" name="slug" value={slug} />
-          <PlanFields />
-          <div className="flex justify-end gap-2">
-            <Button
-              className="w-fit"
-              variant="secondary"
-              text="Cancel"
-              onClick={() => setOpen(false)}
-            />
-            <OperationSubmit>Create plan</OperationSubmit>
-          </div>
-        </form>
+        <ModalBody asChild className="bg-bg-muted">
+          <form action={createVpnPlan} className="space-y-5">
+            <input type="hidden" name="slug" value={slug} />
+            <PlanFields />
+            <ModalFooter className="-mx-6 -mb-5">
+              <Button
+                className="w-fit"
+                variant="secondary"
+                text="Cancel"
+                onClick={() => setOpen(false)}
+              />
+              <OperationSubmit>Create plan</OperationSubmit>
+            </ModalFooter>
+          </form>
+        </ModalBody>
       </FormModal>
     </>
   );
@@ -189,22 +200,32 @@ export function PlanCardActions({
         title={`Provision ${plan.name}`}
         description="Create a Remnawave subscriber with this plan's limits."
       >
-        <form action={provisionPlan} className="bg-bg-muted space-y-4 p-6">
-          <input type="hidden" name="slug" value={slug} />
-          <input type="hidden" name="planId" value={plan.id} />
-          <div className="grid gap-1.5">
-            <Label htmlFor={`provision-${plan.id}-username`}>
-              Subscriber name
-            </Label>
-            <Input
-              id={`provision-${plan.id}-username`}
-              name="username"
-              minLength={3}
-              required
-            />
-          </div>
-          <OperationSubmit>Provision access</OperationSubmit>
-        </form>
+        <ModalBody asChild className="bg-bg-muted">
+          <form action={provisionPlan} className="space-y-4">
+            <input type="hidden" name="slug" value={slug} />
+            <input type="hidden" name="planId" value={plan.id} />
+            <div className="grid gap-1.5">
+              <Label htmlFor={`provision-${plan.id}-username`}>
+                Subscriber name
+              </Label>
+              <Input
+                id={`provision-${plan.id}-username`}
+                name="username"
+                minLength={3}
+                required
+              />
+            </div>
+            <ModalFooter className="-mx-6 -mb-5">
+              <Button
+                className="w-fit"
+                variant="secondary"
+                text="Cancel"
+                onClick={() => setProvisionOpen(false)}
+              />
+              <OperationSubmit>Provision access</OperationSubmit>
+            </ModalFooter>
+          </form>
+        </ModalBody>
       </FormModal>
       <FormModal
         open={editOpen}
