@@ -1,8 +1,8 @@
 // User-level notification preferences for email communications
 export const NOTIFICATION_PREFERENCE_TYPES = [
-  "dubLinks", // Dub Links product updates on app.dub.co
-  "dubPartners", // Dub Partners product updates on app.dub.co
-  "partnerAccount", // Updates to partner accounts on partners.dub.co
+  "dubLinks", // VPN operations updates
+  "dubPartners", // Business and growth updates
+  "partnerAccount", // Workspace membership updates
 ] as const;
 
 export type NotificationPreferenceType =
@@ -34,21 +34,18 @@ export const NOTIFICATION_PREFERENCE_LABELS: Record<
   { title: string; description: string; link: string }
 > = {
   dubLinks: {
-    title: "Dub Links",
-    description:
-      "New Dub Links features and guides on how to manage and track your links",
-    link: "https://dub.co/links",
+    title: "VPN Operations",
+    description: "Remnawave, node, subscription, and service updates",
+    link: "https://app.detz.fun",
   },
   dubPartners: {
-    title: "Dub Partners",
-    description:
-      "New Dub Partners features and tips on how to grow your affiliate program",
-    link: "https://dub.co/partners",
+    title: "Business & Growth",
+    description: "Business, billing, campaign, and growth workspace updates",
+    link: "https://app.detz.fun",
   },
   partnerAccount: {
-    title: "Partner Account",
-    description:
-      "New program launches, feature updates, and tutorials on how to succeed as a partner",
-    link: "https://partners.dub.co",
+    title: "Workspace Account",
+    description: "Workspace invitations, access changes, and account notices",
+    link: "https://app.detz.fun/account/settings",
   },
 };

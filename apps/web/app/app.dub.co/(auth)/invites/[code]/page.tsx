@@ -20,7 +20,7 @@ export default async function InvitesPage(props: {
           <EmptyState
             icon={LoadingSpinner}
             title="Verifying Invite"
-            description="Dub is verifying your invite link. This might take a few seconds..."
+            description="Detz is verifying your invite link. This might take a few seconds..."
           />
         }
       >

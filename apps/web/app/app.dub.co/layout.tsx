@@ -11,10 +11,10 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       <DubAnalytics
         apiHost="/_proxy/dub"
         cookieOptions={{
-          domain: process.env.VERCEL === "1" ? ".dub.co" : "localhost",
+          domain: process.env.VERCEL === "1" ? ".detz.fun" : "localhost",
         }}
         domainsConfig={{
-          refer: "refer.dub.co",
+          refer: "detz.fun",
         }}
       />
       <ModalProvider>{children}</ModalProvider>
