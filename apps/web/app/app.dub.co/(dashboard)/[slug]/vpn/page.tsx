@@ -6,7 +6,7 @@ import {
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { VpnStats } from "@/ui/vpn/vpn-ui";
-import { CardList, EmptyState, ProgressBar, StatusBadge } from "@dub/ui";
+import { EmptyState } from "@dub/ui";
 import { ChartActivity2, Nodes4 } from "@dub/ui/icons";
 
 export default async function VpnOverviewPage() {
@@ -59,9 +59,9 @@ export default async function VpnOverviewPage() {
             detail: hint,
             indicator:
               online === undefined ? undefined : (
-                <StatusBadge variant={online ? "success" : "pending"}>
+                <VpnStatusBadge online={online}>
                   {online ? "Online" : "Connecting"}
-                </StatusBadge>
+                </VpnStatusBadge>
               ),
           }))}
         />
@@ -76,11 +76,14 @@ export default async function VpnOverviewPage() {
                 Live traffic reported by each Remnawave node
               </p>
             </div>
-            <CardList variant="compact">
+            <ul className="flex w-full flex-col overflow-hidden rounded-xl border border-neutral-200 bg-white">
               {nodes.map((node) => {
                 const trafficGb = (node.trafficUsedBytes || 0) / 1024 ** 3;
                 return (
-                  <CardList.Card key={node.uuid} hoverStateEnabled={false}>
+                  <li
+                    key={node.uuid}
+                    className="border-b border-neutral-200 px-4 py-2.5 last:border-b-0"
+                  >
                     <div className="flex items-center justify-between gap-3 text-sm">
                       <span className="text-content-emphasis font-medium">
                         {node.name}
@@ -89,14 +92,16 @@ export default async function VpnOverviewPage() {
                         {trafficGb.toFixed(1)} GB
                       </span>
                     </div>
-                    <ProgressBar
-                      value={Math.min(trafficGb, 100)}
-                      className="mt-2 h-1.5"
-                    />
-                  </CardList.Card>
+                    <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-neutral-200">
+                      <div
+                        className="h-full rounded-full bg-blue-500"
+                        style={{ width: `${Math.min(trafficGb, 100)}%` }}
+                      />
+                    </div>
+                  </li>
                 );
               })}
-            </CardList>
+            </ul>
             {!nodes.length && (
               <div className="py-10">
                 <EmptyState
@@ -116,34 +121,33 @@ export default async function VpnOverviewPage() {
                 Remnawave panel and VPN nodes
               </p>
             </div>
-            <CardList variant="compact">
-              <CardList.Card hoverStateEnabled={false}>
+            <ul className="flex w-full flex-col overflow-hidden rounded-xl border border-neutral-200 bg-white">
+              <li className="border-b border-neutral-200 px-4 py-2.5 last:border-b-0">
                 <div className="flex min-h-9 items-center justify-between gap-3 text-sm">
                   <span className="text-content-emphasis font-medium">
                     Management panel
                   </span>
-                  <StatusBadge
-                    variant={health.connected ? "success" : "pending"}
-                  >
+                  <VpnStatusBadge online={health.connected}>
                     {health.connected ? "Ready" : "Connecting"}
-                  </StatusBadge>
+                  </VpnStatusBadge>
                 </div>
-              </CardList.Card>
+              </li>
               {nodes.map((node) => (
-                <CardList.Card key={node.uuid} hoverStateEnabled={false}>
+                <li
+                  key={node.uuid}
+                  className="border-b border-neutral-200 px-4 py-2.5 last:border-b-0"
+                >
                   <div className="flex min-h-9 items-center justify-between gap-3 text-sm">
                     <span className="text-content-emphasis font-medium">
                       {node.name}
                     </span>
-                    <StatusBadge
-                      variant={node.isConnected ? "success" : "pending"}
-                    >
+                    <VpnStatusBadge online={node.isConnected}>
                       {node.isConnected ? "Ready" : "Connecting"}
-                    </StatusBadge>
+                    </VpnStatusBadge>
                   </div>
-                </CardList.Card>
+                </li>
               ))}
-            </CardList>
+            </ul>
             {!nodes.length && (
               <div className="py-8">
                 <EmptyState icon={Nodes4} title="No VPN nodes" />
@@ -153,5 +157,25 @@ export default async function VpnOverviewPage() {
         </div>
       </PageWidthWrapper>
     </PageContent>
+  );
+}
+
+function VpnStatusBadge({
+  online,
+  children,
+}: {
+  online: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <span
+      className={
+        online
+          ? "bg-bg-success text-content-success max-w-fit rounded-md px-2 py-1 text-xs font-medium"
+          : "bg-bg-attention text-content-attention max-w-fit rounded-md px-2 py-1 text-xs font-medium"
+      }
+    >
+      {children}
+    </span>
   );
 }
