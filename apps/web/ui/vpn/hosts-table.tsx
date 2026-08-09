@@ -1,9 +1,9 @@
 "use client";
 
 import { RemnawaveHost } from "@/lib/remnawave/client";
+import { TableRowMenu } from "@/ui/shared/table-row-menu";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import {
-  Button,
   Checkbox,
   EmptyState,
   Input,
@@ -96,11 +96,13 @@ export function HostsTable({
         header: "Actions",
         meta: { disableTruncate: true },
         cell: ({ row }) => (
-          <Button
-            className="h-9 w-fit"
-            variant="secondary"
-            text="Manage"
-            onClick={() => setSelectedHost(row.original)}
+          <TableRowMenu
+            actions={[
+              {
+                label: "Manage host",
+                onClick: () => setSelectedHost(row.original),
+              },
+            ]}
           />
         ),
       },

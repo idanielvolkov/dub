@@ -1,6 +1,7 @@
 "use client";
 
 import { RemnawaveConfigProfile, RemnawaveSquad } from "@/lib/remnawave/client";
+import { TableRowMenu } from "@/ui/shared/table-row-menu";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import {
   Button,
@@ -81,11 +82,13 @@ export function ConfigurationsTables({
         header: "Actions",
         meta: { disableTruncate: true },
         cell: ({ row }) => (
-          <Button
-            className="h-9 w-fit"
-            variant="secondary"
-            text="Edit profile"
-            onClick={() => setSelectedProfile(row.original)}
+          <TableRowMenu
+            actions={[
+              {
+                label: "Edit profile",
+                onClick: () => setSelectedProfile(row.original),
+              },
+            ]}
           />
         ),
       },
@@ -123,11 +126,13 @@ export function ConfigurationsTables({
         header: "Actions",
         meta: { disableTruncate: true },
         cell: ({ row }) => (
-          <Button
-            className="h-9 w-fit"
-            variant="secondary"
-            text="Manage"
-            onClick={() => setSelectedSquad(row.original)}
+          <TableRowMenu
+            actions={[
+              {
+                label: "Manage squad",
+                onClick: () => setSelectedSquad(row.original),
+              },
+            ]}
           />
         ),
       },
@@ -224,7 +229,7 @@ export function ConfigurationsTables({
                 <Label htmlFor="profile-xray-json">Xray JSON</Label>
                 <TextareaAutosize
                   id="profile-xray-json"
-                  className="border-neutral-300 bg-white text-neutral-900 placeholder-neutral-400 focus:border-neutral-500 focus:ring-neutral-500 min-h-80 w-full resize-y rounded-md p-3 font-mono text-xs focus:outline-none"
+                  className="min-h-80 w-full resize-y rounded-md border-neutral-300 bg-white p-3 font-mono text-xs text-neutral-900 placeholder-neutral-400 focus:border-neutral-500 focus:outline-none focus:ring-neutral-500"
                   name="config"
                   defaultValue={JSON.stringify(selectedProfile.config, null, 2)}
                   minRows={18}
