@@ -23,7 +23,7 @@ export default function TokensPageClient() {
           User API Keys have been replaced by Workspace API Keys. We recommend
           creating a new{" "}
           <a
-            href="https://dub.co/docs/api-reference/tokens"
+            href="https://detz.fun"
             target="_blank"
             className="font-medium underline underline-offset-2 transition-colors hover:text-neutral-800"
           >
@@ -32,7 +32,7 @@ export default function TokensPageClient() {
           for more granular control over your resources such as Links, Tags,
           Domains, Analytics, etc.{" "}
           <a
-            href="https://dub.co/blog/workspace-api-keys"
+            href="https://detz.fun"
             target="_blank"
             className="font-medium underline underline-offset-2 transition-colors hover:text-neutral-800"
           >
