@@ -8,6 +8,7 @@ import {
   Button,
   EmptyState,
   Input,
+  Label,
   Modal,
   StatusBadge,
   Table,
@@ -194,16 +195,25 @@ export function OrdersTable({
         </div>
         <form action={createVpnOrder} className="bg-bg-muted space-y-4 p-6">
           <input type="hidden" name="slug" value={slug} />
-          <label className="text-content-default grid gap-1.5 text-sm font-medium">
-            Customer name
-            <Input name="customerName" placeholder="Alex Smith" />
-          </label>
-          <label className="text-content-default grid gap-1.5 text-sm font-medium">
-            Email
-            <Input type="email" name="customerEmail" required />
-          </label>
-          <label className="text-content-default grid gap-1.5 text-sm font-medium">
-            Plan
+          <div className="grid gap-1.5">
+            <Label htmlFor="order-customer-name">Customer name</Label>
+            <Input
+              id="order-customer-name"
+              name="customerName"
+              placeholder="Alex Smith"
+            />
+          </div>
+          <div className="grid gap-1.5">
+            <Label htmlFor="order-customer-email">Email</Label>
+            <Input
+              id="order-customer-email"
+              type="email"
+              name="customerEmail"
+              required
+            />
+          </div>
+          <div className="grid gap-1.5">
+            <Label>Plan</Label>
             <FormCombobox
               name="planId"
               options={plans.map((plan) => ({
@@ -212,11 +222,15 @@ export function OrdersTable({
               }))}
               placeholder="Select a plan"
             />
-          </label>
-          <label className="text-content-default grid gap-1.5 text-sm font-medium">
-            Note
-            <Input name="note" placeholder="Payment reference" />
-          </label>
+          </div>
+          <div className="grid gap-1.5">
+            <Label htmlFor="order-note">Note</Label>
+            <Input
+              id="order-note"
+              name="note"
+              placeholder="Payment reference"
+            />
+          </div>
           <div className="flex justify-end gap-2 pt-2">
             <Button
               className="w-fit"
