@@ -286,22 +286,22 @@ export function ConfigurationsTables({
                   <OperationSubmit>Save changes</OperationSubmit>
                 </div>
               </form>
-              <div className="border-border-subtle mt-5 flex items-center justify-between gap-4 border-t pt-5">
-                <p className="text-content-subtle text-xs">
-                  Users may lose access when this squad is deleted.
-                </p>
-                <form action={removeSquad}>
-                  <input type="hidden" name="slug" value={slug} />
-                  <input type="hidden" name="uuid" value={selectedSquad.uuid} />
-                  <OperationSubmit
-                    destructive
-                    confirmMessage={`Delete ${selectedSquad.name}? Users may lose access.`}
-                  >
-                    Delete squad
-                  </OperationSubmit>
-                </form>
-              </div>
             </ModalBody>
+            <ModalFooter className="justify-between">
+              <p className="text-content-subtle text-xs">
+                Users may lose access when this squad is deleted.
+              </p>
+              <form action={removeSquad}>
+                <input type="hidden" name="slug" value={slug} />
+                <input type="hidden" name="uuid" value={selectedSquad.uuid} />
+                <OperationSubmit
+                  destructive
+                  confirmMessage={`Delete ${selectedSquad.name}? Users may lose access.`}
+                >
+                  Delete squad
+                </OperationSubmit>
+              </form>
+            </ModalFooter>
           </>
         )}
       </Modal>

@@ -128,7 +128,9 @@ export function GrowthTaskActions({
               <OperationSubmit>Save changes</OperationSubmit>
             </div>
           </form>
-          <form action={deleteGrowthTask} className="mt-3 flex justify-end">
+        </ModalBody>
+        <ModalFooter>
+          <form action={deleteGrowthTask}>
             <input type="hidden" name="slug" value={slug} />
             <input type="hidden" name="id" value={task.id} />
             <OperationSubmit
@@ -138,7 +140,7 @@ export function GrowthTaskActions({
               Delete task
             </OperationSubmit>
           </form>
-        </ModalBody>
+        </ModalFooter>
       </Modal>
     </>
   );

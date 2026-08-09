@@ -10,6 +10,7 @@ import {
   Label,
   Modal,
   ModalBody,
+  ModalFooter,
   ModalHeader,
   StatusBadge,
   Table,
@@ -224,22 +225,22 @@ export function HostsTable({
                   <OperationSubmit>Save changes</OperationSubmit>
                 </div>
               </form>
-              <div className="border-border-subtle mt-5 flex items-center justify-between gap-4 border-t pt-5">
-                <p className="text-content-subtle text-xs">
-                  Deleting a host cannot be undone.
-                </p>
-                <form action={removeHost}>
-                  <input type="hidden" name="slug" value={slug} />
-                  <input type="hidden" name="uuid" value={selectedHost.uuid} />
-                  <OperationSubmit
-                    destructive
-                    confirmMessage={`Delete ${selectedHost.remark}? This cannot be undone.`}
-                  >
-                    Delete host
-                  </OperationSubmit>
-                </form>
-              </div>
             </ModalBody>
+            <ModalFooter className="justify-between">
+              <p className="text-content-subtle text-xs">
+                Deleting a host cannot be undone.
+              </p>
+              <form action={removeHost}>
+                <input type="hidden" name="slug" value={slug} />
+                <input type="hidden" name="uuid" value={selectedHost.uuid} />
+                <OperationSubmit
+                  destructive
+                  confirmMessage={`Delete ${selectedHost.remark}? This cannot be undone.`}
+                >
+                  Delete host
+                </OperationSubmit>
+              </form>
+            </ModalFooter>
           </>
         )}
       </Modal>

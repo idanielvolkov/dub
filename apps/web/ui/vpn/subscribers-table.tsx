@@ -293,49 +293,49 @@ export function SubscribersTable({
                   <OperationSubmit>Save changes</OperationSubmit>
                 </div>
               </form>
-              <div className="border-border-subtle mt-5 flex flex-wrap gap-2 border-t pt-5">
-                <form action={changeSubscriberState}>
-                  <input type="hidden" name="slug" value={slug} />
-                  <input type="hidden" name="uuid" value={selectedUser.uuid} />
-                  <input
-                    type="hidden"
-                    name="enabled"
-                    value={String(selectedUser.status !== "ACTIVE")}
-                  />
-                  <OperationSubmit>
-                    {selectedUser.status === "ACTIVE" ? "Disable" : "Enable"}
-                  </OperationSubmit>
-                </form>
-                <form action={resetSubscriberTraffic}>
-                  <input type="hidden" name="slug" value={slug} />
-                  <input type="hidden" name="uuid" value={selectedUser.uuid} />
-                  <OperationSubmit
-                    confirmMessage={`Reset traffic for ${selectedUser.username}?`}
-                  >
-                    Reset traffic
-                  </OperationSubmit>
-                </form>
-                <form action={revokeSubscriber}>
-                  <input type="hidden" name="slug" value={slug} />
-                  <input type="hidden" name="uuid" value={selectedUser.uuid} />
-                  <OperationSubmit
-                    confirmMessage={`Generate a new subscription link for ${selectedUser.username}?`}
-                  >
-                    Revoke link
-                  </OperationSubmit>
-                </form>
-                <form action={removeSubscriber} className="ml-auto">
-                  <input type="hidden" name="slug" value={slug} />
-                  <input type="hidden" name="uuid" value={selectedUser.uuid} />
-                  <OperationSubmit
-                    destructive
-                    confirmMessage={`Delete ${selectedUser.username}? VPN access will stop immediately.`}
-                  >
-                    Delete
-                  </OperationSubmit>
-                </form>
-              </div>
             </ModalBody>
+            <ModalFooter className="flex-wrap justify-start">
+              <form action={changeSubscriberState}>
+                <input type="hidden" name="slug" value={slug} />
+                <input type="hidden" name="uuid" value={selectedUser.uuid} />
+                <input
+                  type="hidden"
+                  name="enabled"
+                  value={String(selectedUser.status !== "ACTIVE")}
+                />
+                <OperationSubmit>
+                  {selectedUser.status === "ACTIVE" ? "Disable" : "Enable"}
+                </OperationSubmit>
+              </form>
+              <form action={resetSubscriberTraffic}>
+                <input type="hidden" name="slug" value={slug} />
+                <input type="hidden" name="uuid" value={selectedUser.uuid} />
+                <OperationSubmit
+                  confirmMessage={`Reset traffic for ${selectedUser.username}?`}
+                >
+                  Reset traffic
+                </OperationSubmit>
+              </form>
+              <form action={revokeSubscriber}>
+                <input type="hidden" name="slug" value={slug} />
+                <input type="hidden" name="uuid" value={selectedUser.uuid} />
+                <OperationSubmit
+                  confirmMessage={`Generate a new subscription link for ${selectedUser.username}?`}
+                >
+                  Revoke link
+                </OperationSubmit>
+              </form>
+              <form action={removeSubscriber} className="ml-auto">
+                <input type="hidden" name="slug" value={slug} />
+                <input type="hidden" name="uuid" value={selectedUser.uuid} />
+                <OperationSubmit
+                  destructive
+                  confirmMessage={`Delete ${selectedUser.username}? VPN access will stop immediately.`}
+                >
+                  Delete
+                </OperationSubmit>
+              </form>
+            </ModalFooter>
           </>
         )}
       </Modal>
