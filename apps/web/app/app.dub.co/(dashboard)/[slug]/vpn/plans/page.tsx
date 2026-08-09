@@ -9,7 +9,7 @@ import {
   RestorePlanButton,
 } from "@/ui/vpn/plan-actions";
 import { VpnPanel } from "@/ui/vpn/vpn-ui";
-import { Badge } from "@dub/ui";
+import { Badge, CardList } from "@dub/ui";
 
 export default async function PlansPage({
   params,
@@ -101,22 +101,23 @@ export default async function PlansPage({
             <h2 className="text-content-emphasis font-semibold">
               Archived plans
             </h2>
-            <div className="mt-4 space-y-3">
+            <CardList variant="compact" className="mt-4">
               {archivedPlans.map((plan) => (
-                <div
-                  key={plan.id}
-                  className="border-border-subtle flex items-center justify-between rounded-lg border p-3"
-                >
-                  <div>
-                    <p className="text-content-emphasis text-sm font-medium">
-                      {plan.name}
-                    </p>
-                    <p className="text-content-subtle text-xs">${plan.price}</p>
+                <CardList.Card key={plan.id} hoverStateEnabled={false}>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-content-emphasis text-sm font-medium">
+                        {plan.name}
+                      </p>
+                      <p className="text-content-subtle text-xs">
+                        ${plan.price}
+                      </p>
+                    </div>
+                    <RestorePlanButton slug={slug} planId={plan.id} />
                   </div>
-                  <RestorePlanButton slug={slug} planId={plan.id} />
-                </div>
+                </CardList.Card>
               ))}
-            </div>
+            </CardList>
           </VpnPanel>
         )}
 
