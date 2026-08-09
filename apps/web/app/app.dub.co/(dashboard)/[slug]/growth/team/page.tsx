@@ -4,8 +4,7 @@ import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
-import { VpnPanel, VpnPanelHeader } from "@/ui/vpn/vpn-ui";
-import { Badge, Input } from "@dub/ui";
+import { Badge, CardList, Input } from "@dub/ui";
 import {
   changeGrowthMemberRole,
   inviteGrowthMember,
@@ -50,46 +49,60 @@ export default async function GrowthTeamPage({
     >
       <PageWidthWrapper className="pb-10">
         {isOwner && (
-          <VpnPanel className="mb-4">
-            <VpnPanelHeader
-              title="Invite marketer"
-              description="Members can edit Growth; viewers have read-only access"
-            />
-            <form
-              action={inviteGrowthMember}
-              className="grid gap-3 p-5 sm:grid-cols-[1fr_160px_auto]"
-            >
-              <input type="hidden" name="slug" value={slug} />
-              <Input
-                className="h-9"
-                type="email"
-                name="email"
-                placeholder="marketer@company.com"
-                required
-              />
-              <FormCombobox
-                name="role"
-                defaultValue="member"
-                className="h-9"
-                options={[
-                  { value: "member", label: "Marketing member" },
-                  { value: "viewer", label: "Viewer" },
-                ]}
-              />
-              <OperationSubmit>Send invite</OperationSubmit>
-            </form>
-          </VpnPanel>
+          <section className="mb-6">
+            <div className="mb-3">
+              <h2 className="text-content-emphasis text-sm font-semibold">
+                Invite marketer
+              </h2>
+              <p className="text-content-subtle text-sm">
+                Members can edit Growth; viewers have read-only access
+              </p>
+            </div>
+            <CardList>
+              <CardList.Card innerClassName="p-0" hoverStateEnabled={false}>
+                <form
+                  action={inviteGrowthMember}
+                  className="grid gap-3 p-5 sm:grid-cols-[1fr_160px_auto]"
+                >
+                  <input type="hidden" name="slug" value={slug} />
+                  <Input
+                    className="h-9"
+                    type="email"
+                    name="email"
+                    placeholder="marketer@company.com"
+                    required
+                  />
+                  <FormCombobox
+                    name="role"
+                    defaultValue="member"
+                    className="h-9"
+                    options={[
+                      { value: "member", label: "Marketing member" },
+                      { value: "viewer", label: "Viewer" },
+                    ]}
+                  />
+                  <OperationSubmit>Send invite</OperationSubmit>
+                </form>
+              </CardList.Card>
+            </CardList>
+          </section>
         )}
-        <VpnPanel>
-          <VpnPanelHeader
-            title="Workspace members"
-            description={`${workspace.users.length} active · ${workspace.invites.length} pending`}
-          />
-          <div className="divide-border-subtle divide-y">
+        <section>
+          <div className="mb-3">
+            <h2 className="text-content-emphasis text-sm font-semibold">
+              Workspace members
+            </h2>
+            <p className="text-content-subtle text-sm">
+              {workspace.users.length} active · {workspace.invites.length}{" "}
+              pending
+            </p>
+          </div>
+          <CardList variant="compact">
             {workspace.users.map((member) => (
-              <div
+              <CardList.Card
                 key={member.userId}
-                className="flex flex-wrap items-center gap-3 px-5 py-4"
+                innerClassName="flex flex-wrap items-center gap-3 px-5 py-4"
+                hoverStateEnabled={false}
               >
                 <div className="min-w-48 flex-1">
                   <p className="text-content-emphasis text-sm font-medium">
@@ -141,12 +154,13 @@ export default async function GrowthTeamPage({
                     </form>
                   </>
                 )}
-              </div>
+              </CardList.Card>
             ))}
             {workspace.invites.map((invite) => (
-              <div
+              <CardList.Card
                 key={invite.email}
-                className="flex flex-wrap items-center gap-3 bg-neutral-50 px-5 py-4"
+                innerClassName="flex flex-wrap items-center gap-3 bg-neutral-50 px-5 py-4"
+                hoverStateEnabled={false}
               >
                 <div className="min-w-48 flex-1">
                   <p className="text-sm font-medium">{invite.email}</p>
@@ -168,10 +182,10 @@ export default async function GrowthTeamPage({
                     </OperationSubmit>
                   </form>
                 )}
-              </div>
+              </CardList.Card>
             ))}
-          </div>
-        </VpnPanel>
+          </CardList>
+        </section>
       </PageWidthWrapper>
     </PageContent>
   );

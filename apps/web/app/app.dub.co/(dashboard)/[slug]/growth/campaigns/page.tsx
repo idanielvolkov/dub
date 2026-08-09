@@ -3,8 +3,7 @@ import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
-import { VpnPanel, VpnPanelHeader } from "@/ui/vpn/vpn-ui";
-import { Badge, EmptyState, Input } from "@dub/ui";
+import { Badge, CardList, EmptyState, Input } from "@dub/ui";
 import { Megaphone } from "@dub/ui/icons";
 import {
   archiveGrowthCampaign,
@@ -28,125 +27,145 @@ export default async function CampaignsPage({
       }}
     >
       <PageWidthWrapper className="pb-10">
-        <VpnPanel className="mb-4">
-          <VpnPanelHeader
-            title="Create campaign"
-            description="A trackable campaign link with UTM attribution"
-          />
-          {domain ? (
-            <form
-              action={createGrowthCampaign}
-              className="grid gap-3 p-5 md:grid-cols-2 lg:grid-cols-4"
-            >
-              <input type="hidden" name="slug" value={slug} />
-              <label className="grid gap-1 text-xs text-neutral-500 md:col-span-2">
-                Campaign name
-                <Input
-                  className="h-9"
-                  name="title"
-                  placeholder="Summer VPN launch"
-                  required
-                />
-              </label>
-              <label className="grid gap-1 text-xs text-neutral-500 md:col-span-2">
-                Destination URL
-                <Input
-                  className="h-9"
-                  type="url"
-                  name="url"
-                  placeholder="https://detz.fun/pricing"
-                  required
-                />
-              </label>
-              <label className="grid gap-1 text-xs text-neutral-500">
-                Short domain
-                <FormCombobox
-                  name="domain"
-                  defaultValue={domain}
-                  className="h-9"
-                  options={workspace.domains.map((item) => ({
-                    value: item.slug,
-                    label: item.slug,
-                  }))}
-                />
-              </label>
-              <label className="grid gap-1 text-xs text-neutral-500">
-                Short path
-                <Input
-                  className="h-9"
-                  name="key"
-                  placeholder="summer"
-                  pattern="[A-Za-z0-9/_-]+"
-                  required
-                />
-              </label>
-              <label className="grid gap-1 text-xs text-neutral-500">
-                UTM campaign
-                <Input
-                  className="h-9"
-                  name="campaign"
-                  placeholder="summer-2026"
-                />
-              </label>
-              <label className="grid gap-1 text-xs text-neutral-500">
-                Owner
-                <Input
-                  className="h-9"
-                  name="owner"
-                  placeholder="Marketing team"
-                />
-              </label>
-              <label className="grid gap-1 text-xs text-neutral-500">
-                Source
-                <Input className="h-9" name="source" placeholder="telegram" />
-              </label>
-              <label className="grid gap-1 text-xs text-neutral-500">
-                Medium
-                <Input className="h-9" name="medium" placeholder="social" />
-              </label>
-              <label className="grid gap-1 text-xs text-neutral-500">
-                Budget
-                <Input
-                  className="h-9"
-                  type="number"
-                  name="budget"
-                  min={0}
-                  step="1"
-                  placeholder="0"
-                />
-              </label>
-              <label className="grid gap-1 text-xs text-neutral-500">
-                Status
-                <FormCombobox
-                  name="status"
-                  defaultValue="draft"
-                  className="h-9"
-                  options={[
-                    { value: "draft", label: "Draft" },
-                    { value: "active", label: "Active" },
-                    { value: "paused", label: "Paused" },
-                    { value: "completed", label: "Completed" },
-                  ]}
-                />
-              </label>
-              <div className="lg:col-span-4">
-                <OperationSubmit>Create campaign</OperationSubmit>
-              </div>
-            </form>
-          ) : (
-            <p className="p-5 text-sm text-neutral-500">
-              Add and verify a short domain before creating campaigns.
+        <section className="mb-6">
+          <div className="mb-3">
+            <h2 className="text-content-emphasis text-sm font-semibold">
+              Create campaign
+            </h2>
+            <p className="text-content-subtle text-sm">
+              A trackable campaign link with UTM attribution
             </p>
-          )}
-        </VpnPanel>
-        <VpnPanel>
-          <VpnPanelHeader
-            title="All campaigns"
-            description={`${campaigns.length} active records`}
-          />
-          <div className="divide-border-subtle divide-y">
+          </div>
+          <CardList>
+            <CardList.Card innerClassName="p-0" hoverStateEnabled={false}>
+              {domain ? (
+                <form
+                  action={createGrowthCampaign}
+                  className="grid gap-3 p-5 md:grid-cols-2 lg:grid-cols-4"
+                >
+                  <input type="hidden" name="slug" value={slug} />
+                  <label className="grid gap-1 text-xs text-neutral-500 md:col-span-2">
+                    Campaign name
+                    <Input
+                      className="h-9"
+                      name="title"
+                      placeholder="Summer VPN launch"
+                      required
+                    />
+                  </label>
+                  <label className="grid gap-1 text-xs text-neutral-500 md:col-span-2">
+                    Destination URL
+                    <Input
+                      className="h-9"
+                      type="url"
+                      name="url"
+                      placeholder="https://detz.fun/pricing"
+                      required
+                    />
+                  </label>
+                  <label className="grid gap-1 text-xs text-neutral-500">
+                    Short domain
+                    <FormCombobox
+                      name="domain"
+                      defaultValue={domain}
+                      className="h-9"
+                      options={workspace.domains.map((item) => ({
+                        value: item.slug,
+                        label: item.slug,
+                      }))}
+                    />
+                  </label>
+                  <label className="grid gap-1 text-xs text-neutral-500">
+                    Short path
+                    <Input
+                      className="h-9"
+                      name="key"
+                      placeholder="summer"
+                      pattern="[A-Za-z0-9/_-]+"
+                      required
+                    />
+                  </label>
+                  <label className="grid gap-1 text-xs text-neutral-500">
+                    UTM campaign
+                    <Input
+                      className="h-9"
+                      name="campaign"
+                      placeholder="summer-2026"
+                    />
+                  </label>
+                  <label className="grid gap-1 text-xs text-neutral-500">
+                    Owner
+                    <Input
+                      className="h-9"
+                      name="owner"
+                      placeholder="Marketing team"
+                    />
+                  </label>
+                  <label className="grid gap-1 text-xs text-neutral-500">
+                    Source
+                    <Input
+                      className="h-9"
+                      name="source"
+                      placeholder="telegram"
+                    />
+                  </label>
+                  <label className="grid gap-1 text-xs text-neutral-500">
+                    Medium
+                    <Input className="h-9" name="medium" placeholder="social" />
+                  </label>
+                  <label className="grid gap-1 text-xs text-neutral-500">
+                    Budget
+                    <Input
+                      className="h-9"
+                      type="number"
+                      name="budget"
+                      min={0}
+                      step="1"
+                      placeholder="0"
+                    />
+                  </label>
+                  <label className="grid gap-1 text-xs text-neutral-500">
+                    Status
+                    <FormCombobox
+                      name="status"
+                      defaultValue="draft"
+                      className="h-9"
+                      options={[
+                        { value: "draft", label: "Draft" },
+                        { value: "active", label: "Active" },
+                        { value: "paused", label: "Paused" },
+                        { value: "completed", label: "Completed" },
+                      ]}
+                    />
+                  </label>
+                  <div className="lg:col-span-4">
+                    <OperationSubmit>Create campaign</OperationSubmit>
+                  </div>
+                </form>
+              ) : (
+                <p className="p-5 text-sm text-neutral-500">
+                  Add and verify a short domain before creating campaigns.
+                </p>
+              )}
+            </CardList.Card>
+          </CardList>
+        </section>
+        <section>
+          <div className="mb-3">
+            <h2 className="text-content-emphasis text-sm font-semibold">
+              All campaigns
+            </h2>
+            <p className="text-content-subtle text-sm">
+              {campaigns.length} active records
+            </p>
+          </div>
+          <CardList variant="compact">
             {campaigns.map((campaign) => (
-              <div key={campaign.id} className="space-y-4 p-5">
+              <CardList.Card
+                key={campaign.id}
+                innerClassName="space-y-4 p-5"
+                hoverStateEnabled={false}
+              >
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <a
@@ -240,15 +259,15 @@ export default async function CampaignsPage({
                     Archive
                   </OperationSubmit>
                 </form>
-              </div>
+              </CardList.Card>
             ))}
-            {!campaigns.length && (
-              <div className="p-10">
-                <EmptyState icon={Megaphone} title="No campaigns yet" />
-              </div>
-            )}
-          </div>
-        </VpnPanel>
+          </CardList>
+          {!campaigns.length && (
+            <div className="py-12">
+              <EmptyState icon={Megaphone} title="No campaigns yet" />
+            </div>
+          )}
+        </section>
       </PageWidthWrapper>
     </PageContent>
   );
