@@ -4,7 +4,7 @@ import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
-import { Badge, EmptyState, Input } from "@dub/ui";
+import { Badge, EmptyState, Input, Label } from "@dub/ui";
 import { Megaphone } from "@dub/ui/icons";
 import {
   archiveGrowthCampaign,
@@ -45,28 +45,31 @@ export default async function CampaignsPage({
                   className="grid gap-3 p-5 md:grid-cols-2 lg:grid-cols-4"
                 >
                   <input type="hidden" name="slug" value={slug} />
-                  <label className="grid gap-1 text-xs text-neutral-500 md:col-span-2">
-                    Campaign name
+                  <div className="grid gap-1.5 md:col-span-2">
+                    <Label htmlFor="new-campaign-name">Campaign name</Label>
                     <Input
+                      id="new-campaign-name"
                       className="h-9"
                       name="title"
                       placeholder="Summer VPN launch"
                       required
                     />
-                  </label>
-                  <label className="grid gap-1 text-xs text-neutral-500 md:col-span-2">
-                    Destination URL
+                  </div>
+                  <div className="grid gap-1.5 md:col-span-2">
+                    <Label htmlFor="new-campaign-url">Destination URL</Label>
                     <Input
+                      id="new-campaign-url"
                       className="h-9"
                       type="url"
                       name="url"
                       placeholder="https://detz.fun/pricing"
                       required
                     />
-                  </label>
-                  <label className="grid gap-1 text-xs text-neutral-500">
-                    Short domain
+                  </div>
+                  <div className="grid gap-1.5">
+                    <Label htmlFor="new-campaign-domain">Short domain</Label>
                     <FormCombobox
+                      id="new-campaign-domain"
                       name="domain"
                       defaultValue={domain}
                       className="h-9"
@@ -75,48 +78,53 @@ export default async function CampaignsPage({
                         label: item.slug,
                       }))}
                     />
-                  </label>
-                  <label className="grid gap-1 text-xs text-neutral-500">
-                    Short path
+                  </div>
+                  <div className="grid gap-1.5">
+                    <Label htmlFor="new-campaign-path">Short path</Label>
                     <Input
+                      id="new-campaign-path"
                       className="h-9"
                       name="key"
                       placeholder="summer"
                       pattern="[A-Za-z0-9/_-]+"
                       required
                     />
-                  </label>
-                  <label className="grid gap-1 text-xs text-neutral-500">
-                    UTM campaign
+                  </div>
+                  <div className="grid gap-1.5">
+                    <Label htmlFor="new-campaign-utm">UTM campaign</Label>
                     <Input
+                      id="new-campaign-utm"
                       className="h-9"
                       name="campaign"
                       placeholder="summer-2026"
                     />
-                  </label>
-                  <label className="grid gap-1 text-xs text-neutral-500">
-                    Owner
+                  </div>
+                  <div className="grid gap-1.5">
+                    <Label htmlFor="new-campaign-owner">Owner</Label>
                     <Input
+                      id="new-campaign-owner"
                       className="h-9"
                       name="owner"
                       placeholder="Marketing team"
                     />
-                  </label>
-                  <label className="grid gap-1 text-xs text-neutral-500">
-                    Source
+                  </div>
+                  <div className="grid gap-1.5">
+                    <Label htmlFor="new-campaign-source">Source</Label>
                     <Input
+                      id="new-campaign-source"
                       className="h-9"
                       name="source"
                       placeholder="telegram"
                     />
-                  </label>
-                  <label className="grid gap-1 text-xs text-neutral-500">
-                    Medium
-                    <Input className="h-9" name="medium" placeholder="social" />
-                  </label>
-                  <label className="grid gap-1 text-xs text-neutral-500">
-                    Budget
+                  </div>
+                  <div className="grid gap-1.5">
+                    <Label htmlFor="new-campaign-medium">Medium</Label>
+                    <Input id="new-campaign-medium" className="h-9" name="medium" placeholder="social" />
+                  </div>
+                  <div className="grid gap-1.5">
+                    <Label htmlFor="new-campaign-budget">Budget</Label>
                     <Input
+                      id="new-campaign-budget"
                       className="h-9"
                       type="number"
                       name="budget"
@@ -124,10 +132,11 @@ export default async function CampaignsPage({
                       step="1"
                       placeholder="0"
                     />
-                  </label>
-                  <label className="grid gap-1 text-xs text-neutral-500">
-                    Status
+                  </div>
+                  <div className="grid gap-1.5">
+                    <Label htmlFor="new-campaign-status">Status</Label>
                     <FormCombobox
+                      id="new-campaign-status"
                       name="status"
                       defaultValue="draft"
                       className="h-9"
@@ -138,7 +147,7 @@ export default async function CampaignsPage({
                         { value: "completed", label: "Completed" },
                       ]}
                     />
-                  </label>
+                  </div>
                   <div className="lg:col-span-4">
                     <OperationSubmit>Create campaign</OperationSubmit>
                   </div>
@@ -194,44 +203,49 @@ export default async function CampaignsPage({
                 >
                   <input type="hidden" name="slug" value={slug} />
                   <input type="hidden" name="id" value={campaign.id} />
-                  <label className="grid gap-1 text-xs text-neutral-500 lg:col-span-2">
-                    Name
+                  <div className="grid gap-1.5 lg:col-span-2">
+                    <Label htmlFor={`campaign-${campaign.id}-name`}>Name</Label>
                     <Input
+                      id={`campaign-${campaign.id}-name`}
                       className="h-9"
                       name="title"
                       defaultValue={campaign.title || ""}
                       required
                     />
-                  </label>
-                  <label className="grid gap-1 text-xs text-neutral-500">
-                    UTM campaign
+                  </div>
+                  <div className="grid gap-1.5">
+                    <Label htmlFor={`campaign-${campaign.id}-utm`}>UTM campaign</Label>
                     <Input
+                      id={`campaign-${campaign.id}-utm`}
                       className="h-9"
                       name="campaign"
                       defaultValue={campaign.utm_campaign || ""}
                     />
-                  </label>
-                  <label className="grid gap-1 text-xs text-neutral-500">
-                    Owner
+                  </div>
+                  <div className="grid gap-1.5">
+                    <Label htmlFor={`campaign-${campaign.id}-owner`}>Owner</Label>
                     <Input
+                      id={`campaign-${campaign.id}-owner`}
                       className="h-9"
                       name="owner"
                       defaultValue={campaign.meta.owner}
                     />
-                  </label>
-                  <label className="grid gap-1 text-xs text-neutral-500">
-                    Budget
+                  </div>
+                  <div className="grid gap-1.5">
+                    <Label htmlFor={`campaign-${campaign.id}-budget`}>Budget</Label>
                     <Input
+                      id={`campaign-${campaign.id}-budget`}
                       className="h-9"
                       type="number"
                       name="budget"
                       min={0}
                       defaultValue={campaign.meta.budget}
                     />
-                  </label>
-                  <label className="grid gap-1 text-xs text-neutral-500">
-                    Status
+                  </div>
+                  <div className="grid gap-1.5">
+                    <Label htmlFor={`campaign-${campaign.id}-status`}>Status</Label>
                     <FormCombobox
+                      id={`campaign-${campaign.id}-status`}
                       name="status"
                       defaultValue={campaign.meta.status}
                       className="h-9"
@@ -242,7 +256,7 @@ export default async function CampaignsPage({
                         { value: "completed", label: "Completed" },
                       ]}
                     />
-                  </label>
+                  </div>
                   <div className="flex items-end lg:col-span-2">
                     <OperationSubmit>Save campaign</OperationSubmit>
                   </div>
