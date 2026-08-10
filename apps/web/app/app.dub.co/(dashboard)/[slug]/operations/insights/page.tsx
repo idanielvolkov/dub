@@ -5,6 +5,7 @@ import {
 } from "@/lib/remnawave/client";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
+import { AnalyticsDateRangePicker } from "@/ui/vpn/analytics-date-range-picker";
 import { DubAnalyticsDashboard } from "@/ui/vpn/dub-analytics-dashboard";
 
 export default async function OperationsInsightsPage() {
@@ -27,6 +28,7 @@ export default async function OperationsInsightsPage() {
       titleInfo={{
         title: "VPN traffic, users, nodes, and host analytics.",
       }}
+      controls={<AnalyticsDateRangePicker />}
     >
       <PageWidthWrapper>
         <DubAnalyticsDashboard

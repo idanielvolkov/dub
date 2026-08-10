@@ -5,6 +5,7 @@ import { financeExpensesFromStore } from "@/lib/vpn/finance";
 import { vpnOrdersFromStore } from "@/lib/vpn/orders";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
+import { AnalyticsDateRangePicker } from "@/ui/vpn/analytics-date-range-picker";
 import { DubAnalyticsDashboard } from "@/ui/vpn/dub-analytics-dashboard";
 import {
   CreateExpenseButton,
@@ -48,7 +49,12 @@ export default async function FinancePage({
     <PageContent
       title="Finance"
       titleInfo={{ title: "Track revenue, expenses, and net income." }}
-      controls={canManage ? <CreateExpenseButton slug={slug} /> : undefined}
+      controls={
+        <>
+          <AnalyticsDateRangePicker />
+          {canManage && <CreateExpenseButton slug={slug} />}
+        </>
+      }
     >
       <PageWidthWrapper className="pb-10">
         <DubAnalyticsDashboard

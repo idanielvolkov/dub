@@ -1,6 +1,7 @@
 import { getGrowthWorkspace } from "@/lib/growth/get-growth-workspace";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
+import { AnalyticsDateRangePicker } from "@/ui/vpn/analytics-date-range-picker";
 import { DubAnalyticsDashboard } from "@/ui/vpn/dub-analytics-dashboard";
 
 export default async function GrowthAnalyticsPage({
@@ -17,6 +18,7 @@ export default async function GrowthAnalyticsPage({
     <PageContent
       title="Analytics"
       titleInfo={{ title: "Marketing funnel and campaign performance." }}
+      controls={<AnalyticsDateRangePicker />}
     >
       <PageWidthWrapper>
         <DubAnalyticsDashboard

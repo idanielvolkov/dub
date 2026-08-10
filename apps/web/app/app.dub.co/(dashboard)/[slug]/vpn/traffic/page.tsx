@@ -1,6 +1,7 @@
 import { getRemnawaveNodes, getRemnawaveUsers } from "@/lib/remnawave/client";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
+import { AnalyticsDateRangePicker } from "@/ui/vpn/analytics-date-range-picker";
 import { DubAnalyticsDashboard } from "@/ui/vpn/dub-analytics-dashboard";
 
 const inGb = (bytes: number) => bytes / 1024 / 1024 / 1024;
@@ -20,6 +21,7 @@ export default async function TrafficPage() {
     <PageContent
       title="Traffic"
       titleInfo={{ title: "Monitor VPN usage across users and nodes." }}
+      controls={<AnalyticsDateRangePicker />}
     >
       <PageWidthWrapper>
         <DubAnalyticsDashboard
