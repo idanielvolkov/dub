@@ -5,6 +5,7 @@ import { OperationSubmit } from "@/ui/shared/operation-submit";
 import {
   Button,
   Checkbox,
+  EmptyState,
   FormCombobox,
   Input,
   Label,
@@ -12,8 +13,14 @@ import {
   ModalBody,
   ModalFooter,
   ModalHeader,
+  StatusBadge,
+  Table,
+  TableRowMenu,
+  useTable,
 } from "@dub/ui";
-import { useState } from "react";
+import { Cards } from "@dub/ui/icons";
+import { ColumnDef } from "@tanstack/react-table";
+import { useMemo, useState } from "react";
 import {
   createVpnPlan,
   provisionPlan,
@@ -264,5 +271,105 @@ export function RestorePlanButton({
       <input type="hidden" name="archived" value="false" />
       <OperationSubmit>Restore</OperationSubmit>
     </form>
+  );
+}
+
+export function ArchivedPlansTable({
+  slug,
+  plans,
+}: {
+  slug: string;
+  plans: VpnPlan[];
+}) {
+  const [selected, setSelected] = useState<VpnPlan | null>(null);
+  const columns = useMemo<ColumnDef<VpnPlan>[]>(
+    () => [
+      {
+        accessorKey: "name",
+        header: "Plan",
+        cell: ({ row }) => (
+          <span className="text-content-emphasis font-medium">
+            {row.original.name}
+          </span>
+        ),
+      },
+      {
+        id: "price",
+        header: "Price",
+        cell: ({ row }) => `$${row.original.price}`,
+      },
+      {
+        id: "duration",
+        header: "Duration",
+        cell: ({ row }) => `${row.original.durationDays} days`,
+      },
+      {
+        id: "status",
+        header: "Status",
+        cell: () => (
+          <StatusBadge icon={null} variant="neutral">
+            Archived
+          </StatusBadge>
+        ),
+      },
+      {
+        id: "actions",
+        header: "Actions",
+        meta: { disableTruncate: true },
+        cell: ({ row }) => (
+          <TableRowMenu
+            actions={[
+              {
+                label: "Restore plan",
+                onClick: () => setSelected(row.original),
+              },
+            ]}
+          />
+        ),
+      },
+    ],
+    [],
+  );
+  const table = useTable({ data: plans, columns });
+  return (
+    <>
+      <Table
+        {...table}
+        resourceName={(plural) => (plural ? "plans" : "plan")}
+        emptyState={
+          <EmptyState
+            icon={Cards}
+            title="No archived plans"
+            description="Archived plans will appear here."
+          />
+        }
+      />
+      <Modal
+        showModal={Boolean(selected)}
+        setShowModal={(open) => !open && setSelected(null)}
+      >
+        {selected && (
+          <>
+            <ModalHeader
+              title="Restore plan"
+              description={`Make ${selected.name} available again?`}
+            />
+            <ModalFooter>
+              <Button
+                variant="secondary"
+                text="Cancel"
+                onClick={() => setSelected(null)}
+              />
+              <form action={setVpnPlanArchived}>
+                <input type="hidden" name="slug" value={slug} />
+                <input type="hidden" name="id" value={selected.id} />
+                <input type="hidden" name="archived" value="false" />
+                <OperationSubmit>Restore plan</OperationSubmit>
+              </form>
+            </ModalFooter>
+          </>
+        )}
+      </Modal>
+    </>
   );
 }

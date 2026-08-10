@@ -5,9 +5,9 @@ import { vpnPlansFromStore } from "@/lib/remnawave/plans";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import {
+  ArchivedPlansTable,
   CreatePlanButton,
   PlanCardActions,
-  RestorePlanButton,
 } from "@/ui/vpn/plan-actions";
 import { Badge, CardList, CardListCard, EmptyState } from "@dub/ui";
 import { Cards } from "@dub/ui/icons";
@@ -132,30 +132,7 @@ export default async function PlansPage({
         )}
 
         {canManage && archivedPlans.length > 0 && (
-          <CardList>
-            <CardListCard innerClassName="p-5" hoverStateEnabled={false}>
-              <h2 className="text-content-emphasis font-semibold">
-                Archived plans
-              </h2>
-              <CardList variant="compact" className="mt-4">
-                {archivedPlans.map((plan) => (
-                  <CardListCard key={plan.id} hoverStateEnabled={false}>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-content-emphasis text-sm font-medium">
-                          {plan.name}
-                        </p>
-                        <p className="text-content-subtle text-xs">
-                          ${plan.price}
-                        </p>
-                      </div>
-                      <RestorePlanButton slug={slug} planId={plan.id} />
-                    </div>
-                  </CardListCard>
-                ))}
-              </CardList>
-            </CardListCard>
-          </CardList>
+          <ArchivedPlansTable slug={slug} plans={archivedPlans} />
         )}
       </PageWidthWrapper>
     </PageContent>
