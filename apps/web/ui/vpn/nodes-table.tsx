@@ -170,22 +170,24 @@ export function NodesTable({
       >
         {selectedNode && (
           <>
-            <ModalHeader>
-              <div className="flex items-center gap-2">
-                <h3 className="text-content-emphasis text-lg font-medium">
-                  {selectedNode.name}
-                </h3>
-                <StatusBadge
-                  icon={null}
-                  variant={selectedNode.isConnected ? "success" : "pending"}
-                >
-                  {selectedNode.isConnected ? "Online" : "Offline"}
-                </StatusBadge>
-              </div>
-              <p className="text-content-subtle mt-1 font-mono text-xs">
-                {selectedNode.address}:{selectedNode.port}
-              </p>
-            </ModalHeader>
+            <ModalHeader
+              title={
+                <div className="flex items-center gap-2">
+                  <span>{selectedNode.name}</span>
+                  <StatusBadge
+                    icon={null}
+                    variant={selectedNode.isConnected ? "success" : "pending"}
+                  >
+                    {selectedNode.isConnected ? "Online" : "Offline"}
+                  </StatusBadge>
+                </div>
+              }
+              description={
+                <span className="font-mono text-xs">
+                  {selectedNode.address}:{selectedNode.port}
+                </span>
+              }
+            />
             <ModalBody className="bg-bg-muted">
               <form
                 action={canManage ? saveNode : undefined}

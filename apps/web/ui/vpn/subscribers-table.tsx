@@ -363,24 +363,24 @@ export function SubscribersTable({
       >
         {selectedUser && (
           <>
-            <ModalHeader>
-              <div className="flex items-center gap-2">
-                <h3 className="text-content-emphasis text-lg font-medium">
-                  {selectedUser.username}
-                </h3>
-                <StatusBadge
-                  icon={null}
-                  variant={
-                    selectedUser.status === "ACTIVE" ? "success" : "neutral"
-                  }
-                >
-                  {selectedUser.status.toLowerCase()}
-                </StatusBadge>
-              </div>
-              <p className="text-content-subtle mt-1 truncate text-xs">
-                {selectedUser.uuid}
-              </p>
-            </ModalHeader>
+            <ModalHeader
+              title={
+                <div className="flex items-center gap-2">
+                  <span>{selectedUser.username}</span>
+                  <StatusBadge
+                    icon={null}
+                    variant={
+                      selectedUser.status === "ACTIVE" ? "success" : "neutral"
+                    }
+                  >
+                    {selectedUser.status.toLowerCase()}
+                  </StatusBadge>
+                </div>
+              }
+              description={
+                <span className="font-mono text-xs">{selectedUser.uuid}</span>
+              }
+            />
             <ModalBody className="bg-bg-muted">
               <CardList className="mb-4">
                 <CardListCard

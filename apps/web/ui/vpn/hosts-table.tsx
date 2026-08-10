@@ -148,22 +148,22 @@ export function HostsTable({
       >
         {selectedHost && (
           <>
-            <ModalHeader>
-              <div className="flex items-center gap-2">
-                <h3 className="text-content-emphasis text-lg font-medium">
-                  {selectedHost.remark}
-                </h3>
-                <StatusBadge
-                  icon={null}
-                  variant={selectedHost.isDisabled ? "neutral" : "success"}
-                >
-                  {selectedHost.isDisabled ? "Disabled" : "Enabled"}
-                </StatusBadge>
-              </div>
-              <p className="text-content-subtle mt-1 font-mono text-xs">
-                {selectedHost.uuid}
-              </p>
-            </ModalHeader>
+            <ModalHeader
+              title={
+                <div className="flex items-center gap-2">
+                  <span>{selectedHost.remark}</span>
+                  <StatusBadge
+                    icon={null}
+                    variant={selectedHost.isDisabled ? "neutral" : "success"}
+                  >
+                    {selectedHost.isDisabled ? "Disabled" : "Enabled"}
+                  </StatusBadge>
+                </div>
+              }
+              description={
+                <span className="font-mono text-xs">{selectedHost.uuid}</span>
+              }
+            />
             <ModalBody className="bg-bg-muted">
               <form action={saveHost} className="grid gap-4 sm:grid-cols-2">
                 <input type="hidden" name="slug" value={slug} />

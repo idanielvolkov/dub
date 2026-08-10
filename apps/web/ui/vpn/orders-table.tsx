@@ -220,26 +220,26 @@ export function OrdersTable({
       >
         {selectedOrder && (
           <>
-            <ModalHeader>
-              <div className="flex items-center gap-2">
-                <h3 className="text-content-emphasis text-lg font-medium">
-                  {selectedOrder.customerName || selectedOrder.customerEmail}
-                </h3>
-                <StatusBadge
-                  icon={null}
-                  variant={
-                    selectedOrder.paymentStatus === "paid"
-                      ? "success"
-                      : "pending"
-                  }
-                >
-                  {selectedOrder.paymentStatus}
-                </StatusBadge>
-              </div>
-              <p className="text-content-subtle mt-1 text-sm">
-                {selectedOrder.planName} · ${selectedOrder.amount}
-              </p>
-            </ModalHeader>
+            <ModalHeader
+              title={
+                <div className="flex items-center gap-2">
+                  <span>
+                    {selectedOrder.customerName || selectedOrder.customerEmail}
+                  </span>
+                  <StatusBadge
+                    icon={null}
+                    variant={
+                      selectedOrder.paymentStatus === "paid"
+                        ? "success"
+                        : "pending"
+                    }
+                  >
+                    {selectedOrder.paymentStatus}
+                  </StatusBadge>
+                </div>
+              }
+              description={`${selectedOrder.planName} · $${selectedOrder.amount}`}
+            />
             <ModalBody className="bg-bg-muted space-y-5">
               {canEdit && (
                 <form action={updateVpnOrder} className="space-y-4">
