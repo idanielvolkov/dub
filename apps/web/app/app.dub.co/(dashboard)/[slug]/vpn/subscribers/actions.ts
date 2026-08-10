@@ -4,8 +4,6 @@ import { authorizePlatformAction } from "@/lib/platform-access-server";
 import {
   createRemnawaveUser,
   deleteRemnawaveUser,
-  extendAllRemnawaveUsers,
-  resetAllRemnawaveUserTraffic,
   resetRemnawaveUserTraffic,
   revokeRemnawaveUserSubscription,
   setRemnawaveUserEnabled,
@@ -115,25 +113,6 @@ export async function resetSubscriberTraffic(formData: FormData) {
   await authorize(slug);
   await resetRemnawaveUserTraffic(text(formData, "uuid"));
   revalidatePath(`/${slug}/operations/users`);
-  revalidatePath(`/${slug}/operations/users`);
-}
-
-export async function resetAllSubscriberTraffic(formData: FormData) {
-  const slug = text(formData, "slug");
-  await authorize(slug);
-  await resetAllRemnawaveUserTraffic();
-  revalidatePath(`/${slug}/operations/users`);
-  revalidatePath(`/${slug}/operations/traffic`);
-}
-
-export async function extendAllSubscribers(formData: FormData) {
-  const slug = text(formData, "slug");
-  await authorize(slug);
-  const extendDays = Math.min(
-    9999,
-    Math.max(1, Number(formData.get("extendDays")) || 0),
-  );
-  await extendAllRemnawaveUsers(extendDays);
   revalidatePath(`/${slug}/operations/users`);
 }
 

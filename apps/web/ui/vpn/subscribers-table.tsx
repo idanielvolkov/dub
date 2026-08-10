@@ -29,9 +29,7 @@ import { toast } from "sonner";
 import {
   changeSubscriberState,
   createSubscriber,
-  extendAllSubscribers,
   removeSubscriber,
-  resetAllSubscriberTraffic,
   resetSubscriberTraffic,
   revokeSubscriber,
   saveSubscriber,
@@ -43,218 +41,17 @@ function formatBytes(bytes: number | null) {
   return gb >= 1000 ? `${(gb / 1000).toFixed(1)} TB` : `${Math.round(gb)} GB`;
 }
 
-export function SubscribersTable({
-  slug,
-  users,
-  canManage,
-}: {
-  slug: string;
-  users: RemnawaveUser[];
-  canManage: boolean;
-}) {
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [showBulkModal, setShowBulkModal] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<RemnawaveUser | null>(null);
-  const [, copyToClipboard] = useCopyToClipboard();
-  const columns = useMemo<ColumnDef<RemnawaveUser>[]>(
-    () => [
-      {
-        id: "subscriber",
-        header: "User",
-        cell: ({ row }) => (
-          <div>
-            <p className="text-content-emphasis font-medium">
-              {row.original.username}
-            </p>
-            <p className="text-content-subtle max-w-48 truncate text-xs">
-              {row.original.email || row.original.uuid}
-            </p>
-          </div>
-        ),
-      },
-      {
-        id: "status",
-        header: "Status",
-        cell: ({ row }) => (
-          <StatusBadge
-            icon={null}
-            variant={row.original.status === "ACTIVE" ? "success" : "neutral"}
-          >
-            {row.original.status.toLowerCase()}
-          </StatusBadge>
-        ),
-      },
-      {
-        id: "traffic",
-        header: "Traffic",
-        cell: ({ row }) => (
-          <span>
-            {formatBytes(row.original.usedTrafficBytes)} /{" "}
-            {formatBytes(row.original.trafficLimitBytes)}
-          </span>
-        ),
-      },
-      {
-        id: "expires",
-        header: "Expires",
-        cell: ({ row }) =>
-          new Date(row.original.expireAt).toLocaleDateString("en-US"),
-      },
-      {
-        id: "devices",
-        header: "Devices",
-        cell: ({ row }) => row.original.hwidDeviceLimit || "Unlimited",
-      },
-      {
-        id: "actions",
-        header: "Actions",
-        meta: { disableTruncate: true },
-        cell: ({ row }) => (
-          <TableRowMenu
-            actions={[
-              {
-                label: canManage ? "Edit user" : "View user",
-                icon: Pen2,
-                onClick: () => setSelectedUser(row.original),
-              },
-              {
-                label: "Copy access link",
-                icon: Copy,
-                onClick: () =>
-                  toast.promise(copyToClipboard(row.original.subscriptionUrl), {
-                    success: "Access link copied",
-                  }),
-              },
-              {
-                label: "Open access link",
-                icon: Link4,
-                onClick: () =>
-                  window.open(
-                    row.original.subscriptionUrl,
-                    "_blank",
-                    "noopener,noreferrer",
-                  ),
-              },
-            ]}
-          />
-        ),
-      },
-    ],
-    [canManage, copyToClipboard],
-  );
-  const table = useTable({ data: users, columns });
+export function AddSubscriberButton({ slug }: { slug: string }) {
+  const [showModal, setShowModal] = useState(false);
 
   return (
     <>
-      <div className="mb-3 flex items-center justify-between gap-4">
-        <div>
-          <h2 className="text-content-emphasis text-sm font-semibold">Users</h2>
-          <p className="text-content-subtle text-sm">
-            {users.length} users in Remnawave
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <StatusBadge variant="success">Live data</StatusBadge>
-          {canManage && (
-            <>
-              <Button
-                className="w-fit"
-                variant="secondary"
-                text="Bulk actions"
-                onClick={() => setShowBulkModal(true)}
-              />
-              <Button
-                className="w-fit"
-                text="Add user"
-                onClick={() => setShowCreateModal(true)}
-              />
-            </>
-          )}
-        </div>
-      </div>
-      <Table
-        {...table}
-        resourceName={(plural) => (plural ? "users" : "user")}
-        emptyState={
-          <EmptyState
-            icon={ShieldUser}
-            title="No users yet"
-            description="Add a user to create VPN access."
-          />
-        }
+      <Button
+        className="w-fit"
+        text="Add user"
+        onClick={() => setShowModal(true)}
       />
-
-      <Modal showModal={showBulkModal} setShowModal={setShowBulkModal}>
-        <ModalHeader
-          title="Bulk actions"
-          description="Apply changes to all Remnawave users."
-        />
-        <ModalBody className="bg-bg-muted">
-          <CardList>
-            <CardListCard hoverStateEnabled={false} innerClassName="p-4">
-              <form action={extendAllSubscribers}>
-                <input type="hidden" name="slug" value={slug} />
-                <div className="flex items-end gap-3">
-                  <div className="grid flex-1 gap-1.5">
-                    <Label htmlFor="extend-all-days">
-                      Extend subscriptions
-                    </Label>
-                    <Input
-                      id="extend-all-days"
-                      name="extendDays"
-                      type="number"
-                      min={1}
-                      max={9999}
-                      defaultValue={30}
-                      required
-                    />
-                  </div>
-                  <OperationSubmit
-                    confirmMessage={`Extend all ${users.length} users by the selected number of days?`}
-                  >
-                    Extend all
-                  </OperationSubmit>
-                </div>
-              </form>
-            </CardListCard>
-            <CardListCard hoverStateEnabled={false} innerClassName="p-4">
-              <form
-                action={resetAllSubscriberTraffic}
-                className="flex items-center justify-between gap-4"
-              >
-                <input type="hidden" name="slug" value={slug} />
-                <div>
-                  <p className="text-content-emphasis text-sm font-medium">
-                    Reset all traffic
-                  </p>
-                  <p className="text-content-subtle mt-1 text-xs">
-                    Clear usage counters for every user.
-                  </p>
-                </div>
-                <OperationSubmit
-                  confirmMessage={`Reset traffic for all ${users.length} users?`}
-                >
-                  Reset all
-                </OperationSubmit>
-              </form>
-            </CardListCard>
-          </CardList>
-        </ModalBody>
-        <ModalFooter>
-          <Button
-            className="w-fit"
-            variant="secondary"
-            text="Close"
-            onClick={() => setShowBulkModal(false)}
-          />
-        </ModalFooter>
-      </Modal>
-
-      <Modal
-        showModal={showCreateModal}
-        setShowModal={setShowCreateModal}
-        className="max-w-xl"
-      >
+      <Modal showModal={showModal} setShowModal={setShowModal} className="max-w-xl">
         <ModalHeader
           title="Add user"
           description="Create a user in Remnawave."
@@ -348,13 +145,129 @@ export function SubscribersTable({
                 className="w-fit"
                 variant="secondary"
                 text="Cancel"
-                onClick={() => setShowCreateModal(false)}
+                onClick={() => setShowModal(false)}
               />
               <OperationSubmit>Add user</OperationSubmit>
             </ModalFooter>
           </form>
         </ModalBody>
       </Modal>
+    </>
+  );
+}
+
+export function SubscribersTable({
+  slug,
+  users,
+  canManage,
+}: {
+  slug: string;
+  users: RemnawaveUser[];
+  canManage: boolean;
+}) {
+  const [selectedUser, setSelectedUser] = useState<RemnawaveUser | null>(null);
+  const [, copyToClipboard] = useCopyToClipboard();
+  const columns = useMemo<ColumnDef<RemnawaveUser>[]>(
+    () => [
+      {
+        id: "subscriber",
+        header: "User",
+        cell: ({ row }) => (
+          <div>
+            <p className="text-content-emphasis font-medium">
+              {row.original.username}
+            </p>
+            <p className="text-content-subtle max-w-48 truncate text-xs">
+              {row.original.email || row.original.uuid}
+            </p>
+          </div>
+        ),
+      },
+      {
+        id: "status",
+        header: "Status",
+        cell: ({ row }) => (
+          <StatusBadge
+            icon={null}
+            variant={row.original.status === "ACTIVE" ? "success" : "neutral"}
+          >
+            {row.original.status.toLowerCase()}
+          </StatusBadge>
+        ),
+      },
+      {
+        id: "traffic",
+        header: "Traffic",
+        cell: ({ row }) => (
+          <span>
+            {formatBytes(row.original.usedTrafficBytes)} /{" "}
+            {formatBytes(row.original.trafficLimitBytes)}
+          </span>
+        ),
+      },
+      {
+        id: "expires",
+        header: "Expires",
+        cell: ({ row }) =>
+          new Date(row.original.expireAt).toLocaleDateString("en-US"),
+      },
+      {
+        id: "devices",
+        header: "Devices",
+        cell: ({ row }) => row.original.hwidDeviceLimit || "Unlimited",
+      },
+      {
+        id: "actions",
+        header: "Actions",
+        meta: { disableTruncate: true },
+        cell: ({ row }) => (
+          <TableRowMenu
+            actions={[
+              {
+                label: canManage ? "Edit user" : "View user",
+                icon: Pen2,
+                onClick: () => setSelectedUser(row.original),
+              },
+              {
+                label: "Copy access link",
+                icon: Copy,
+                onClick: () =>
+                  toast.promise(copyToClipboard(row.original.subscriptionUrl), {
+                    success: "Access link copied",
+                  }),
+              },
+              {
+                label: "Open access link",
+                icon: Link4,
+                onClick: () =>
+                  window.open(
+                    row.original.subscriptionUrl,
+                    "_blank",
+                    "noopener,noreferrer",
+                  ),
+              },
+            ]}
+          />
+        ),
+      },
+    ],
+    [canManage, copyToClipboard],
+  );
+  const table = useTable({ data: users, columns });
+
+  return (
+    <>
+      <Table
+        {...table}
+        resourceName={(plural) => (plural ? "users" : "user")}
+        emptyState={
+          <EmptyState
+            icon={ShieldUser}
+            title="No users yet"
+            description="Add a user to create VPN access."
+          />
+        }
+      />
 
       <Modal
         showModal={Boolean(selectedUser)}

@@ -5,7 +5,7 @@ import { vpnPlansFromStore } from "@/lib/remnawave/plans";
 import { vpnOrdersFromStore } from "@/lib/vpn/orders";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import { OrdersTable } from "@/ui/vpn/orders-table";
+import { CreateOrderButton, OrdersTable } from "@/ui/vpn/orders-table";
 import { MetricCards } from "@dub/ui";
 
 export default async function OrdersPage({
@@ -56,6 +56,9 @@ export default async function OrdersPage({
     <PageContent
       title="Orders"
       titleInfo={{ title: "Track sales, payments, and fulfillment." }}
+      controls={
+        canEdit ? <CreateOrderButton slug={slug} plans={plans} /> : undefined
+      }
     >
       <PageWidthWrapper className="space-y-6 pb-10">
         <MetricCards

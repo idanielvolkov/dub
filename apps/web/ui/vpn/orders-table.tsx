@@ -27,6 +27,83 @@ import {
   updateVpnOrder,
 } from "../../app/app.dub.co/(dashboard)/[slug]/vpn/orders/actions";
 
+export function CreateOrderButton({
+  slug,
+  plans,
+}: {
+  slug: string;
+  plans: VpnPlan[];
+}) {
+  const [showModal, setShowModal] = useState(false);
+
+  return (
+    <>
+      <Button
+        className="w-fit"
+        text="Create order"
+        onClick={() => setShowModal(true)}
+      />
+      <Modal showModal={showModal} setShowModal={setShowModal}>
+        <ModalHeader
+          title="Create order"
+          description="Add a sale before payment or fulfillment."
+        />
+        <ModalBody asChild className="bg-bg-muted">
+          <form action={createVpnOrder} className="space-y-4">
+            <input type="hidden" name="slug" value={slug} />
+            <div className="grid gap-1.5">
+              <Label htmlFor="order-customer-name">Customer name</Label>
+              <Input
+                id="order-customer-name"
+                name="customerName"
+                placeholder="Alex Smith"
+              />
+            </div>
+            <div className="grid gap-1.5">
+              <Label htmlFor="order-customer-email">Email</Label>
+              <Input
+                id="order-customer-email"
+                type="email"
+                name="customerEmail"
+                required
+              />
+            </div>
+            <div className="grid gap-1.5">
+              <Label htmlFor="order-plan">Plan</Label>
+              <FormCombobox
+                id="order-plan"
+                name="planId"
+                options={plans.map((plan) => ({
+                  value: plan.id,
+                  label: `${plan.name} · $${plan.price}`,
+                }))}
+                placeholder="Select a plan"
+              />
+            </div>
+            <div className="grid gap-1.5">
+              <Label htmlFor="order-note">Note</Label>
+              <Input
+                id="order-note"
+                name="note"
+                placeholder="Payment reference"
+              />
+            </div>
+            <ModalFooter className="-mx-6 -mb-5">
+              <Button
+                className="w-fit"
+                variant="secondary"
+                text="Cancel"
+                onClick={() => setShowModal(false)}
+              />
+              <OperationSubmit>Create order</OperationSubmit>
+            </ModalFooter>
+          </form>
+        </ModalBody>
+      </Modal>
+    </>
+  );
+}
+
 export function OrdersTable({
   slug,
   orders,
@@ -40,7 +117,6 @@ export function OrdersTable({
   canEdit: boolean;
   canProvision: boolean;
 }) {
-  const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<VpnOrder | null>(null);
   const columns = useMemo<ColumnDef<VpnOrder>[]>(
     () => [
@@ -126,23 +202,6 @@ export function OrdersTable({
 
   return (
     <>
-      <div className="mb-3 flex items-center justify-between">
-        <div>
-          <h2 className="text-content-emphasis text-sm font-semibold">
-            Order ledger
-          </h2>
-          <p className="text-content-subtle text-sm">
-            {orders.length} orders in this workspace
-          </p>
-        </div>
-        {canEdit && (
-          <Button
-            className="w-fit"
-            text="Create order"
-            onClick={() => setShowCreateModal(true)}
-          />
-        )}
-      </div>
       <Table
         {...table}
         resourceName={(plural) => (plural ? "orders" : "order")}
@@ -154,64 +213,6 @@ export function OrdersTable({
           />
         }
       />
-
-      <Modal showModal={showCreateModal} setShowModal={setShowCreateModal}>
-        <ModalHeader
-          title="Create order"
-          description="Add a sale before payment or fulfillment."
-        />
-        <ModalBody asChild className="bg-bg-muted">
-          <form action={createVpnOrder} className="space-y-4">
-            <input type="hidden" name="slug" value={slug} />
-            <div className="grid gap-1.5">
-              <Label htmlFor="order-customer-name">Customer name</Label>
-              <Input
-                id="order-customer-name"
-                name="customerName"
-                placeholder="Alex Smith"
-              />
-            </div>
-            <div className="grid gap-1.5">
-              <Label htmlFor="order-customer-email">Email</Label>
-              <Input
-                id="order-customer-email"
-                type="email"
-                name="customerEmail"
-                required
-              />
-            </div>
-            <div className="grid gap-1.5">
-              <Label htmlFor="order-plan">Plan</Label>
-              <FormCombobox
-                id="order-plan"
-                name="planId"
-                options={plans.map((plan) => ({
-                  value: plan.id,
-                  label: `${plan.name} · $${plan.price}`,
-                }))}
-                placeholder="Select a plan"
-              />
-            </div>
-            <div className="grid gap-1.5">
-              <Label htmlFor="order-note">Note</Label>
-              <Input
-                id="order-note"
-                name="note"
-                placeholder="Payment reference"
-              />
-            </div>
-            <ModalFooter className="-mx-6 -mb-5">
-              <Button
-                className="w-fit"
-                variant="secondary"
-                text="Cancel"
-                onClick={() => setShowCreateModal(false)}
-              />
-              <OperationSubmit>Create order</OperationSubmit>
-            </ModalFooter>
-          </form>
-        </ModalBody>
-      </Modal>
 
       <Modal
         showModal={Boolean(selectedOrder)}

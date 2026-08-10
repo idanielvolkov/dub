@@ -118,17 +118,6 @@ export function HostsTable({
 
   return (
     <>
-      <div className="mb-3 flex items-center justify-between gap-4">
-        <div>
-          <h2 className="text-content-emphasis text-sm font-semibold">
-            Subscription hosts
-          </h2>
-          <p className="text-content-subtle text-sm">
-            {hosts.length} configured hosts
-          </p>
-        </div>
-        <StatusBadge variant="success">Live data</StatusBadge>
-      </div>
       <Table
         {...table}
         resourceName={(plural) => (plural ? "hosts" : "host")}

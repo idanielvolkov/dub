@@ -3,7 +3,10 @@ import { requirePlatformAccess } from "@/lib/platform-access-server";
 import { getRemnawaveUsersState } from "@/lib/remnawave/client";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import { SubscribersTable } from "@/ui/vpn/subscribers-table";
+import {
+  AddSubscriberButton,
+  SubscribersTable,
+} from "@/ui/vpn/subscribers-table";
 import { ButtonLink, CardList, CardListCard, EmptyState } from "@dub/ui";
 import { Refresh2, TriangleWarning } from "@dub/ui/icons";
 
@@ -28,6 +31,7 @@ export default async function UsersPage({
     <PageContent
       title="Users"
       titleInfo={{ title: "Manage users and VPN access." }}
+      controls={canManage ? <AddSubscriberButton slug={slug} /> : undefined}
     >
       <PageWidthWrapper className="pb-10">
         {usersState.error ? (

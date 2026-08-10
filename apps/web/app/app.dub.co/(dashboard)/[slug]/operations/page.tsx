@@ -102,9 +102,6 @@ export default async function OperationsPage({
             <h2 className="text-content-emphasis text-sm font-semibold">
               Resources
             </h2>
-            <p className="text-content-subtle text-sm">
-              Live data from Remnawave
-            </p>
           </div>
           <CardList variant="compact">
             {resources.map(([name, count, href]) => (

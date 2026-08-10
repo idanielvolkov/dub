@@ -3,7 +3,10 @@ import { requirePlatformAccess } from "@/lib/platform-access-server";
 import { getRemnawaveNodesState } from "@/lib/remnawave/client";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import { NodesTable } from "@/ui/vpn/nodes-table";
+import {
+  NodesTable,
+  RestartAllNodesButton,
+} from "@/ui/vpn/nodes-table";
 import { ButtonLink, CardList, CardListCard, EmptyState } from "@dub/ui";
 import { Refresh2, TriangleWarning } from "@dub/ui/icons";
 
@@ -27,6 +30,9 @@ export default async function NodesPage({
     <PageContent
       title="Nodes"
       titleInfo={{ title: "Manage nodes connected to Remnawave." }}
+      controls={
+        canManage ? <RestartAllNodesButton slug={slug} /> : undefined
+      }
     >
       <PageWidthWrapper className="pb-10">
         {nodesState.error ? (

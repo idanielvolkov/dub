@@ -34,6 +34,17 @@ function formatBytes(bytes: number) {
   return gb >= 1000 ? `${(gb / 1000).toFixed(1)} TB` : `${Math.round(gb)} GB`;
 }
 
+export function RestartAllNodesButton({ slug }: { slug: string }) {
+  return (
+    <form action={restartAllNodes}>
+      <input type="hidden" name="slug" value={slug} />
+      <OperationSubmit confirmMessage="Restart every connected Remnawave node? Active VPN sessions may reconnect briefly.">
+        Restart all
+      </OperationSubmit>
+    </form>
+  );
+}
+
 export function NodesTable({
   slug,
   nodes,
@@ -130,27 +141,6 @@ export function NodesTable({
 
   return (
     <>
-      <div className="mb-3 flex items-center justify-between gap-4">
-        <div>
-          <h2 className="text-content-emphasis text-sm font-semibold">
-            Network nodes
-          </h2>
-          <p className="text-content-subtle text-sm">
-            {nodes.length} nodes connected to Remnawave
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <StatusBadge variant="success">Live data</StatusBadge>
-          {canManage && (
-            <form action={restartAllNodes}>
-              <input type="hidden" name="slug" value={slug} />
-              <OperationSubmit confirmMessage="Restart every connected Remnawave node? Active VPN sessions may reconnect briefly.">
-                Restart all
-              </OperationSubmit>
-            </form>
-          )}
-        </div>
-      </div>
       <Table
         {...table}
         resourceName={(plural) => (plural ? "nodes" : "node")}

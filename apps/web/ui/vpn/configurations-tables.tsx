@@ -148,7 +148,7 @@ export function ConfigurationsTables({
   return (
     <>
       <section>
-        <div className="mb-3 flex items-center justify-between gap-4">
+        <div className="mb-3">
           <div>
             <h2 className="text-content-emphasis text-sm font-semibold">
               Configuration profiles
@@ -157,7 +157,6 @@ export function ConfigurationsTables({
               {profiles.length} profiles · advanced JSON editor
             </p>
           </div>
-          <StatusBadge variant="success">Live data</StatusBadge>
         </div>
         <Table
           {...profileTable}
