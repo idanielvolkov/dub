@@ -4,8 +4,13 @@ import {
   RemnawaveHwidDevice,
   RemnawaveSubscriptionRequestRecord,
 } from "@/lib/remnawave/client";
+import { OperationSubmit } from "@/ui/shared/operation-submit";
 import {
+  Button,
   EmptyState,
+  Modal,
+  ModalFooter,
+  ModalHeader,
   StatusBadge,
   Table,
   TableRowMenu,
@@ -14,7 +19,7 @@ import {
 } from "@dub/ui";
 import { MobilePhone, ShieldKeyhole } from "@dub/ui/icons";
 import { ColumnDef } from "@tanstack/react-table";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { removeHwidDevice } from "../../app/app.dub.co/(dashboard)/[slug]/operations/actions";
 
 const dateTime = (value: string) =>
@@ -43,6 +48,9 @@ export function HwidDevicesTable({
   devices: RemnawaveHwidDevice[];
   total: number;
 }) {
+  const [removeTarget, setRemoveTarget] = useState<RemnawaveHwidDevice | null>(
+    null,
+  );
   const columns = useMemo<ColumnDef<RemnawaveHwidDevice>[]>(
     () => [
       {
@@ -116,19 +124,7 @@ export function HwidDevicesTable({
               {
                 label: "Remove device",
                 variant: "danger",
-                onClick: async () => {
-                  if (
-                    !window.confirm(
-                      "Remove this device from the user? The client may register again on its next connection.",
-                    )
-                  )
-                    return;
-                  const data = new FormData();
-                  data.set("slug", slug);
-                  data.set("userId", String(row.original.userId));
-                  data.set("hwid", row.original.hwid);
-                  await removeHwidDevice(data);
-                },
+                onClick: () => setRemoveTarget(row.original),
               },
             ]}
           />
@@ -140,27 +136,59 @@ export function HwidDevicesTable({
   const table = useTable({ data: devices, columns });
 
   return (
-    <section>
-      <div className="mb-3">
-        <h2 className="text-content-emphasis text-sm font-semibold">
-          HWID devices
-        </h2>
-        <p className="text-content-subtle text-sm">
-          {total} client hardware records registered in Remnawave
-        </p>
-      </div>
-      <Table
-        {...table}
-        resourceName={(plural) => (plural ? "devices" : "device")}
-        emptyState={
-          <EmptyState
-            icon={MobilePhone}
-            title="No HWID devices"
-            description="Compatible VPN clients will appear here after registering a device."
-          />
-        }
-      />
-    </section>
+    <>
+      <section>
+        <div className="mb-3">
+          <h2 className="text-content-emphasis text-sm font-semibold">
+            HWID devices
+          </h2>
+          <p className="text-content-subtle text-sm">
+            {total} client hardware records registered in Remnawave
+          </p>
+        </div>
+        <Table
+          {...table}
+          resourceName={(plural) => (plural ? "devices" : "device")}
+          emptyState={
+            <EmptyState
+              icon={MobilePhone}
+              title="No HWID devices"
+              description="Compatible VPN clients will appear here after registering a device."
+            />
+          }
+        />
+      </section>
+      <Modal
+        showModal={Boolean(removeTarget)}
+        setShowModal={(open) => !open && setRemoveTarget(null)}
+      >
+        {removeTarget && (
+          <>
+            <ModalHeader
+              title="Remove device"
+              description="The client may register again on its next connection."
+            />
+            <ModalFooter>
+              <Button
+                variant="secondary"
+                text="Cancel"
+                onClick={() => setRemoveTarget(null)}
+              />
+              <form action={removeHwidDevice}>
+                <input type="hidden" name="slug" value={slug} />
+                <input
+                  type="hidden"
+                  name="userId"
+                  value={String(removeTarget.userId)}
+                />
+                <input type="hidden" name="hwid" value={removeTarget.hwid} />
+                <OperationSubmit destructive>Remove device</OperationSubmit>
+              </form>
+            </ModalFooter>
+          </>
+        )}
+      </Modal>
+    </>
   );
 }
 
