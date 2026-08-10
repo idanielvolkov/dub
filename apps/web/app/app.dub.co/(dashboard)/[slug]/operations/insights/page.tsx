@@ -1,64 +1,72 @@
 import {
-  getRemnawaveDeviceStats,
-  getRemnawaveInfraProviders,
-  getRemnawaveRequestStats,
+  getRemnawaveHosts,
+  getRemnawaveNodes,
+  getRemnawaveUsers,
 } from "@/lib/remnawave/client";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { DubAnalyticsDashboard } from "@/ui/vpn/dub-analytics-dashboard";
 
 export default async function OperationsInsightsPage() {
-  const [devices, requests, infra] = await Promise.all([
-    getRemnawaveDeviceStats(),
-    getRemnawaveRequestStats(),
-    getRemnawaveInfraProviders(),
+  const [users, nodes, hosts] = await Promise.all([
+    getRemnawaveUsers(),
+    getRemnawaveNodes(),
+    getRemnawaveHosts(),
   ]);
-
-  const requestTotal =
-    requests?.hourlyRequestStats.reduce(
-      (total, item) => total + item.requestCount,
-      0,
-    ) ?? 0;
+  const totalTraffic = users.reduce(
+    (total, user) => total + (user.usedTrafficBytes ?? 0),
+    0,
+  );
+  const trafficGb = Math.round(totalTraffic / 1024 / 1024 / 1024);
+  const onlineNodes = nodes.filter((node) => node.isConnected).length;
 
   return (
     <PageContent
       title="Insights"
       titleInfo={{
-        title: "VPN usage, devices, requests, and infrastructure analytics.",
+        title: "VPN traffic, users, nodes, and host analytics.",
       }}
     >
       <PageWidthWrapper>
         <DubAnalyticsDashboard
-          points={(requests?.hourlyRequestStats ?? []).map((point, index) => ({
-            date: point.dateTime,
-            requests: point.requestCount,
-            devices:
-              index === (requests?.hourlyRequestStats.length ?? 0) - 1
-                ? devices?.stats.totalUniqueDevices ?? 0
-                : 0,
-            cost: 0,
-          }))}
+          points={[
+            {
+              date: new Date().toISOString(),
+              requests: trafficGb,
+              devices: users.length,
+              cost: onlineNodes,
+            },
+          ]}
           totals={{
-            requests: requestTotal,
-            devices: devices?.stats.totalUniqueDevices ?? 0,
-            cost: infra.providers.reduce(
-              (sum, provider) => sum + provider.billingHistory.totalAmount,
-              0,
-            ),
+            requests: trafficGb,
+            devices: users.length,
+            cost: onlineNodes,
           }}
-          platforms={(devices?.byPlatform ?? []).map((platform) => ({
-            label: platform.platform || "Unknown",
-            value: platform.count,
-            detail: `${platform.byApp.length} apps`,
+          metricLabels={{
+            requests: "Traffic, GB",
+            devices: "Users",
+            cost: "Online nodes",
+          }}
+          breakdownLabels={{
+            platforms: "Nodes",
+            applications: "Users",
+            providers: "Hosts",
+          }}
+          secondaryTitle="Network hosts"
+          platforms={nodes.map((node) => ({
+            label: node.name,
+            value: Math.round(node.trafficUsedBytes / 1024 / 1024),
+            detail: `${node.usersOnline} online`,
           }))}
-          applications={(requests?.byParsedApp ?? []).map((app) => ({
-            label: app.app || "Unknown",
-            value: app.count,
+          applications={users.map((user) => ({
+            label: user.username,
+            value: Math.round((user.usedTrafficBytes ?? 0) / 1024 / 1024),
+            detail: user.status,
           }))}
-          providers={infra.providers.map((provider) => ({
-            label: provider.name,
-            value: provider.billingHistory.totalAmount,
-            detail: `${provider.billingNodes.length} nodes · ${provider.billingHistory.totalBills} bills`,
+          providers={hosts.map((host) => ({
+            label: host.remark,
+            value: host.nodes.length,
+            detail: `${host.address}${host.port ? `:${host.port}` : ""}`,
           }))}
         />
       </PageWidthWrapper>

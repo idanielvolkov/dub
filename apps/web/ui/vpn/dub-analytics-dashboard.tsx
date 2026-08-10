@@ -39,12 +39,20 @@ export function DubAnalyticsDashboard({
   platforms,
   applications,
   providers,
+  metricLabels,
+  breakdownLabels,
+  secondaryTitle = "Infrastructure overview",
 }: {
   points: AnalyticsPoint[];
   totals: Record<Metric, number>;
   platforms: Breakdown[];
   applications: Breakdown[];
   providers: Breakdown[];
+  metricLabels?: Partial<Record<Metric, string>>;
+  breakdownLabels?: Partial<
+    Record<"platforms" | "applications" | "providers", string>
+  >;
+  secondaryTitle?: string;
 }) {
   const [metric, setMetric] = useState<Metric>("requests");
   const [breakdown, setBreakdown] = useState<
@@ -72,6 +80,8 @@ export function DubAnalyticsDashboard({
         : providers;
   const maxBreakdown = Math.max(...breakdownData.map(({ value }) => value), 1);
   const selected = metricTabs.find(({ id }) => id === metric)!;
+  const getMetricLabel = (id: Metric, fallback: string) =>
+    metricLabels?.[id] ?? fallback;
 
   return (
     <div className="space-y-6 pb-10">
@@ -107,7 +117,7 @@ export function DubAnalyticsDashboard({
                           colorClassName,
                         )}
                       />
-                      <span>{label}</span>
+                      <span>{getMetricLabel(id, label)}</span>
                     </div>
                     <div className="mt-1 flex h-12 items-center">
                       <NumberFlow
@@ -160,7 +170,7 @@ export function DubAnalyticsDashboard({
                             selected.colorClassName,
                           )}
                         />
-                        {selected.label}
+                        {getMetricLabel(selected.id, selected.label)}
                       </div>
                       <span className="font-medium text-neutral-900">
                         {metric === "cost"
@@ -197,15 +207,19 @@ export function DubAnalyticsDashboard({
             {[
               {
                 id: "platforms" as const,
-                label: "Platforms",
+                label: breakdownLabels?.platforms ?? "Platforms",
                 icon: MobilePhone,
               },
               {
                 id: "applications" as const,
-                label: "Applications",
+                label: breakdownLabels?.applications ?? "Applications",
                 icon: Cube,
               },
-              { id: "providers" as const, label: "Providers", icon: Globe },
+              {
+                id: "providers" as const,
+                label: breakdownLabels?.providers ?? "Providers",
+                icon: Globe,
+              },
             ].map(({ id, label, icon: Icon }) => (
               <button
                 key={id}
@@ -267,7 +281,7 @@ export function DubAnalyticsDashboard({
         <section className="h-[400px] overflow-hidden rounded-xl border border-neutral-200 bg-white">
           <div className="border-b border-neutral-200 px-5 py-[17px]">
             <h2 className="text-sm font-medium text-neutral-900">
-              Infrastructure overview
+              {secondaryTitle}
             </h2>
           </div>
           <div className="divide-y divide-neutral-100">
