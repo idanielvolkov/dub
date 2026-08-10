@@ -31,19 +31,16 @@ export function ConfigurationsTables({
   slug,
   profiles,
   squads,
-  inboundIds,
 }: {
   slug: string;
   profiles: RemnawaveConfigProfile[];
   squads: RemnawaveSquad[];
-  inboundIds: string[];
 }) {
   const [selectedProfile, setSelectedProfile] =
     useState<RemnawaveConfigProfile | null>(null);
   const [selectedSquad, setSelectedSquad] = useState<RemnawaveSquad | null>(
     null,
   );
-  const [showCreateSquad, setShowCreateSquad] = useState(false);
 
   const profileColumns = useMemo<ColumnDef<RemnawaveConfigProfile>[]>(
     () => [
@@ -172,7 +169,7 @@ export function ConfigurationsTables({
       </section>
 
       <section>
-        <div className="mb-3 flex items-center justify-between gap-4">
+        <div className="mb-3">
           <div>
             <h2 className="text-content-emphasis text-sm font-semibold">
               Internal squads
@@ -181,11 +178,6 @@ export function ConfigurationsTables({
               {squads.length} access groups
             </p>
           </div>
-          <Button
-            className="w-fit"
-            text="Create squad"
-            onClick={() => setShowCreateSquad(true)}
-          />
         </div>
         <Table
           {...squadTable}
@@ -304,7 +296,21 @@ export function ConfigurationsTables({
           </>
         )}
       </Modal>
+    </>
+  );
+}
 
+export function CreateSquadButton({
+  slug,
+  inboundIds,
+}: {
+  slug: string;
+  inboundIds: string[];
+}) {
+  const [showCreateSquad, setShowCreateSquad] = useState(false);
+  return (
+    <>
+      <Button text="Create squad" onClick={() => setShowCreateSquad(true)} />
       <Modal showModal={showCreateSquad} setShowModal={setShowCreateSquad}>
         <ModalHeader
           title="Create squad"

@@ -4,7 +4,10 @@ import {
 } from "@/lib/remnawave/client";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import { ConfigurationsTables } from "@/ui/vpn/configurations-tables";
+import {
+  ConfigurationsTables,
+  CreateSquadButton,
+} from "@/ui/vpn/configurations-tables";
 
 export default async function ConfigurationsPage({
   params,
@@ -25,13 +28,13 @@ export default async function ConfigurationsPage({
     <PageContent
       title="Configurations"
       titleInfo={{ title: "Manage config profiles and internal squads." }}
+      controls={<CreateSquadButton slug={slug} inboundIds={inboundIds} />}
     >
       <PageWidthWrapper className="space-y-8 pb-10">
         <ConfigurationsTables
           slug={slug}
           profiles={profiles.configProfiles}
           squads={squads.internalSquads}
-          inboundIds={inboundIds}
         />
       </PageWidthWrapper>
     </PageContent>
