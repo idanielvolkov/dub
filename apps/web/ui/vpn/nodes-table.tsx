@@ -256,7 +256,6 @@ export function NodesTable({
                   <Checkbox
                     id="node-track-traffic"
                     name="isTrafficTrackingActive"
-                    className="size-4"
                     defaultChecked={selectedNode.isTrafficTrackingActive}
                   />
                   Track traffic for this node

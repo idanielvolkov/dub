@@ -229,7 +229,7 @@ export function ConfigurationsTables({
                   <Label htmlFor="profile-xray-json">Xray JSON</Label>
                   <Textarea
                     id="profile-xray-json"
-                    className="min-h-80 w-full resize-y rounded-md border-neutral-300 bg-white p-3 font-mono text-xs text-neutral-900 placeholder-neutral-400 focus:border-neutral-500 focus:outline-none focus:ring-neutral-500"
+                    className="min-h-80 resize-y p-3 font-mono text-xs"
                     name="config"
                     defaultValue={JSON.stringify(
                       selectedProfile.config,

@@ -111,7 +111,6 @@ function PlanFields({ plan }: { plan?: VpnPlan }) {
           id={`${fieldPrefix}-featured`}
           name="featured"
           defaultChecked={plan?.featured}
-          className="size-4 rounded"
         />
         Mark as most popular
       </Label>

@@ -208,7 +208,6 @@ export function HostsTable({
                     >
                       <Checkbox
                         id="host-disabled"
-                        className="size-4 rounded"
                         name="isDisabled"
                         defaultChecked={selectedHost.isDisabled}
                       />
@@ -220,7 +219,6 @@ export function HostsTable({
                     >
                       <Checkbox
                         id="host-hidden"
-                        className="size-4 rounded"
                         name="isHidden"
                         defaultChecked={selectedHost.isHidden}
                       />

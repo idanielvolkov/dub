@@ -1,9 +1,8 @@
 import { getRemnawaveHostsState } from "@/lib/remnawave/client";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import { SimpleEmptyState } from "@/ui/shared/simple-empty-state";
 import { HostsTable } from "@/ui/vpn/hosts-table";
-import { ButtonLink } from "@dub/ui";
+import { ButtonLink, CardList, CardListCard, EmptyState } from "@dub/ui";
 import { Refresh2, TriangleWarning } from "@dub/ui/icons";
 
 export default async function HostsPage({
@@ -22,25 +21,26 @@ export default async function HostsPage({
     >
       <PageWidthWrapper className="pb-10">
         {hostsState.error ? (
-          <SimpleEmptyState
-            className="border-border-subtle min-h-96 rounded-xl border bg-white"
-            graphic={
-              <div className="flex size-12 items-center justify-center rounded-full bg-amber-100 text-amber-700">
-                <TriangleWarning className="size-6" />
-              </div>
-            }
-            title="Remnawave is unavailable"
-            description={hostsState.error}
-            addButton={
-              <ButtonLink
-                href={`/${slug}/operations/hosts`}
-                variant="primary"
+          <CardList>
+            <CardListCard
+              hoverStateEnabled={false}
+              innerClassName="flex min-h-96 items-center justify-center p-8"
+            >
+              <EmptyState
+                icon={TriangleWarning}
+                title="Remnawave is unavailable"
+                description={hostsState.error}
               >
-                <Refresh2 className="size-4" />
-                Try again
-              </ButtonLink>
-            }
-          />
+                <ButtonLink
+                  href={`/${slug}/operations/hosts`}
+                  variant="primary"
+                >
+                  <Refresh2 className="size-4" />
+                  Try again
+                </ButtonLink>
+              </EmptyState>
+            </CardListCard>
+          </CardList>
         ) : (
           <HostsTable slug={slug} hosts={hostsState.data} />
         )}
