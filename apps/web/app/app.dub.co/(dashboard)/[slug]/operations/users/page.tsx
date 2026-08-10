@@ -3,8 +3,10 @@ import { requirePlatformAccess } from "@/lib/platform-access-server";
 import { getRemnawaveUsersState } from "@/lib/remnawave/client";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import { RemnawaveUnavailable } from "@/ui/vpn/remnawave-unavailable";
+import { SimpleEmptyState } from "@/ui/shared/simple-empty-state";
 import { SubscribersTable } from "@/ui/vpn/subscribers-table";
+import { ButtonLink } from "@dub/ui";
+import { Refresh2, TriangleWarning } from "@dub/ui/icons";
 
 export default async function UsersPage({
   params,
@@ -30,7 +32,25 @@ export default async function UsersPage({
     >
       <PageWidthWrapper className="pb-10">
         {usersState.error ? (
-          <RemnawaveUnavailable detail={usersState.error} />
+          <SimpleEmptyState
+            className="border-border-subtle min-h-96 rounded-xl border bg-white"
+            graphic={
+              <div className="flex size-12 items-center justify-center rounded-full bg-amber-100 text-amber-700">
+                <TriangleWarning className="size-6" />
+              </div>
+            }
+            title="Remnawave is unavailable"
+            description={usersState.error}
+            addButton={
+              <ButtonLink
+                href={`/${slug}/operations/users`}
+                variant="primary"
+              >
+                <Refresh2 className="size-4" />
+                Try again
+              </ButtonLink>
+            }
+          />
         ) : (
           <SubscribersTable
             slug={slug}
