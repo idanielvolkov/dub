@@ -44,6 +44,7 @@ export * from "./smart-datetime-picker";
 export * from "./status-badge";
 export * from "./switch";
 export * from "./table";
+export * from "./table-row-menu";
 export * from "./textarea";
 export * from "./timestamp-tooltip";
 export * from "./toggle-group";

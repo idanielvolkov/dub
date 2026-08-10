@@ -1,8 +1,7 @@
 "use client";
 
 import { RemnawaveUser } from "@/lib/remnawave/client";
-import { TableRowMenu } from "@/ui/shared/table-row-menu";
-import { OperationSubmit } from "@/ui/vpn/operation-submit";
+import { OperationSubmit } from "@/ui/shared/operation-submit";
 import {
   Button,
   CopyButton,
@@ -17,6 +16,7 @@ import {
   ModalHeader,
   StatusBadge,
   Table,
+  TableRowMenu,
   useCopyToClipboard,
   useTable,
 } from "@dub/ui";

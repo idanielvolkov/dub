@@ -1,7 +1,7 @@
 "use client";
 
 import { VpnPlan } from "@/lib/remnawave/plans";
-import { OperationSubmit } from "@/ui/vpn/operation-submit";
+import { OperationSubmit } from "@/ui/shared/operation-submit";
 import {
   Button,
   Checkbox,

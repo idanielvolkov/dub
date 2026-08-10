@@ -1,8 +1,7 @@
 "use client";
 
 import { RemnawaveHost } from "@/lib/remnawave/client";
-import { TableRowMenu } from "@/ui/shared/table-row-menu";
-import { OperationSubmit } from "@/ui/vpn/operation-submit";
+import { OperationSubmit } from "@/ui/shared/operation-submit";
 import {
   Checkbox,
   EmptyState,
@@ -14,6 +13,7 @@ import {
   ModalHeader,
   StatusBadge,
   Table,
+  TableRowMenu,
   useTable,
 } from "@dub/ui";
 import { GlobePointer } from "@dub/ui/icons";

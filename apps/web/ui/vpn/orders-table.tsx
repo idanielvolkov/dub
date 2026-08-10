@@ -2,8 +2,7 @@
 
 import { VpnPlan } from "@/lib/remnawave/plans";
 import { VpnOrder } from "@/lib/vpn/orders";
-import { TableRowMenu } from "@/ui/shared/table-row-menu";
-import { OperationSubmit } from "@/ui/vpn/operation-submit";
+import { OperationSubmit } from "@/ui/shared/operation-submit";
 import {
   Button,
   EmptyState,
@@ -16,6 +15,7 @@ import {
   ModalHeader,
   StatusBadge,
   Table,
+  TableRowMenu,
   useTable,
 } from "@dub/ui";
 import { InvoiceDollar } from "@dub/ui/icons";

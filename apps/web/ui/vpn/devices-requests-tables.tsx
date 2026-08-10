@@ -4,11 +4,11 @@ import {
   RemnawaveHwidDevice,
   RemnawaveSubscriptionRequestRecord,
 } from "@/lib/remnawave/client";
-import { TableRowMenu } from "@/ui/shared/table-row-menu";
 import {
   EmptyState,
   StatusBadge,
   Table,
+  TableRowMenu,
   TimestampTooltip,
   useTable,
 } from "@dub/ui";

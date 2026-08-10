@@ -7,8 +7,8 @@ import {
 import { prisma } from "@/lib/prisma";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
+import { OperationSubmit } from "@/ui/shared/operation-submit";
 import { UserAvatar } from "@/ui/users/user-avatar";
-import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import { Badge, CardList, CardListCard, FormCombobox, Input } from "@dub/ui";
 import {
   changeGrowthMemberRole,

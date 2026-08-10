@@ -1,8 +1,10 @@
 "use client";
 
-import { Button, MenuItem, Popover } from "@dub/ui";
-import { Dots, Icon } from "@dub/ui/icons";
 import { useState } from "react";
+import { Button } from "./button";
+import { Dots, Icon } from "./icons";
+import { MenuItem } from "./menu-item";
+import { Popover } from "./popover";
 
 export function TableRowMenu({
   actions,

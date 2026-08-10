@@ -1,6 +1,7 @@
 "use client";
 
 import { RemnawaveExternalSquad } from "@/lib/remnawave/client";
+import { OperationSubmit } from "@/ui/shared/operation-submit";
 import {
   Button,
   CardList,
@@ -20,7 +21,6 @@ import {
   removeExternalSquad,
   renameExternalSquad,
 } from "../../app/app.dub.co/(dashboard)/[slug]/operations/actions";
-import { OperationSubmit } from "./operation-submit";
 
 export function ExternalSquadsManagement({
   slug,

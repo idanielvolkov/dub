@@ -5,7 +5,7 @@ import {
 } from "@/ui/growth/promotion-actions";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import { OperationSubmit } from "@/ui/vpn/operation-submit";
+import { OperationSubmit } from "@/ui/shared/operation-submit";
 import { Badge, CardList, CardListCard, EmptyState } from "@dub/ui";
 import { Discount } from "@dub/ui/icons";
 import { deletePromotion, updatePromotion } from "./actions";

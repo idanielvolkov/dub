@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { supportTicketsFromStore } from "@/lib/vpn/support";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import { OperationSubmit } from "@/ui/vpn/operation-submit";
+import { OperationSubmit } from "@/ui/shared/operation-submit";
 import {
   Badge,
   CardList,
