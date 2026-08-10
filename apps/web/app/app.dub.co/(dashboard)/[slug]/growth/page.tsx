@@ -1,14 +1,8 @@
 import { getGrowthWorkspace } from "@/lib/growth/get-growth-workspace";
+import { CampaignSummaryTable } from "@/ui/growth/campaign-summary-table";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import {
-  ButtonLink,
-  CardList,
-  CardListCard,
-  EmptyState,
-  MetricCards,
-} from "@dub/ui";
-import { Megaphone } from "@dub/ui/icons";
+import { ButtonLink, MetricCards } from "@dub/ui";
 
 export default async function GrowthPage({
   params,
@@ -61,44 +55,19 @@ export default async function GrowthPage({
           ]}
         />
         <section className="mt-6">
-          <div className="mb-3">
-            <h2 className="text-content-emphasis text-sm font-semibold">
-              Recent campaigns
-            </h2>
-            <p className="text-content-subtle text-sm">
-              Latest activity across marketing channels
-            </p>
-          </div>
-          <CardList variant="compact">
-            {campaigns.slice(0, 6).map((campaign) => (
-              <CardListCard key={campaign.id} hoverStateEnabled={false}>
-                <div className="grid gap-3 sm:grid-cols-[1fr_repeat(3,100px)] sm:items-center">
-                  <div className="min-w-0">
-                    <p className="text-content-emphasis truncate text-sm font-medium">
-                      {campaign.title ||
-                        campaign.utm_campaign ||
-                        campaign.shortLink}
-                    </p>
-                    <p className="text-content-subtle mt-0.5 truncate text-xs">
-                      {campaign.shortLink}
-                    </p>
-                  </div>
-                  <span className="text-sm">{campaign.clicks} clicks</span>
-                  <span className="text-sm">{campaign.leads} leads</span>
-                  <span className="text-sm">{campaign.sales} sales</span>
-                </div>
-              </CardListCard>
-            ))}
-          </CardList>
-          {!campaigns.length && (
-            <div className="py-12">
-              <EmptyState
-                icon={Megaphone}
-                title="No campaign data"
-                description="Campaign activity will appear here."
-              />
-            </div>
-          )}
+          <CampaignSummaryTable
+            campaigns={campaigns.slice(0, 6).map((campaign) => ({
+              id: campaign.id,
+              title: campaign.title,
+              shortLink: campaign.shortLink,
+              campaign: campaign.utm_campaign,
+              status: campaign.meta.status,
+              clicks: campaign.clicks,
+              leads: campaign.leads,
+              sales: campaign.sales,
+              createdAt: campaign.createdAt.toISOString(),
+            }))}
+          />
         </section>
       </PageWidthWrapper>
     </PageContent>
