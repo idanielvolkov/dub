@@ -6,7 +6,6 @@ import {
   BookOpen,
   Cards,
   ChartActivity2,
-  ChartLine,
   ConnectedDots,
   Crosshairs3,
   CubeSettings,
@@ -223,7 +222,7 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
           },
           {
             name: "Insights",
-            icon: iconOr(ChartActivity2, LinesY),
+            icon: LinesY,
             href: `/${slug}/operations/insights`,
           },
         ],
@@ -269,7 +268,7 @@ const NAV_AREAS: SidebarNavAreas<SidebarNavData> = {
         items: [
           {
             name: "Analytics",
-            icon: iconOr(ChartLine, LinesY),
+            icon: LinesY,
             href: `/${slug}/growth/analytics`,
           },
         ],
