@@ -5,6 +5,7 @@ import { Cube, Globe, MobilePhone } from "@dub/ui/icons";
 import { cn, nFormatter } from "@dub/utils";
 import NumberFlow, { NumberFlowGroup } from "@number-flow/react";
 import { ChevronRight } from "lucide-react";
+import { motion } from "motion/react";
 import { useMemo, useState } from "react";
 
 type Metric = "requests" | "devices" | "cost";
@@ -79,6 +80,10 @@ export function DubAnalyticsDashboard({
         ? applications
         : providers;
   const maxBreakdown = Math.max(...breakdownData.map(({ value }) => value), 1);
+  const totalBreakdown = Math.max(
+    breakdownData.reduce((total, { value }) => total + value, 0),
+    1,
+  );
   const selected = metricTabs.find(({ id }) => id === metric)!;
   const getMetricLabel = (id: Metric, fallback: string) =>
     metricLabels?.[id] ?? fallback;
@@ -242,34 +247,63 @@ export function DubAnalyticsDashboard({
           </div>
           <div className="py-4">
             {breakdownData.length ? (
-              breakdownData.slice(0, 8).map((item) => (
-                <div
-                  key={item.label}
-                  className="group/row relative flex h-10 items-center px-4 text-sm"
-                >
+              breakdownData.slice(0, 8).map((item) => {
+                const Icon =
+                  breakdown === "platforms"
+                    ? MobilePhone
+                    : breakdown === "applications"
+                      ? Cube
+                      : Globe;
+                const percentage =
+                  Math.round((item.value / totalBreakdown) * 1000) / 10;
+
+                return (
                   <div
-                    className="absolute inset-y-1 left-0 rounded-r-md bg-green-100 transition-all group-hover/row:bg-green-200"
-                    style={{
-                      width: `${Math.max((item.value / maxBreakdown) * 100, 2)}%`,
-                    }}
-                  />
-                  <div className="relative flex w-full items-center justify-between gap-4">
-                    <div className="min-w-0">
-                      <span className="truncate font-medium text-neutral-700">
-                        {item.label}
-                      </span>
-                      {item.detail && (
-                        <span className="ml-2 text-xs text-neutral-400">
-                          {item.detail}
-                        </span>
-                      )}
+                    key={item.label}
+                    className="group block min-w-0 border-l-2 border-transparent px-4 py-1 transition-all hover:border-green-500 hover:bg-gradient-to-r hover:from-green-50 hover:to-transparent"
+                  >
+                    <div className="relative flex items-center justify-between">
+                      <motion.div
+                        className="absolute inset-0 -z-10 h-full origin-left rounded-md bg-green-100"
+                        style={{
+                          width: `${Math.max((item.value / maxBreakdown) * 100, 2)}%`,
+                        }}
+                        transition={{ ease: "easeOut", duration: 0.3 }}
+                        initial={{ transform: "scaleX(0)" }}
+                        animate={{ transform: "scaleX(1)" }}
+                      />
+                      <div className="relative z-10 flex h-8 w-full min-w-0 max-w-[calc(100%-2rem)] items-center transition-[max-width] duration-300 ease-in-out group-hover:max-w-[calc(100%-5rem)]">
+                        <div className="z-10 flex min-w-0 items-center space-x-4 overflow-hidden px-3">
+                          <div className="flex size-6 shrink-0 items-center justify-center">
+                            <Icon className="size-4 text-neutral-500" />
+                          </div>
+                          <div className="min-w-0 truncate text-sm text-neutral-800">
+                            {item.label}
+                            {item.detail && (
+                              <span className="ml-2 text-xs text-neutral-400">
+                                {item.detail}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="z-10 flex items-center">
+                        <NumberFlow
+                          value={item.value}
+                          className="z-10 px-2 text-sm text-neutral-600 transition-transform duration-300 group-hover:-translate-x-14"
+                          format={{
+                            notation:
+                              item.value > 999999 ? "compact" : "standard",
+                          }}
+                        />
+                        <div className="invisible absolute right-0 translate-x-14 px-3 text-sm text-neutral-600/70 opacity-0 transition-all duration-300 group-hover:visible group-hover:translate-x-0 group-hover:opacity-100">
+                          {percentage}%
+                        </div>
+                      </div>
                     </div>
-                    <span className="font-medium tabular-nums text-neutral-600">
-                      {nFormatter(item.value, { full: true })}
-                    </span>
                   </div>
-                </div>
-              ))
+                );
+              })
             ) : (
               <div className="flex h-[300px] items-center justify-center text-sm text-neutral-500">
                 No data available
