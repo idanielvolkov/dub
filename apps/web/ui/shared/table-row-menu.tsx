@@ -1,6 +1,6 @@
 "use client";
 
-import { MenuItem, Popover } from "@dub/ui";
+import { Button, MenuItem, Popover } from "@dub/ui";
 import { Dots, Icon } from "@dub/ui/icons";
 import { useState } from "react";
 
@@ -39,13 +39,13 @@ export function TableRowMenu({
         </div>
       }
     >
-      <button
+      <Button
         type="button"
         aria-label="Open row actions"
-        className="text-content-subtle hover:bg-bg-subtle active:bg-bg-muted flex size-8 items-center justify-center rounded-md transition-colors"
-      >
-        <Dots className="size-4" />
-      </button>
+        variant="outline"
+        className="text-content-subtle size-8 rounded-md border-transparent p-0"
+        icon={<Dots className="size-4" />}
+      />
     </Popover>
   );
 }

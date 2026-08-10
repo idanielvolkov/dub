@@ -119,27 +119,6 @@ function PlanFields({ plan }: { plan?: VpnPlan }) {
   );
 }
 
-function FormModal({
-  open,
-  setOpen,
-  title,
-  description,
-  children,
-}: {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-  title: string;
-  description: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <Modal showModal={open} setShowModal={setOpen} className="max-w-xl">
-      <ModalHeader title={title} description={description} />
-      {children}
-    </Modal>
-  );
-}
-
 export function CreatePlanButton({ slug }: { slug: string }) {
   const [open, setOpen] = useState(false);
   return (
@@ -149,12 +128,11 @@ export function CreatePlanButton({ slug }: { slug: string }) {
         text="Create plan"
         onClick={() => setOpen(true)}
       />
-      <FormModal
-        open={open}
-        setOpen={setOpen}
-        title="Create plan"
-        description="Create a plan for your VPN catalog."
-      >
+      <Modal showModal={open} setShowModal={setOpen} className="max-w-xl">
+        <ModalHeader
+          title="Create plan"
+          description="Create a plan for your VPN catalog."
+        />
         <ModalBody asChild className="bg-bg-muted">
           <form action={createVpnPlan} className="space-y-5">
             <input type="hidden" name="slug" value={slug} />
@@ -170,7 +148,7 @@ export function CreatePlanButton({ slug }: { slug: string }) {
             </ModalFooter>
           </form>
         </ModalBody>
-      </FormModal>
+      </Modal>
     </>
   );
 }
@@ -199,12 +177,15 @@ export function PlanCardActions({
         />
       </div>
       {canProvision && (
-        <FormModal
-          open={provisionOpen}
-          setOpen={setProvisionOpen}
-          title={`Provision ${plan.name}`}
-          description="Create a Remnawave user with this plan's limits."
+        <Modal
+          showModal={provisionOpen}
+          setShowModal={setProvisionOpen}
+          className="max-w-xl"
         >
+          <ModalHeader
+            title={`Provision ${plan.name}`}
+            description="Create a Remnawave user with this plan's limits."
+          />
           <ModalBody asChild className="bg-bg-muted">
             <form action={provisionPlan} className="space-y-4">
               <input type="hidden" name="slug" value={slug} />
@@ -231,14 +212,17 @@ export function PlanCardActions({
               </ModalFooter>
             </form>
           </ModalBody>
-        </FormModal>
+        </Modal>
       )}
-      <FormModal
-        open={editOpen}
-        setOpen={setEditOpen}
-        title={`Edit ${plan.name}`}
-        description="Update pricing and access limits."
+      <Modal
+        showModal={editOpen}
+        setShowModal={setEditOpen}
+        className="max-w-xl"
       >
+        <ModalHeader
+          title={`Edit ${plan.name}`}
+          description="Update pricing and access limits."
+        />
         <ModalBody className="bg-bg-muted">
           <form action={updateVpnPlan} className="space-y-5">
             <input type="hidden" name="slug" value={slug} />
@@ -262,7 +246,7 @@ export function PlanCardActions({
             </OperationSubmit>
           </form>
         </ModalFooter>
-      </FormModal>
+      </Modal>
     </>
   );
 }

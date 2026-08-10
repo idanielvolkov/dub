@@ -24,6 +24,7 @@ export * from "./grid";
 export * from "./input";
 export * from "./label";
 export * from "./menu-item";
+export * from "./metric-cards";
 export * from "./mini-area-chart";
 export * from "./modal";
 export * from "./multi-value-input";

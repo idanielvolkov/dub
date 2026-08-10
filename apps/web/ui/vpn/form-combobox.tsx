@@ -1,6 +1,7 @@
 "use client";
 
 import { Combobox, ComboboxOption } from "@dub/ui";
+import { cn } from "@dub/utils";
 import { useState } from "react";
 
 export function FormCombobox({
@@ -39,7 +40,7 @@ export function FormCombobox({
         matchTriggerWidth
         buttonProps={{
           id,
-          className: `w-full justify-start border-neutral-300 px-3 ${className ?? ""}`,
+          className: cn("w-full justify-start px-3", className),
         }}
       />
     </>
