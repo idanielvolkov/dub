@@ -57,6 +57,7 @@ export default async function PlansPage({
     <PageContent
       title="Plans"
       titleInfo={{ title: "Manage pricing and access limits." }}
+      controls={canManage ? <CreatePlanButton slug={slug} /> : undefined}
     >
       <PageWidthWrapper className="space-y-6 pb-10">
         <div className="grid items-stretch gap-4 lg:grid-cols-3">
@@ -130,12 +131,6 @@ export default async function PlansPage({
           />
         )}
 
-        {canManage && (
-          <div className="flex justify-end">
-            <CreatePlanButton slug={slug} />
-          </div>
-        )}
-
         {canManage && archivedPlans.length > 0 && (
           <CardList>
             <CardListCard innerClassName="p-5" hoverStateEnabled={false}>
@@ -162,11 +157,6 @@ export default async function PlansPage({
             </CardListCard>
           </CardList>
         )}
-
-        <p className="text-content-subtle text-xs">
-          Provisioning creates a user in Remnawave. Prices are informational
-          until checkout is connected.
-        </p>
       </PageWidthWrapper>
     </PageContent>
   );

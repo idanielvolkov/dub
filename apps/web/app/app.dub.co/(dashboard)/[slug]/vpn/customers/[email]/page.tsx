@@ -6,25 +6,14 @@ import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { UserAvatar } from "@/ui/users/user-avatar";
 import {
-  Badge,
-  ButtonLink,
-  CardList,
-  CardListCard,
-  EmptyState,
-  MetricCards,
-} from "@dub/ui";
-import { LifeRing, Receipt2 } from "@dub/ui/icons";
+  CustomerOrdersTable,
+  CustomerSupportTable,
+} from "@/ui/vpn/customer-history-tables";
+import { ButtonLink, MetricCards } from "@dub/ui";
 import { notFound } from "next/navigation";
 
 const money = (value: number) =>
   `$${value.toLocaleString("en-US", { maximumFractionDigits: 2 })}`;
-
-const date = (value: string) =>
-  new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  }).format(new Date(value));
 
 export default async function CustomerPage({
   params,
@@ -138,50 +127,7 @@ export default async function CustomerPage({
               Payments and VPN provisioning
             </p>
           </div>
-          {orders.length ? (
-            <CardList variant="compact">
-              {orders.map((order) => (
-                <CardListCard
-                  key={order.id}
-                  innerClassName="flex flex-wrap items-center gap-3 px-5 py-4"
-                  hoverStateEnabled={false}
-                >
-                  <div className="min-w-48 flex-1">
-                    <p className="text-content-emphasis text-sm font-medium">
-                      {order.planName}
-                    </p>
-                    <p className="text-content-subtle text-xs">
-                      {order.subscriberUsername || "Awaiting subscriber"} ·{" "}
-                      {date(order.createdAt)}
-                    </p>
-                  </div>
-                  <p className="w-24 text-sm font-medium">
-                    {money(order.amount)}
-                  </p>
-                  <Badge
-                    variant={order.paymentStatus === "paid" ? "green" : "gray"}
-                  >
-                    {order.paymentStatus}
-                  </Badge>
-                  <Badge
-                    variant={
-                      order.fulfillmentStatus === "fulfilled"
-                        ? "blue"
-                        : "orange"
-                    }
-                  >
-                    {order.fulfillmentStatus}
-                  </Badge>
-                </CardListCard>
-              ))}
-            </CardList>
-          ) : (
-            <EmptyState
-              icon={Receipt2}
-              title="No orders"
-              description="This customer does not have an order yet."
-            />
-          )}
+          <CustomerOrdersTable orders={orders} />
         </section>
 
         <section className="mt-8">
@@ -193,47 +139,7 @@ export default async function CustomerPage({
               Requests and internal notes
             </p>
           </div>
-          {tickets.length ? (
-            <CardList variant="compact">
-              {tickets.map((ticket) => (
-                <CardListCard
-                  key={ticket.id}
-                  innerClassName="flex flex-wrap items-center gap-3 px-5 py-4"
-                  hoverStateEnabled={false}
-                >
-                  <div className="min-w-48 flex-1">
-                    <p className="text-content-emphasis text-sm font-medium">
-                      {ticket.subject}
-                    </p>
-                    <p className="text-content-subtle text-xs">
-                      {ticket.note || "No internal note"} ·{" "}
-                      {date(ticket.updatedAt)}
-                    </p>
-                  </div>
-                  <Badge
-                    variant={
-                      ticket.priority === "urgent" || ticket.priority === "high"
-                        ? "red"
-                        : "gray"
-                    }
-                  >
-                    {ticket.priority}
-                  </Badge>
-                  <Badge
-                    variant={ticket.status === "resolved" ? "green" : "orange"}
-                  >
-                    {ticket.status.replace("_", " ")}
-                  </Badge>
-                </CardListCard>
-              ))}
-            </CardList>
-          ) : (
-            <EmptyState
-              icon={LifeRing}
-              title="No support history"
-              description="This customer has not contacted support."
-            />
-          )}
+          <CustomerSupportTable tickets={tickets} />
         </section>
       </PageWidthWrapper>
     </PageContent>
