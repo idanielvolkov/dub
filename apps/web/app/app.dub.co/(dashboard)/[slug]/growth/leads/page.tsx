@@ -2,16 +2,16 @@ import { getGrowthLeads } from "@/lib/growth/leads";
 import { CreateLeadButton } from "@/ui/growth/create-lead-button";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
-import { VpnStats } from "@/ui/vpn/vpn-ui";
 import {
   Badge,
   CardList,
   CardListCard,
   EmptyState,
+  FormCombobox,
   Input,
   Label,
+  MetricCards,
 } from "@dub/ui";
 import { Crosshairs3 } from "@dub/ui/icons";
 import { updateGrowthLead } from "./actions";
@@ -38,7 +38,7 @@ export default async function LeadsPage({
       controls={<CreateLeadButton slug={slug} />}
     >
       <PageWidthWrapper className="pb-10">
-        <VpnStats
+        <MetricCards
           className="mb-6"
           items={[
             { label: "Leads", value: leads.length, detail: "CRM contacts" },

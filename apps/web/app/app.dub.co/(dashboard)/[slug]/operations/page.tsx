@@ -9,8 +9,13 @@ import {
 } from "@/lib/remnawave/client";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import { VpnStats } from "@/ui/vpn/vpn-ui";
-import { ButtonLink, CardList, CardListCard, StatusBadge } from "@dub/ui";
+import {
+  ButtonLink,
+  CardList,
+  CardListCard,
+  MetricCards,
+  StatusBadge,
+} from "@dub/ui";
 import { ArrowUpRight2, ChevronRight } from "@dub/ui/icons";
 import Link from "next/link";
 
@@ -67,7 +72,7 @@ export default async function OperationsPage({
       }
     >
       <PageWidthWrapper className="pb-10">
-        <VpnStats
+        <MetricCards
           items={[
             {
               label: "API status",

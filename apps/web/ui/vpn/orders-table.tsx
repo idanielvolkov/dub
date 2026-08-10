@@ -3,11 +3,11 @@
 import { VpnPlan } from "@/lib/remnawave/plans";
 import { VpnOrder } from "@/lib/vpn/orders";
 import { TableRowMenu } from "@/ui/shared/table-row-menu";
-import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import {
   Button,
   EmptyState,
+  FormCombobox,
   Input,
   Label,
   Modal,

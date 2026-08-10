@@ -5,7 +5,6 @@ import {
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
-import { VpnStats } from "@/ui/vpn/vpn-ui";
 import {
   Badge,
   CardList,
@@ -13,6 +12,7 @@ import {
   Checkbox,
   EmptyState,
   Label,
+  MetricCards,
 } from "@dub/ui";
 import { QRCode } from "@dub/ui/icons";
 import { saveSubscriptionSettings } from "../actions";
@@ -36,7 +36,7 @@ export default async function SubscriptionsPage({
       }}
     >
       <PageWidthWrapper className="pb-10">
-        <VpnStats
+        <MetricCards
           className="mb-6"
           items={[
             {

@@ -1,8 +1,8 @@
 "use client";
 
-import { Combobox, ComboboxOption } from "@dub/ui";
 import { cn } from "@dub/utils";
 import { useState } from "react";
+import { Combobox, ComboboxOption } from "./combobox";
 
 export function FormCombobox({
   id,

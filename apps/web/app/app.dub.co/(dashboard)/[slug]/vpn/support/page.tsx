@@ -4,10 +4,16 @@ import { prisma } from "@/lib/prisma";
 import { supportTicketsFromStore } from "@/lib/vpn/support";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
-import { VpnStats } from "@/ui/vpn/vpn-ui";
-import { Badge, CardList, CardListCard, EmptyState, Input } from "@dub/ui";
+import {
+  Badge,
+  CardList,
+  CardListCard,
+  EmptyState,
+  FormCombobox,
+  Input,
+  MetricCards,
+} from "@dub/ui";
 import { LifeRing } from "@dub/ui/icons";
 import { createSupportTicket, updateSupportTicket } from "./actions";
 
@@ -53,7 +59,7 @@ export default async function SupportPage({
       titleInfo={{ title: "Resolve customer questions and service issues." }}
     >
       <PageWidthWrapper className="pb-10">
-        <VpnStats
+        <MetricCards
           items={[
             { label: "Open", value: open.length, detail: "Awaiting triage" },
             {

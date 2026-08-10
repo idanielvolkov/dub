@@ -2,13 +2,13 @@ import { getGrowthWorkspace } from "@/lib/growth/get-growth-workspace";
 import { CreateCampaignButton } from "@/ui/growth/create-campaign-button";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import { FormCombobox } from "@/ui/vpn/form-combobox";
 import { OperationSubmit } from "@/ui/vpn/operation-submit";
 import {
   Badge,
   CardList,
   CardListCard,
   EmptyState,
+  FormCombobox,
   Input,
   Label,
 } from "@dub/ui";

@@ -4,12 +4,12 @@ import { vpnPlansFromStore } from "@/lib/remnawave/plans";
 import { vpnOrdersFromStore } from "@/lib/vpn/orders";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import { VpnStats } from "@/ui/vpn/vpn-ui";
 import {
   ButtonLink,
   CardList,
   CardListCard,
   EmptyState,
+  MetricCards,
   StatusBadge,
 } from "@dub/ui";
 import { InvoiceDollar } from "@dub/ui/icons";
@@ -60,7 +60,7 @@ export default async function BusinessOverviewPage({
       }
     >
       <PageWidthWrapper className="pb-10">
-        <VpnStats
+        <MetricCards
           items={[
             {
               label: "Revenue",

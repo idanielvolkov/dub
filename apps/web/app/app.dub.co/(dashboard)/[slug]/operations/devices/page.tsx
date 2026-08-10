@@ -10,7 +10,7 @@ import {
   HwidDevicesTable,
   SubscriptionRequestsTable,
 } from "@/ui/vpn/devices-requests-tables";
-import { VpnStats } from "@/ui/vpn/vpn-ui";
+import { MetricCards } from "@dub/ui";
 
 export default async function OperationsDevicesPage({
   params,
@@ -39,7 +39,7 @@ export default async function OperationsDevicesPage({
       }}
     >
       <PageWidthWrapper className="space-y-8 pb-10">
-        <VpnStats
+        <MetricCards
           items={[
             {
               label: "Registered devices",

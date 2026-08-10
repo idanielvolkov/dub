@@ -6,7 +6,7 @@ import { vpnOrdersFromStore } from "@/lib/vpn/orders";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { OrdersTable } from "@/ui/vpn/orders-table";
-import { VpnStats } from "@/ui/vpn/vpn-ui";
+import { MetricCards } from "@dub/ui";
 
 export default async function OrdersPage({
   params,
@@ -58,7 +58,7 @@ export default async function OrdersPage({
       titleInfo={{ title: "Track sales, payments, and fulfillment." }}
     >
       <PageWidthWrapper className="space-y-6 pb-10">
-        <VpnStats
+        <MetricCards
           items={[
             { label: "Orders", value: orders.length, detail: "All sales" },
             {

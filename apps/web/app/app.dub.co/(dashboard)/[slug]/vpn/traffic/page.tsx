@@ -1,11 +1,11 @@
 import { getRemnawaveNodes, getRemnawaveUsers } from "@/lib/remnawave/client";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import { VpnStats } from "@/ui/vpn/vpn-ui";
 import {
   CardList,
   CardListCard,
   EmptyState,
+  MetricCards,
   ProgressBar,
   StatusBadge,
 } from "@dub/ui";
@@ -45,7 +45,7 @@ export default async function TrafficPage() {
       titleInfo={{ title: "Monitor usage across users and nodes." }}
     >
       <PageWidthWrapper className="pb-10">
-        <VpnStats
+        <MetricCards
           items={[
             ["User traffic", formatBytes(used), `${users.length} users`],
             [

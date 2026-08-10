@@ -1,8 +1,13 @@
 import { getGrowthWorkspace } from "@/lib/growth/get-growth-workspace";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import { VpnStats } from "@/ui/vpn/vpn-ui";
-import { ButtonLink, CardList, CardListCard, EmptyState } from "@dub/ui";
+import {
+  ButtonLink,
+  CardList,
+  CardListCard,
+  EmptyState,
+  MetricCards,
+} from "@dub/ui";
 import { Megaphone } from "@dub/ui/icons";
 
 export default async function GrowthPage({
@@ -31,7 +36,7 @@ export default async function GrowthPage({
       }
     >
       <PageWidthWrapper className="pb-10">
-        <VpnStats
+        <MetricCards
           items={[
             {
               label: "Campaigns",

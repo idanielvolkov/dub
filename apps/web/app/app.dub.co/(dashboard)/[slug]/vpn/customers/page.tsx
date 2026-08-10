@@ -5,8 +5,14 @@ import { supportTicketsFromStore } from "@/lib/vpn/support";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { UserAvatar } from "@/ui/users/user-avatar";
-import { VpnStats } from "@/ui/vpn/vpn-ui";
-import { Badge, ButtonLink, CardList, CardListCard, EmptyState } from "@dub/ui";
+import {
+  Badge,
+  ButtonLink,
+  CardList,
+  CardListCard,
+  EmptyState,
+  MetricCards,
+} from "@dub/ui";
 import { User } from "@dub/ui/icons";
 
 type Customer = {
@@ -92,7 +98,7 @@ export default async function CustomersPage({
       }
     >
       <PageWidthWrapper className="pb-10">
-        <VpnStats
+        <MetricCards
           items={[
             {
               label: "Customers",

@@ -5,8 +5,14 @@ import { supportTicketsFromStore } from "@/lib/vpn/support";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { UserAvatar } from "@/ui/users/user-avatar";
-import { VpnStats } from "@/ui/vpn/vpn-ui";
-import { Badge, ButtonLink, CardList, CardListCard, EmptyState } from "@dub/ui";
+import {
+  Badge,
+  ButtonLink,
+  CardList,
+  CardListCard,
+  EmptyState,
+  MetricCards,
+} from "@dub/ui";
 import { LifeRing, Receipt2 } from "@dub/ui/icons";
 import { notFound } from "next/navigation";
 
@@ -106,7 +112,7 @@ export default async function CustomerPage({
           </div>
         </div>
 
-        <VpnStats
+        <MetricCards
           items={[
             { label: "Revenue", value: money(revenue), detail: "Paid orders" },
             { label: "Orders", value: orders.length, detail: "All purchases" },

@@ -7,8 +7,13 @@ import {
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { ExternalSquadsManagement } from "@/ui/vpn/external-squads-management";
-import { VpnStats } from "@/ui/vpn/vpn-ui";
-import { Badge, CardList, CardListCard, EmptyState } from "@dub/ui";
+import {
+  Badge,
+  CardList,
+  CardListCard,
+  EmptyState,
+  MetricCards,
+} from "@dub/ui";
 import { ChartActivity2 } from "@dub/ui/icons";
 
 export default async function OperationsInsightsPage({
@@ -38,7 +43,7 @@ export default async function OperationsInsightsPage({
       }}
     >
       <PageWidthWrapper className="space-y-8 pb-10">
-        <VpnStats
+        <MetricCards
           items={[
             {
               label: "Unique devices",

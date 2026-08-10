@@ -20,6 +20,7 @@ export * from "./empty-state";
 export * from "./file-upload";
 export * from "./filter";
 export * from "./form";
+export * from "./form-combobox";
 export * from "./grid";
 export * from "./input";
 export * from "./label";
