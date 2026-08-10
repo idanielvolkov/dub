@@ -92,7 +92,6 @@ export function SidebarNav<T extends Record<any, any>>({
   data,
   toolContent,
   newsContent,
-  switcher,
   bottom,
 }: {
   groups: SidebarNavGroups<T>;
@@ -101,7 +100,6 @@ export function SidebarNav<T extends Record<any, any>>({
   data: T;
   toolContent?: ReactNode;
   newsContent?: ReactNode;
-  switcher?: ReactNode;
   bottom?: ReactNode;
 }) {
   return (
@@ -136,7 +134,6 @@ export function SidebarNav<T extends Record<any, any>>({
               {(!currentArea ||
                 !areas[currentArea](data).hideSwitcherIcons) && (
                 <div className="flex flex-col gap-3">
-                  {switcher}
                   {groups(data).map((group) => (
                     <NavGroupItem key={group.name} group={group} />
                   ))}

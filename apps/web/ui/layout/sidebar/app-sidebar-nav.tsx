@@ -33,7 +33,6 @@ import {
 import { useParams, usePathname } from "next/navigation";
 import { ReactNode } from "react";
 import { SidebarNav, SidebarNavAreas, SidebarNavGroups } from "./sidebar-nav";
-import { WorkspaceDropdown } from "./workspace-dropdown";
 
 type SidebarNavData = {
   slug: string;
@@ -360,7 +359,6 @@ export function AppSidebarNav({
         marketingAccess,
       }}
       toolContent={toolContent}
-      switcher={<WorkspaceDropdown />}
     />
   );
 }
