@@ -8,11 +8,12 @@ import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { DubAnalyticsDashboard } from "@/ui/vpn/dub-analytics-dashboard";
 
 export default async function OperationsInsightsPage() {
-  const [users, nodes, hosts] = await Promise.all([
+  const [usersResponse, nodes, hosts] = await Promise.all([
     getRemnawaveUsers(),
     getRemnawaveNodes(),
     getRemnawaveHosts(),
   ]);
+  const users = usersResponse.users;
   const totalTraffic = users.reduce(
     (total, user) => total + (user.usedTrafficBytes ?? 0),
     0,
