@@ -1,7 +1,8 @@
 "use client";
 
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "@dub/ui";
-import { useState } from "react";
+import { useConfirmModal } from "@/ui/modals/confirm-modal";
+import { Button } from "@dub/ui";
+import { useRef } from "react";
 import { useFormStatus } from "react-dom";
 
 export function OperationSubmit({
@@ -14,8 +15,14 @@ export function OperationSubmit({
   confirmMessage?: string;
 }) {
   const { pending } = useFormStatus();
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [form, setForm] = useState<HTMLFormElement | null>(null);
+  const formRef = useRef<HTMLFormElement | null>(null);
+  const { setShowConfirmModal, confirmModal } = useConfirmModal({
+    title: "Confirm action",
+    description: confirmMessage || "Are you sure you want to continue?",
+    confirmText: "Confirm",
+    confirmVariant: destructive ? "danger" : "primary",
+    onConfirm: () => formRef.current?.requestSubmit(),
+  });
 
   return (
     <>
@@ -29,39 +36,11 @@ export function OperationSubmit({
         onClick={(event) => {
           if (!confirmMessage) return;
           event.preventDefault();
-          setForm(event.currentTarget.form);
+          formRef.current = event.currentTarget.form;
           setShowConfirmModal(true);
         }}
       />
-      {confirmMessage && (
-        <Modal
-          showModal={showConfirmModal}
-          setShowModal={setShowConfirmModal}
-          className="max-w-md"
-        >
-          <ModalHeader title="Confirm action" />
-          <ModalBody className="text-content-default text-sm leading-6">
-            {confirmMessage}
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              variant="secondary"
-              className="h-9 w-fit"
-              text="Cancel"
-              onClick={() => setShowConfirmModal(false)}
-            />
-            <Button
-              variant={destructive ? "danger" : "primary"}
-              className="h-9 w-fit"
-              text="Confirm"
-              onClick={() => {
-                setShowConfirmModal(false);
-                form?.requestSubmit();
-              }}
-            />
-          </ModalFooter>
-        </Modal>
-      )}
+      {confirmMessage && confirmModal}
     </>
   );
 }
