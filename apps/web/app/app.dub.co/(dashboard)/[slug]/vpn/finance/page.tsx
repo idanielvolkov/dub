@@ -6,6 +6,7 @@ import { vpnOrdersFromStore } from "@/lib/vpn/orders";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
 import { OperationSubmit } from "@/ui/shared/operation-submit";
+import { DubAnalyticsDashboard } from "@/ui/vpn/dub-analytics-dashboard";
 import {
   Badge,
   CardList,
@@ -13,7 +14,6 @@ import {
   EmptyState,
   FormCombobox,
   Input,
-  MetricCards,
 } from "@dub/ui";
 import { MoneyBills2 } from "@dub/ui/icons";
 import { createFinanceExpense, deleteFinanceExpense } from "./actions";
@@ -59,29 +59,50 @@ export default async function FinancePage({
       titleInfo={{ title: "Track revenue, expenses, and net income." }}
     >
       <PageWidthWrapper className="pb-10">
-        <MetricCards
-          items={[
-            {
-              label: "Revenue",
-              value: money(revenue),
-              detail: "Confirmed payments",
-            },
-            {
-              label: "Expenses",
-              value: money(costs),
-              detail: `${expenses.length} recorded costs`,
-            },
-            {
-              label: "Net income",
-              value: money(revenue - costs),
-              detail: "Revenue after expenses",
-            },
-            {
-              label: "Outstanding",
-              value: pending.length,
-              detail: "Payments awaiting confirmation",
-            },
-          ]}
+        <DubAnalyticsDashboard
+          points={[...orders]
+            .sort(
+              (a, b) =>
+                new Date(a.createdAt).getTime() -
+                new Date(b.createdAt).getTime(),
+            )
+            .map((order) => ({
+              date: order.createdAt,
+              requests: order.paymentStatus === "paid" ? order.amount : 0,
+              devices: 0,
+              cost: order.paymentStatus === "paid" ? order.amount : 0,
+            }))}
+          totals={{
+            requests: revenue,
+            devices: costs,
+            cost: revenue - costs,
+          }}
+          metricLabels={{
+            requests: "Revenue",
+            devices: "Expenses",
+            cost: "Net income",
+          }}
+          breakdownLabels={{
+            platforms: "Paid orders",
+            applications: "Outstanding",
+            providers: "Expenses",
+          }}
+          secondaryTitle="Operating expenses"
+          platforms={paid.map((order) => ({
+            label: order.customerName,
+            value: order.amount,
+            detail: order.planName,
+          }))}
+          applications={pending.map((order) => ({
+            label: order.customerName,
+            value: order.amount,
+            detail: order.paymentStatus,
+          }))}
+          providers={expenses.map((expense) => ({
+            label: expense.description,
+            value: expense.amount,
+            detail: expense.category,
+          }))}
         />
         {canManage && (
           <section className="mt-6">
