@@ -4,6 +4,8 @@ import { RemnawaveUser } from "@/lib/remnawave/client";
 import { OperationSubmit } from "@/ui/shared/operation-submit";
 import {
   Button,
+  CardList,
+  CardListCard,
   CopyButton,
   CopyText,
   EmptyState,
@@ -187,51 +189,56 @@ export function SubscribersTable({
           title="Bulk actions"
           description="Apply changes to all Remnawave users."
         />
-        <ModalBody className="bg-bg-muted space-y-4">
-          <form
-            action={extendAllSubscribers}
-            className="border-border-subtle rounded-xl border bg-white p-4"
-          >
-            <input type="hidden" name="slug" value={slug} />
-            <div className="flex items-end gap-3">
-              <div className="grid flex-1 gap-1.5">
-                <Label htmlFor="extend-all-days">Extend subscriptions</Label>
-                <Input
-                  id="extend-all-days"
-                  name="extendDays"
-                  type="number"
-                  min={1}
-                  max={9999}
-                  defaultValue={30}
-                  required
-                />
-              </div>
-              <OperationSubmit
-                confirmMessage={`Extend all ${users.length} users by the selected number of days?`}
+        <ModalBody className="bg-bg-muted">
+          <CardList>
+            <CardListCard hoverStateEnabled={false} innerClassName="p-4">
+              <form action={extendAllSubscribers}>
+                <input type="hidden" name="slug" value={slug} />
+                <div className="flex items-end gap-3">
+                  <div className="grid flex-1 gap-1.5">
+                    <Label htmlFor="extend-all-days">
+                      Extend subscriptions
+                    </Label>
+                    <Input
+                      id="extend-all-days"
+                      name="extendDays"
+                      type="number"
+                      min={1}
+                      max={9999}
+                      defaultValue={30}
+                      required
+                    />
+                  </div>
+                  <OperationSubmit
+                    confirmMessage={`Extend all ${users.length} users by the selected number of days?`}
+                  >
+                    Extend all
+                  </OperationSubmit>
+                </div>
+              </form>
+            </CardListCard>
+            <CardListCard hoverStateEnabled={false} innerClassName="p-4">
+              <form
+                action={resetAllSubscriberTraffic}
+                className="flex items-center justify-between gap-4"
               >
-                Extend all
-              </OperationSubmit>
-            </div>
-          </form>
-          <form
-            action={resetAllSubscriberTraffic}
-            className="border-border-subtle flex items-center justify-between gap-4 rounded-xl border bg-white p-4"
-          >
-            <input type="hidden" name="slug" value={slug} />
-            <div>
-              <p className="text-content-emphasis text-sm font-medium">
-                Reset all traffic
-              </p>
-              <p className="text-content-subtle mt-1 text-xs">
-                Clear usage counters for every user.
-              </p>
-            </div>
-            <OperationSubmit
-              confirmMessage={`Reset traffic for all ${users.length} users?`}
-            >
-              Reset all
-            </OperationSubmit>
-          </form>
+                <input type="hidden" name="slug" value={slug} />
+                <div>
+                  <p className="text-content-emphasis text-sm font-medium">
+                    Reset all traffic
+                  </p>
+                  <p className="text-content-subtle mt-1 text-xs">
+                    Clear usage counters for every user.
+                  </p>
+                </div>
+                <OperationSubmit
+                  confirmMessage={`Reset traffic for all ${users.length} users?`}
+                >
+                  Reset all
+                </OperationSubmit>
+              </form>
+            </CardListCard>
+          </CardList>
         </ModalBody>
         <ModalFooter>
           <Button
@@ -375,36 +382,41 @@ export function SubscribersTable({
               </p>
             </ModalHeader>
             <ModalBody className="bg-bg-muted">
-              <div className="border-border-subtle mb-4 flex items-center gap-3 rounded-xl border bg-white p-3">
-                <div className="min-w-0 flex-1">
-                  <p className="text-content-subtle text-xs">Access link</p>
-                  <CopyText
+              <CardList className="mb-4">
+                <CardListCard
+                  hoverStateEnabled={false}
+                  innerClassName="flex items-center gap-3 p-3"
+                >
+                  <div className="min-w-0 flex-1">
+                    <p className="text-content-subtle text-xs">Access link</p>
+                    <CopyText
+                      value={selectedUser.subscriptionUrl}
+                      successMessage="Access link copied"
+                      className="text-content-emphasis mt-1 block max-w-full truncate font-mono text-xs"
+                    >
+                      {selectedUser.subscriptionUrl}
+                    </CopyText>
+                  </div>
+                  <CopyButton
                     value={selectedUser.subscriptionUrl}
                     successMessage="Access link copied"
-                    className="text-content-emphasis mt-1 block max-w-full truncate font-mono text-xs"
-                  >
-                    {selectedUser.subscriptionUrl}
-                  </CopyText>
-                </div>
-                <CopyButton
-                  value={selectedUser.subscriptionUrl}
-                  successMessage="Access link copied"
-                  className="shrink-0"
-                />
-                <Button
-                  className="w-fit shrink-0"
-                  variant="secondary"
-                  icon={<Link4 className="size-4" />}
-                  text="Open"
-                  onClick={() =>
-                    window.open(
-                      selectedUser.subscriptionUrl,
-                      "_blank",
-                      "noopener,noreferrer",
-                    )
-                  }
-                />
-              </div>
+                    className="shrink-0"
+                  />
+                  <Button
+                    className="w-fit shrink-0"
+                    variant="secondary"
+                    icon={<Link4 className="size-4" />}
+                    text="Open"
+                    onClick={() =>
+                      window.open(
+                        selectedUser.subscriptionUrl,
+                        "_blank",
+                        "noopener,noreferrer",
+                      )
+                    }
+                  />
+                </CardListCard>
+              </CardList>
               <form
                 action={canManage ? saveSubscriber : undefined}
                 className={`grid gap-4 sm:grid-cols-2 ${canManage ? "" : "pointer-events-none"}`}

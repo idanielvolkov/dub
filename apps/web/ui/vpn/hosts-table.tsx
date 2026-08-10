@@ -3,6 +3,8 @@
 import { RemnawaveHost } from "@/lib/remnawave/client";
 import { OperationSubmit } from "@/ui/shared/operation-submit";
 import {
+  CardList,
+  CardListCard,
   Checkbox,
   EmptyState,
   Input,
@@ -195,32 +197,37 @@ export function HostsTable({
                     defaultValue={selectedHost.port || 443}
                   />
                 </div>
-                <div className="border-border-subtle space-y-3 rounded-xl border bg-white p-4 sm:col-span-2">
-                  <Label
-                    htmlFor="host-disabled"
-                    className="text-content-default flex cursor-pointer items-center gap-3 font-normal"
+                <CardList className="sm:col-span-2">
+                  <CardListCard
+                    hoverStateEnabled={false}
+                    innerClassName="space-y-3 p-4"
                   >
-                    <Checkbox
-                      id="host-disabled"
-                      className="size-4 rounded"
-                      name="isDisabled"
-                      defaultChecked={selectedHost.isDisabled}
-                    />
-                    Disable this host
-                  </Label>
-                  <Label
-                    htmlFor="host-hidden"
-                    className="text-content-default flex cursor-pointer items-center gap-3 font-normal"
-                  >
-                    <Checkbox
-                      id="host-hidden"
-                      className="size-4 rounded"
-                      name="isHidden"
-                      defaultChecked={selectedHost.isHidden}
-                    />
-                    Hide this host from subscriptions
-                  </Label>
-                </div>
+                    <Label
+                      htmlFor="host-disabled"
+                      className="text-content-default flex cursor-pointer items-center gap-3 font-normal"
+                    >
+                      <Checkbox
+                        id="host-disabled"
+                        className="size-4 rounded"
+                        name="isDisabled"
+                        defaultChecked={selectedHost.isDisabled}
+                      />
+                      Disable this host
+                    </Label>
+                    <Label
+                      htmlFor="host-hidden"
+                      className="text-content-default flex cursor-pointer items-center gap-3 font-normal"
+                    >
+                      <Checkbox
+                        id="host-hidden"
+                        className="size-4 rounded"
+                        name="isHidden"
+                        defaultChecked={selectedHost.isHidden}
+                      />
+                      Hide this host from subscriptions
+                    </Label>
+                  </CardListCard>
+                </CardList>
                 <div className="flex justify-end sm:col-span-2">
                   <OperationSubmit>Save changes</OperationSubmit>
                 </div>
