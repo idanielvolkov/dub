@@ -4,26 +4,8 @@ import { vpnOrdersFromStore } from "@/lib/vpn/orders";
 import { supportTicketsFromStore } from "@/lib/vpn/support";
 import { PageContent } from "@/ui/layout/page-content";
 import { PageWidthWrapper } from "@/ui/layout/page-width-wrapper";
-import { UserAvatar } from "@/ui/users/user-avatar";
-import {
-  Badge,
-  ButtonLink,
-  CardList,
-  CardListCard,
-  EmptyState,
-  MetricCards,
-} from "@dub/ui";
-import { User } from "@dub/ui/icons";
-
-type Customer = {
-  email: string;
-  name: string;
-  orders: number;
-  revenue: number;
-  hasAccess: boolean;
-  openTickets: number;
-  updatedAt: string;
-};
+import { CustomersTable, VpnCustomer } from "@/ui/vpn/customers-table";
+import { ButtonLink, MetricCards } from "@dub/ui";
 
 const money = (value: number) =>
   `$${value.toLocaleString("en-US", { maximumFractionDigits: 2 })}`;
@@ -40,7 +22,7 @@ export default async function CustomersPage({
   });
   const orders = vpnOrdersFromStore(workspace.store);
   const tickets = supportTicketsFromStore(workspace.store);
-  const customers = new Map<string, Customer>();
+  const customers = new Map<string, VpnCustomer>();
   for (const order of orders) {
     const email = order.customerEmail.toLowerCase();
     const current = customers.get(email) || {
@@ -125,76 +107,7 @@ export default async function CustomersPage({
           ]}
         />
         <section className="mt-6">
-          <div className="mb-3">
-            <h2 className="text-content-emphasis text-sm font-semibold">
-              All customers
-            </h2>
-            <p className="text-content-subtle text-sm">
-              A unified view across sales and support
-            </p>
-          </div>
-          {rows.length ? (
-            <CardList variant="compact">
-              {rows.map((customer) => (
-                <CardListCard
-                  key={customer.email}
-                  innerClassName="flex flex-wrap items-center gap-3 px-5 py-4"
-                  hoverStateEnabled={false}
-                >
-                  <UserAvatar
-                    user={{
-                      id: customer.email,
-                      name: customer.name,
-                      email: customer.email,
-                      image: null,
-                      role: customer.hasAccess ? "member" : "viewer",
-                    }}
-                    className="size-8 border-none"
-                  />
-                  <div className="min-w-48 flex-1">
-                    <p className="text-content-emphasis truncate text-sm font-medium">
-                      {customer.name || customer.email}
-                    </p>
-                    <p className="text-content-subtle truncate text-xs">
-                      {customer.email}
-                    </p>
-                  </div>
-                  <div className="w-24">
-                    <p className="text-sm font-medium">{customer.orders}</p>
-                    <p className="text-content-subtle text-xs">orders</p>
-                  </div>
-                  <div className="w-28">
-                    <p className="text-sm font-medium">
-                      {money(customer.revenue)}
-                    </p>
-                    <p className="text-content-subtle text-xs">revenue</p>
-                  </div>
-                  {customer.openTickets > 0 ? (
-                    <Badge variant="orange">{customer.openTickets} open</Badge>
-                  ) : (
-                    <Badge variant={customer.hasAccess ? "green" : "gray"}>
-                      {customer.hasAccess ? "Active" : "No access"}
-                    </Badge>
-                  )}
-                  <ButtonLink
-                    href={`/${slug}/vpn/customers/${encodeURIComponent(customer.email)}`}
-                    variant="secondary"
-                    className="h-8 px-3 text-xs"
-                  >
-                    View
-                  </ButtonLink>
-                </CardListCard>
-              ))}
-            </CardList>
-          ) : (
-            <div className="py-16">
-              <EmptyState
-                icon={User}
-                title="No customers yet"
-                description="Customers appear after their first order or support request."
-              />
-            </div>
-          )}
+          <CustomersTable slug={slug} customers={rows} />
         </section>
       </PageWidthWrapper>
     </PageContent>
